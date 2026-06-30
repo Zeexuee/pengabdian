@@ -16,7 +16,7 @@
             @endif
             <div class="p-6 flex-grow flex flex-col">
                 <h2 class="text-xl font-bold text-gray-900 mb-3">{{ $edu->title }}</h2>
-                <div class="text-gray-600 text-sm mb-6 flex-grow">{{ Str::limit(strip_tags($edu->content), 150) }}</div>
+                <div class="text-gray-600 text-sm mb-6 flex-grow">{!! Str::limit(strip_tags($edu->content), 150) !!}</div>
                 
                 @if($edu->video_url)
                     <a href="{{ $edu->video_url }}" target="_blank" class="inline-flex items-center text-red-600 hover:text-red-800 font-semibold mb-4">
@@ -25,7 +25,7 @@
                     </a>
                 @endif
                 
-                <a href="#" class="inline-block px-4 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition text-sm font-semibold text-center mt-auto">Mulai Belajar</a>
+                <a href="{{ route('educations.detail', $edu->slug) }}" class="inline-block px-4 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition text-sm font-semibold text-center mt-auto">Mulai Belajar</a>
             </div>
         </div>
     @empty
@@ -34,4 +34,10 @@
         </div>
     @endforelse
 </div>
+
+@if(isset($educations) && $educations->hasPages())
+    <div class="mt-12 bg-white px-4 py-3 border-t border-gray-200 sm:px-6 rounded-lg shadow-sm">
+        {{ $educations->links() }}
+    </div>
+@endif
 @endsection

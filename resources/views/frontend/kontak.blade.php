@@ -14,6 +14,12 @@
         <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
             @csrf
             
+            <!-- Honeypot untuk menangkal bot -->
+            <div style="display:none;">
+                <label for="website_url">Website URL</label>
+                <input type="text" name="website_url" id="website_url" autocomplete="off" tabindex="-1">
+            </div>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Field Nama Lengkap -->
                 <div>

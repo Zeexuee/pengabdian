@@ -36,8 +36,16 @@ class FrontEndController extends Controller
     public function educations()
     {
         // Mengambil data edukasi yang dipublikasikan
-        $educations = Education::where('is_published', true)->latest()->get();
+        $educations = Education::where('is_published', true)->latest()->paginate(9);
         return view('frontend.educations', compact('educations'));
+    }
+
+    public function educationDetail(Education $education)
+    {
+        if (!$education->is_published) {
+            abort(404);
+        }
+        return view('frontend.edukasi_detail', compact('education'));
     }
 
     public function news()
@@ -47,6 +55,14 @@ class FrontEndController extends Controller
         return view('frontend.berita', compact('news'));
     }
 
+    public function newsDetail(News $news)
+    {
+        if ($news->status !== 'published') {
+            abort(404);
+        }
+        return view('frontend.berita_detail', compact('news'));
+    }
+
     public function contact()
     {
         return view('frontend.kontak');
@@ -54,6 +70,11 @@ class FrontEndController extends Controller
 
     public function storeContact(Request $request)
     {
+        // Honeypot check
+        if ($request->filled('website_url')) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -73,6 +94,11 @@ class FrontEndController extends Controller
 
     public function storeJoin(Request $request)
     {
+        // Honeypot check
+        if ($request->filled('website_url')) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',

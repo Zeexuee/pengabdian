@@ -19,7 +19,7 @@
 
         <div>
             <label for="content" class="block text-gray-700 font-semibold mb-2">Konten</label>
-            <textarea name="content" id="content" rows="8" 
+            <textarea name="content" id="content_editor" rows="8" 
                       class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 @error('content') border-red-500 @enderror" 
                       placeholder="Tulis isi berita di sini...">{{ old('content') }}</textarea>
             @error('content')
@@ -55,4 +55,10 @@
         </div>
     </form>
 </div>
+
+@push('scripts')
+<script>
+    ClassicEditor.create(document.querySelector('#content_editor')).catch(error => { console.error(error); });
+</script>
+@endpush
 @endsection

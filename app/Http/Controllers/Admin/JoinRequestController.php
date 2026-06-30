@@ -10,27 +10,40 @@ class JoinRequestController extends Controller
 {
     public function index()
     {
-        $joinRequests = JoinRequest::latest()->paginate(15);
-        return view('admin.join_requests.index', compact('joinRequests'));
+        $query = JoinRequest::latest();
+        
+        if (request('search')) {
+            $query->where('name', 'like', '%' . request('search') . '%')
+                  ->orWhere('email', 'like', '%' . request('search') . '%');
+        }
+        
+        $joinRequests = $query->paginate(10)->withQueryString();
+        return view('admin.join-requests.index', compact('joinRequests'));
     }
 
-    public function show(JoinRequest $joinRequest)
+    public function show(JoinRequest $join_request)
     {
-        return view('admin.join_requests.show', compact('joinRequest'));
+        return view('admin.join-requests.show', compact('join_request'));
     }
 
-    public function updateStatus(Request $request, JoinRequest $joinRequest)
+    public function updateStatus(Request $request, JoinRequest $join_request)
     {
         $request->validate([
-            'status' => 'required|in:pending,approved,rejected'
+            'status' => 'required|in:pending,approved,rejected',
+            'admin_notes' => 'nullable|string'
         ]);
-        $joinRequest->update(['status' => $request->status]);
-        return back()->with('success', 'Status pendaftaran berhasil diperbarui.');
+
+        $join_request->update([
+            'status' => $request->status,
+            'admin_notes' => $request->admin_notes
+        ]);
+
+        return redirect()->back()->with('success', 'Status permintaan bergabung berhasil diperbarui.');
     }
 
-    public function destroy(JoinRequest $joinRequest)
+    public function destroy(JoinRequest $join_request)
     {
-        $joinRequest->delete();
+        $join_request->delete();
         return redirect()->route('admin.join_requests.index')->with('success', 'Data pendaftaran berhasil dihapus.');
     }
 }

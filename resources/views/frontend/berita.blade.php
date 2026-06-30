@@ -35,11 +35,11 @@
                 
                 <!-- Cuplikan Konten -->
                 <div class="text-gray-600 text-sm mb-6 flex-grow line-clamp-3">
-                    {{ Str::limit(strip_tags($item->content), 120) }}
+                    {!! Str::limit(strip_tags($item->content), 120) !!}
                 </div>
                 
                 <!-- Tombol Baca -->
-                <a href="#" class="inline-block w-full px-4 py-2 bg-gray-50 text-blue-700 rounded-md hover:bg-blue-600 hover:text-white transition-colors duration-200 text-sm font-semibold text-center mt-auto border border-gray-100 hover:border-transparent">
+                <a href="{{ route('news.detail', $item->slug) }}" class="inline-block w-full px-4 py-2 bg-gray-50 text-blue-700 rounded-md hover:bg-blue-600 hover:text-white transition-colors duration-200 text-sm font-semibold text-center mt-auto border border-gray-100 hover:border-transparent">
                     Baca Berita Penuh
                 </a>
             </div>

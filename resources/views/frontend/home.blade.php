@@ -72,10 +72,10 @@
                     </h3>
                     
                     <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
-                        {{ Str::limit(strip_tags($item->content), 120) }}
+                        {!! Str::limit(strip_tags($item->content), 120) !!}
                     </p>
                     
-                    <a href="#" class="text-blue-600 font-semibold text-sm hover:underline inline-flex items-center mt-auto">
+                    <a href="{{ route('news.detail', $item->slug) }}" class="text-blue-600 font-semibold text-sm hover:underline inline-flex items-center mt-auto">
                         Baca Selengkapnya 
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>

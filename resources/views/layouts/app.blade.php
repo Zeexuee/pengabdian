@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CMS Komunitas - @yield('title', 'Beranda')</title>
+    
+    @hasSection('meta_tags')
+        @yield('meta_tags')
+    @else
+        <meta name="title" content="CMS Komunitas - @yield('title', 'Beranda')">
+        <meta name="description" content="Portal informasi dan manajemen CMS Komunitas yang terpercaya.">
+    @endif
+
     <!-- Integrasi Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     

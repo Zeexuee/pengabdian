@@ -21,7 +21,7 @@
                 @endif
                 
                 {{-- Menampilkan 150 karakter pertama dari konten --}}
-                <p>{{ Str::limit($item->content, 150) }}</p>
+                <p>{!! Str::limit(strip_tags($item->content), 150) !!}</p>
                 
                 <a href="#" style="color: blue;">Baca Selengkapnya &rarr;</a>
             </article>

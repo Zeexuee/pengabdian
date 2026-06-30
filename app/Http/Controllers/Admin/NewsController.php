@@ -14,7 +14,13 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::with('author')->latest()->paginate(10);
+        $query = News::with('author')->latest();
+        
+        if (request('search')) {
+            $query->where('title', 'like', '%' . request('search') . '%');
+        }
+        
+        $news = $query->paginate(10)->withQueryString();
         return view('admin.news.index', compact('news'));
     }
 

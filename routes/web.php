@@ -9,13 +9,15 @@ Route::get('/', [FrontEndController::class, 'home'])->name('home');
 Route::get('/struktur-anggota', [FrontEndController::class, 'members'])->name('members');
 Route::get('/program-kerja', [FrontEndController::class, 'workPrograms'])->name('work_programs');
 Route::get('/edukasi', [FrontEndController::class, 'educations'])->name('educations');
+Route::get('/edukasi/{education:slug}', [FrontEndController::class, 'educationDetail'])->name('educations.detail');
 Route::get('/berita', [FrontEndController::class, 'news'])->name('news');
+Route::get('/berita/{news:slug}', [FrontEndController::class, 'newsDetail'])->name('news.detail');
 
 Route::get('/kontak', [FrontEndController::class, 'contact'])->name('contact');
-Route::post('/kontak', [FrontEndController::class, 'storeContact'])->name('contact.store');
+Route::post('/kontak', [FrontEndController::class, 'storeContact'])->name('contact.store')->middleware('throttle:3,1');
 
 Route::get('/gabung', [FrontEndController::class, 'join'])->name('join');
-Route::post('/gabung', [FrontEndController::class, 'storeJoin'])->name('join.store');
+Route::post('/gabung', [FrontEndController::class, 'storeJoin'])->name('join.store')->middleware('throttle:3,1');
 
 // Authentication Routes
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
@@ -24,10 +26,12 @@ Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])-
 
 // Admin Route Group
 Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(function () {
-    // Dashboard (optional)
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    // Dashboard
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // Pengaturan Profil
+    Route::get('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
 
     // CRUD Resources
     Route::resource('members', \App\Http\Controllers\Admin\MemberController::class);

@@ -3,11 +3,22 @@
 @section('page_title', 'Kelola Berita')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
+<div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
     <h2 class="text-xl font-bold text-gray-800">Daftar Berita</h2>
-    <a href="{{ route('admin.news.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
-        + Tambah Berita
-    </a>
+    
+    <div class="flex items-center space-x-4">
+        <form action="{{ route('admin.news.index') }}" method="GET" class="flex items-center">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari berita..." 
+                   class="border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm w-64">
+            <button type="submit" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-r-md border border-l-0 border-gray-300 transition text-sm font-semibold">
+                Cari
+            </button>
+        </form>
+        
+        <a href="{{ route('admin.news.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition whitespace-nowrap">
+            + Tambah Berita
+        </a>
+    </div>
 </div>
 
 <div class="overflow-x-auto bg-white rounded-lg shadow">
@@ -65,7 +76,7 @@
 
 @if(isset($news) && $news->hasPages())
 <div class="mt-4">
-    {{ $news->links() }}
+    {{ $news->appends(request()->query())->links() }}
 </div>
 @endif
 @endsection

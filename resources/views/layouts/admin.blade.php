@@ -107,5 +107,10 @@
         
     </main>
 
+    <!-- CKEditor 5 Classic -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    
+    <!-- Area khusus untuk script per-halaman -->
+    @stack('scripts')
 </body>
 </html>
