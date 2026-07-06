@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use Illuminate\Http\Request;
+use App\Traits\HandlesBlockContent;
 use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
+    use HandlesBlockContent;
     /**
      * Display a listing of the resource.
      */
@@ -39,7 +41,8 @@ class NewsController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'nullable|string', // dipertahankan untuk backward compatibility/summary
+            'content_blocks' => 'nullable|array',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:draft,published,archived',
         ]);
@@ -54,6 +57,8 @@ class NewsController extends Controller
         if ($request->hasFile('thumbnail')) {
             $validated['thumbnail'] = $request->file('thumbnail')->store('news', 'public');
         }
+
+        $validated['content_blocks'] = $this->processBlockContent($request);
 
         News::create($validated);
 
@@ -83,7 +88,8 @@ class NewsController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'nullable|string',
+            'content_blocks' => 'nullable|array',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:draft,published,archived',
         ]);
@@ -98,8 +104,9 @@ class NewsController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             $validated['thumbnail'] = $request->file('thumbnail')->store('news', 'public');
-            // Opsional: Hapus file lama di sini menggunakan Storage::disk('public')->delete(...)
         }
+
+        $validated['content_blocks'] = $this->processBlockContent($request, $news->content_blocks);
 
         $news->update($validated);
 

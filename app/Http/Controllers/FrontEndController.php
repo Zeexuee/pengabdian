@@ -7,6 +7,7 @@ use App\Models\Education;
 use App\Models\JoinRequest;
 use App\Models\Member;
 use App\Models\News;
+use App\Models\Page;
 use App\Models\WorkProgram;
 use Illuminate\Http\Request;
 
@@ -109,5 +110,11 @@ class FrontEndController extends Controller
         JoinRequest::create($validated);
 
         return back()->with('success', 'Permintaan bergabung Anda berhasil dikirim. Menunggu persetujuan admin.');
+    }
+
+    public function showPage($slug)
+    {
+        $page = Page::where('slug', $slug)->firstOrFail();
+        return view('frontend.page', compact('page'));
     }
 }

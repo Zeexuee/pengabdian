@@ -30,8 +30,14 @@
                     Jadwal: {{ $program->start_date ? $program->start_date->format('d M Y') : 'TBA' }} 
                     s/d {{ $program->end_date ? $program->end_date->format('d M Y') : 'TBA' }}
                 </p>
-                
-                <p class="text-gray-600">{{ $program->description }}</p>
+                <p class="text-gray-600 mb-4">{{ $program->description }}</p>
+
+                <!-- Render konten baru (Block Builder) -->
+                @if(is_array($program->content_blocks) && count($program->content_blocks) > 0)
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <x-frontend.block-renderer :blocks="$program->content_blocks" />
+                </div>
+                @endif
             </div>
         </div>
     @empty

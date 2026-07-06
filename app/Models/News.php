@@ -16,6 +16,7 @@ class News extends Model
     {
         return [
             'published_at' => 'datetime',
+            'content_blocks' => 'array',
         ];
     }
 

@@ -59,13 +59,15 @@
 
         <!-- Input Deskripsi -->
         <div class="mb-4">
-            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi Detail <span class="text-red-500">*</span></label>
-            <textarea name="description" id="description" rows="5" required 
+            <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Ringkasan Program (Opsional)</label>
+            <textarea name="description" rows="3" 
                 class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">{{ old('description', $work_program->description) }}</textarea>
             @error('description')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
+
+        <x-admin.block-builder :blocks="old('content_blocks', $work_program->content_blocks ?? [])" />
 
         <!-- Input Foto/Gambar Cover -->
         <div class="mb-6">

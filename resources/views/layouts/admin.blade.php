@@ -32,6 +32,9 @@
                 <li>
                     <a href="{{ route('admin.news.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.news.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Berita</a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.pages.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.pages.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Halaman (Builder)</a>
+                </li>
             </ul>
 
             <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Interaksi Publik</p>

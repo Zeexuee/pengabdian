@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\WorkProgram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\HandlesBlockContent;
 
 class WorkProgramController extends Controller
 {
+    use HandlesBlockContent;
     public function index()
     {
         $query = WorkProgram::latest();
@@ -30,7 +32,8 @@ class WorkProgramController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string', // dipertahankan sebagai ringkasan
+            'content_blocks' => 'nullable|array',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -42,6 +45,8 @@ class WorkProgramController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('work_programs', 'public');
         }
+
+        $data['content_blocks'] = $this->processBlockContent($request);
 
         WorkProgram::create($data);
 
@@ -57,7 +62,8 @@ class WorkProgramController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
+            'content_blocks' => 'nullable|array',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
@@ -72,6 +78,8 @@ class WorkProgramController extends Controller
             }
             $data['image'] = $request->file('image')->store('work_programs', 'public');
         }
+
+        $data['content_blocks'] = $this->processBlockContent($request, $work_program->content_blocks);
 
         $work_program->update($data);
 

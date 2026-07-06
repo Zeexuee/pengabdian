@@ -44,6 +44,11 @@
     <div class="prose max-w-none prose-blue bg-white p-8 sm:p-10 rounded-2xl shadow-sm border border-gray-100">
         {!! $education->content !!}
     </div>
+
+    <!-- Render konten baru (Block Builder) -->
+    <div class="mt-8">
+        <x-frontend.block-renderer :blocks="$education->content_blocks" />
+    </div>
     
     <div class="mt-12 pt-8 border-t border-gray-200">
         <a href="{{ route('educations') }}" class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center transition">

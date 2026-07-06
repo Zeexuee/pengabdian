@@ -38,10 +38,13 @@
     </div>
     @endif
     
-    <!-- Render konten CKEditor -->
+    <!-- Render konten legacy (CKEditor) -->
     <div class="prose max-w-none prose-blue prose-img:rounded-xl">
         {!! $news->content !!}
     </div>
+    
+    <!-- Render konten baru (Block Builder) -->
+    <x-frontend.block-renderer :blocks="$news->content_blocks" />
     
     <div class="mt-12 pt-8 border-t border-gray-200">
         <a href="{{ route('news') }}" class="text-blue-600 hover:text-blue-800 font-semibold flex items-center transition">

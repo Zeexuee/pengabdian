@@ -28,13 +28,16 @@
 
                 <!-- Input Konten / Artikel -->
                 <div>
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Isi Artikel Edukasi <span class="text-red-500">*</span></label>
-                    <textarea name="content" id="content_editor" rows="10" required 
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Ringkasan Materi Edukasi (Opsional)</label>
+                    <textarea name="content" rows="4" 
                         class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">{{ old('content', $education->content) }}</textarea>
                     @error('content')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+
+                <!-- Block Builder Component -->
+                <x-admin.block-builder :blocks="old('content_blocks', $education->content_blocks ?? [])" />
 
             </div>
 
@@ -95,9 +98,4 @@
     </form>
 </div>
 
-@push('scripts')
-<script>
-    ClassicEditor.create(document.querySelector('#content_editor')).catch(error => { console.error(error); });
-</script>
-@endpush
 @endsection

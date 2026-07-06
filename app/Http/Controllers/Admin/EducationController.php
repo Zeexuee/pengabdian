@@ -7,9 +7,11 @@ use App\Models\Education;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Traits\HandlesBlockContent;
 
 class EducationController extends Controller
 {
+    use HandlesBlockContent;
     public function index()
     {
         $query = Education::latest();
@@ -31,7 +33,8 @@ class EducationController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'nullable|string',
+            'content_blocks' => 'nullable|array',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'video_url' => 'nullable|url|max:255',
             'is_published' => 'required|boolean'
@@ -43,6 +46,8 @@ class EducationController extends Controller
         if ($request->hasFile('thumbnail')) {
             $data['thumbnail'] = $request->file('thumbnail')->store('educations', 'public');
         }
+
+        $data['content_blocks'] = $this->processBlockContent($request);
 
         Education::create($data);
 
@@ -58,7 +63,8 @@ class EducationController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'nullable|string',
+            'content_blocks' => 'nullable|array',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'video_url' => 'nullable|url|max:255',
             'is_published' => 'required|boolean'
@@ -77,6 +83,8 @@ class EducationController extends Controller
             }
             $data['thumbnail'] = $request->file('thumbnail')->store('educations', 'public');
         }
+
+        $data['content_blocks'] = $this->processBlockContent($request, $education->content_blocks);
 
         $education->update($data);
 

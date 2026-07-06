@@ -19,6 +19,7 @@ Route::post('/kontak', [FrontEndController::class, 'storeContact'])->name('conta
 Route::get('/gabung', [FrontEndController::class, 'join'])->name('join');
 Route::post('/gabung', [FrontEndController::class, 'storeJoin'])->name('join.store')->middleware('throttle:3,1');
 
+
 // Authentication Routes
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'authenticate']);
@@ -38,6 +39,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::resource('work-programs', \App\Http\Controllers\Admin\WorkProgramController::class);
     Route::resource('educations', \App\Http\Controllers\Admin\EducationController::class);
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
+    Route::resource('pages', \App\Http\Controllers\Admin\PageController::class);
 
     // Read, Update (change status), Delete for Contacts & Join Requests
     Route::get('contacts', [\App\Http\Controllers\Admin\ContactController::class, 'index'])->name('contacts.index');
@@ -50,3 +52,6 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::put('join-requests/{join_request}/update-status', [\App\Http\Controllers\Admin\JoinRequestController::class, 'updateStatus'])->name('join_requests.update_status');
     Route::delete('join-requests/{join_request}', [\App\Http\Controllers\Admin\JoinRequestController::class, 'destroy'])->name('join_requests.destroy');
 });
+
+// Dynamic Page Route (MUST BE AT THE BOTTOM)
+Route::get('/{slug}', [FrontEndController::class, 'showPage'])->name('page.show');

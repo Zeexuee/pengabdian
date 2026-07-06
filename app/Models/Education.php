@@ -17,6 +17,7 @@ class Education extends Model
     {
         return [
             'is_published' => 'boolean',
+            'content_blocks' => 'array',
         ];
     }
 }
