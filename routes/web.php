@@ -5,18 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontEndController;
 
 // Public Routes
-Route::get('/', [FrontEndController::class, 'home'])->name('home');
-Route::get('/struktur-anggota', [FrontEndController::class, 'members'])->name('members');
-Route::get('/program-kerja', [FrontEndController::class, 'workPrograms'])->name('work_programs');
-Route::get('/edukasi', [FrontEndController::class, 'educations'])->name('educations');
+// GET requests for main pages are now handled dynamically by PageBuilder at the bottom of this file.
 Route::get('/edukasi/{education:slug}', [FrontEndController::class, 'educationDetail'])->name('educations.detail');
-Route::get('/berita', [FrontEndController::class, 'news'])->name('news');
 Route::get('/berita/{news:slug}', [FrontEndController::class, 'newsDetail'])->name('news.detail');
 
-Route::get('/kontak', [FrontEndController::class, 'contact'])->name('contact');
 Route::post('/kontak', [FrontEndController::class, 'storeContact'])->name('contact.store')->middleware('throttle:3,1');
-
-Route::get('/gabung', [FrontEndController::class, 'join'])->name('join');
 Route::post('/gabung', [FrontEndController::class, 'storeJoin'])->name('join.store')->middleware('throttle:3,1');
 
 
@@ -54,4 +47,5 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
 });
 
 // Dynamic Page Route (MUST BE AT THE BOTTOM)
+Route::get('/', [FrontEndController::class, 'showPage'])->defaults('slug', 'home')->name('home');
 Route::get('/{slug}', [FrontEndController::class, 'showPage'])->name('page.show');

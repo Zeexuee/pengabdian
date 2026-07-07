@@ -39,12 +39,12 @@
                 <!-- Menu Navigasi Desktop -->
                 <div class="hidden md:flex sm:items-center sm:space-x-2 lg:space-x-6">
                     <a href="{{ route('home') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('home') ? 'text-blue-600 font-bold' : '' }}">Beranda</a>
-                    <a href="{{ route('members') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('members') ? 'text-blue-600 font-bold' : '' }}">Struktur Anggota</a>
-                    <a href="{{ route('work_programs') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('work_programs') ? 'text-blue-600 font-bold' : '' }}">Program Kerja</a>
-                    <a href="{{ route('educations') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('educations') ? 'text-blue-600 font-bold' : '' }}">Edukasi</a>
-                    <a href="{{ route('news') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('news') ? 'text-blue-600 font-bold' : '' }}">Berita</a>
-                    <a href="{{ route('contact') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('contact') ? 'text-blue-600 font-bold' : '' }}">Kontak</a>
-                    <a href="{{ route('join') }}" class="bg-blue-600 text-white hover:bg-blue-700 px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-md hover:shadow-lg">Gabung</a>
+                    <a href="{{ url('struktur-anggota') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->is('struktur-anggota') ? 'text-blue-600 font-bold' : '' }}">Struktur Anggota</a>
+                    <a href="{{ url('program-kerja') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->is('program-kerja') ? 'text-blue-600 font-bold' : '' }}">Program Kerja</a>
+                    <a href="{{ url('edukasi') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->is('edukasi') ? 'text-blue-600 font-bold' : '' }}">Edukasi</a>
+                    <a href="{{ url('berita') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->is('berita') ? 'text-blue-600 font-bold' : '' }}">Berita</a>
+                    <a href="{{ url('kontak') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->is('kontak') ? 'text-blue-600 font-bold' : '' }}">Kontak</a>
+                    <a href="{{ url('gabung') }}" class="bg-blue-600 text-white hover:bg-blue-700 px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-md hover:shadow-lg">Gabung</a>
                 </div>
                 
                 <!-- Tombol Menu Hamburger (Mobile) -->
@@ -63,12 +63,12 @@
         <div class="md:hidden hidden" id="mobile-menu">
             <div class="px-4 pt-2 pb-4 space-y-1 bg-white border-t border-gray-100 shadow-lg">
                 <a href="{{ route('home') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('home') ? 'text-blue-600 bg-blue-50' : '' }}">Beranda</a>
-                <a href="{{ route('members') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('members') ? 'text-blue-600 bg-blue-50' : '' }}">Struktur Anggota</a>
-                <a href="{{ route('work_programs') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('work_programs') ? 'text-blue-600 bg-blue-50' : '' }}">Program Kerja</a>
-                <a href="{{ route('educations') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('educations') ? 'text-blue-600 bg-blue-50' : '' }}">Edukasi</a>
-                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('news') ? 'text-blue-600 bg-blue-50' : '' }}">Berita</a>
-                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('contact') ? 'text-blue-600 bg-blue-50' : '' }}">Kontak</a>
-                <a href="{{ route('join') }}" class="block w-full text-center px-3 py-3 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 mt-4 shadow">Gabung Komunitas</a>
+                <a href="{{ url('struktur-anggota') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->is('struktur-anggota') ? 'text-blue-600 bg-blue-50' : '' }}">Struktur Anggota</a>
+                <a href="{{ url('program-kerja') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->is('program-kerja') ? 'text-blue-600 bg-blue-50' : '' }}">Program Kerja</a>
+                <a href="{{ url('edukasi') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->is('edukasi') ? 'text-blue-600 bg-blue-50' : '' }}">Edukasi</a>
+                <a href="{{ url('berita') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->is('berita') ? 'text-blue-600 bg-blue-50' : '' }}">Berita</a>
+                <a href="{{ url('kontak') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->is('kontak') ? 'text-blue-600 bg-blue-50' : '' }}">Kontak</a>
+                <a href="{{ url('gabung') }}" class="block w-full text-center px-3 py-3 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 mt-4 shadow">Gabung Komunitas</a>
             </div>
         </div>
     </nav>
@@ -119,7 +119,7 @@
                 <!-- Navigasi Cepat -->
                 <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 text-center md:text-left text-sm text-gray-400">
                     <a href="{{ route('home') }}" class="hover:text-white transition">Beranda</a>
-                    <a href="{{ route('contact') }}" class="hover:text-white transition">Hubungi Kami</a>
+                    <a href="{{ url('kontak') }}" class="hover:text-white transition">Hubungi Kami</a>
                     <a href="{{ route('login') }}" class="hover:text-white transition border-l border-gray-700 pl-8">Admin Login</a>
                 </div>
             </div>

@@ -26,15 +26,22 @@ class PageController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:pages,slug',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'content_blocks' => 'nullable|array',
         ]);
+
+        if ($request->hasFile('meta_image')) {
+            $validated['meta_image'] = $request->file('meta_image')->store('seo_pages', 'public');
+        }
 
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['title']);
         }
 
-        if (!empty($validated['content_blocks'])) {
-            $blocks = $validated['content_blocks'];
+        if (!empty($request->input('content_blocks'))) {
+            $blocks = $request->input('content_blocks');
             foreach ($blocks as $index => &$block) {
                 // Handle tipe 'gambar' dan 'file'
                 if (in_array($block['type'], ['gambar', 'file']) && $request->hasFile("content_blocks.{$index}.content")) {
@@ -66,6 +73,8 @@ class PageController extends Controller
                 }
             }
             $validated['content_blocks'] = $blocks;
+        } else {
+            $validated['content_blocks'] = [];
         }
 
         Page::create($validated);
@@ -83,11 +92,18 @@ class PageController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:pages,slug,' . $page->id,
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'content_blocks' => 'nullable|array',
         ]);
 
-        if (!empty($validated['content_blocks'])) {
-            $blocks = $validated['content_blocks'];
+        if ($request->hasFile('meta_image')) {
+            $validated['meta_image'] = $request->file('meta_image')->store('seo_pages', 'public');
+        }
+
+        if (!empty($request->input('content_blocks'))) {
+            $blocks = $request->input('content_blocks');
             $oldBlocks = is_array($page->content_blocks) ? $page->content_blocks : [];
             
             foreach ($blocks as $index => &$block) {
@@ -141,10 +157,24 @@ class PageController extends Controller
                 }
             }
             $validated['content_blocks'] = $blocks;
+        } else {
+            $validated['content_blocks'] = [];
         }
 
         $page->update($validated);
 
         return redirect()->route('admin.pages.index')->with('success', 'Halaman berhasil diperbarui.');
+    }
+
+    public function destroy(Page $page)
+    {
+        // Prevent deleting default pages if necessary, or just allow deletion.
+        $defaultSlugs = ['home', 'struktur-anggota', 'program-kerja', 'edukasi', 'berita', 'kontak', 'gabung'];
+        if (in_array($page->slug, $defaultSlugs)) {
+            return redirect()->route('admin.pages.index')->withErrors(['error' => 'Halaman default tidak dapat dihapus.']);
+        }
+
+        $page->delete();
+        return redirect()->route('admin.pages.index')->with('success', 'Halaman berhasil dihapus.');
     }
 }

@@ -112,9 +112,15 @@ class FrontEndController extends Controller
         return back()->with('success', 'Permintaan bergabung Anda berhasil dikirim. Menunggu persetujuan admin.');
     }
 
-    public function showPage($slug)
+    public function showPage($slug = 'home')
     {
         $page = Page::where('slug', $slug)->firstOrFail();
-        return view('frontend.page', compact('page'));
+
+        // Data agregasi untuk komponen widget modul di page builder
+        $members = Member::orderBy('order', 'asc')->get();
+        $workPrograms = WorkProgram::latest()->get();
+        $news = News::where('status', 'published')->latest('published_at')->take(6)->get();
+
+        return view('frontend.page', compact('page', 'members', 'workPrograms', 'news'));
     }
 }
