@@ -22,6 +22,7 @@
             menu.classList.toggle('hidden');
         }
     </script>
+    @stack('styles')
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen font-sans text-gray-800">
 
@@ -103,6 +104,9 @@
         @endif
     </div>
 
+    <!-- Area Konten Full Width (Contoh: Hero Banner) -->
+    @yield('full_width_content')
+
     <!-- Area Konten Utama Dinamis -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-6">
         @yield('content')
@@ -137,5 +141,6 @@
         </div>
     </footer>
 
+    @stack('scripts')
 </body>
 </html>

@@ -34,10 +34,21 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::put('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
 
     // CRUD Resources
+    Route::post('members/reorder', [\App\Http\Controllers\Admin\MemberController::class, 'reorderMembers'])->name('members.reorder');
+    Route::post('members/sections/reorder', [\App\Http\Controllers\Admin\MemberController::class, 'reorderSections'])->name('members.sections.reorder');
+    Route::post('members/sections', [\App\Http\Controllers\Admin\MemberController::class, 'storeSectionImage'])->name('members.sections.store');
+    Route::delete('members/sections/{id}', [\App\Http\Controllers\Admin\MemberController::class, 'destroySectionImage'])->name('members.sections.destroy');
     Route::resource('members', \App\Http\Controllers\Admin\MemberController::class);
     Route::resource('work-programs', \App\Http\Controllers\Admin\WorkProgramController::class);
     Route::resource('educations', \App\Http\Controllers\Admin\EducationController::class);
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
+
+    // Page Builder Home
+    Route::post('home-sections/hero/reorder', [\App\Http\Controllers\Admin\HomeSectionController::class, 'reorderHero'])->name('home-sections.hero.reorder');
+    Route::post('home-sections/hero', [\App\Http\Controllers\Admin\HomeSectionController::class, 'storeHero'])->name('home-sections.hero.store');
+    Route::delete('home-sections/hero/{id}', [\App\Http\Controllers\Admin\HomeSectionController::class, 'destroyHero'])->name('home-sections.hero.destroy');
+    Route::post('home-sections/reorder', [\App\Http\Controllers\Admin\HomeSectionController::class, 'reorder'])->name('home-sections.reorder');
+    Route::resource('home-sections', \App\Http\Controllers\Admin\HomeSectionController::class);
 
     // Read, Update (change status), Delete for Contacts & Join Requests
     Route::get('contacts', [\App\Http\Controllers\Admin\ContactController::class, 'index'])->name('contacts.index');

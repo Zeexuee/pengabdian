@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Member;
+use App\Models\MemberPageSection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,7 +20,8 @@ class MemberController extends Controller
         }
         
         $members = $query->paginate(10)->withQueryString();
-        return view('admin.members.index', compact('members'));
+        $sections = MemberPageSection::orderBy('order')->get();
+        return view('admin.members.index', compact('members', 'sections'));
     }
 
     public function create()
@@ -86,5 +88,66 @@ class MemberController extends Controller
         $member->delete();
 
         return redirect()->route('admin.members.index')->with('success', 'Anggota berhasil dihapus.');
+    }
+
+    // ─── Member Page Sections ─────────────────────────────────────────
+
+    public function storeSectionImage(Request $request)
+    {
+        $request->validate([
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,webp|max:3072',
+            'position'  => 'required|in:above,below',
+        ]);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $path = $file->store('member_sections', 'public');
+                MemberPageSection::create([
+                    'image'    => $path,
+                    'order'    => MemberPageSection::max('order') + 1,
+                    'position' => $request->input('position', 'below'),
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Gambar berhasil ditambahkan.');
+    }
+
+    public function destroySectionImage($id)
+    {
+        $section = MemberPageSection::findOrFail($id);
+        Storage::disk('public')->delete($section->image);
+        $section->delete();
+        return back()->with('success', 'Gambar berhasil dihapus.');
+    }
+
+    public function reorderMembers(Request $request)
+    {
+        $request->validate([
+            'orders' => 'required|array',
+            'orders.*.id' => 'required|exists:members,id',
+            'orders.*.order' => 'required|integer',
+        ]);
+
+        foreach ($request->orders as $item) {
+            Member::where('id', $item['id'])->update(['order' => $item['order']]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function reorderSections(Request $request)
+    {
+        $request->validate([
+            'orders' => 'required|array',
+            'orders.*.id' => 'required|exists:member_page_sections,id',
+            'orders.*.order' => 'required|integer',
+        ]);
+
+        foreach ($request->orders as $item) {
+            MemberPageSection::where('id', $item['id'])->update(['order' => $item['order']]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

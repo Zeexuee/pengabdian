@@ -14,16 +14,21 @@ class FrontEndController extends Controller
 {
     public function home()
     {
-        // Menampilkan sekilas data untuk halaman beranda (contoh: 3 berita terbaru)
+        // Data lama (berita terbaru)
         $latest_news = News::where('status', 'published')->latest('published_at')->take(3)->get();
-        return view('frontend.home', compact('latest_news'));
+        
+        // Data dinamis Page Builder
+        $hero_slides = \App\Models\HeroBanner::orderBy('order')->get();
+        $sections = \App\Models\HomeSection::where('type', '!=', 'hero')->where('is_active', true)->orderBy('order')->get();
+
+        return view('frontend.home', compact('latest_news', 'hero_slides', 'sections'));
     }
 
     public function members()
     {
-        // Mengambil semua anggota berdasarkan urutan
         $members = Member::orderBy('order', 'asc')->get();
-        return view('frontend.members', compact('members'));
+        $sections = \App\Models\MemberPageSection::orderBy('order')->get();
+        return view('frontend.members', compact('members', 'sections'));
     }
 
     public function workPrograms()
