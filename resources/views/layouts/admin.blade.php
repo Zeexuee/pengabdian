@@ -13,7 +13,7 @@
     <!-- Sidebar (Kiri - Fixed) -->
     <aside class="bg-gray-800 text-white w-64 min-h-screen fixed left-0 top-0 overflow-y-auto shadow-lg z-20">
         <div class="p-6 flex items-center justify-center border-b border-gray-700">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10 w-auto mr-2" style="filter: brightness(0) invert(1);">
+            <img src="{{ asset('images/logo-baru.png') }}" alt="Logo" class="h-10 w-auto mr-2" style="filter: brightness(0) invert(1);">
             <span class="text-lg font-bold tracking-wider leading-tight">Bank Sampah<br>Sejahtera Gemilang</span>
         </div>
         <nav class="mt-6 px-4">

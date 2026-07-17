@@ -51,7 +51,7 @@
                     @endif
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 text-sm flex space-x-3 items-center">
-                    <a href="{{ route('admin.join_requests.show', $request->id) }}" class="text-blue-600 hover:text-blue-900 font-medium border border-blue-200 rounded px-3 py-1 hover:bg-blue-50">Tinjau</a>
+                    <a href="{{ route('admin.join_requests.show', $request->id) }}" class="text-red-600 hover:text-red-900 font-medium border border-red-200 rounded px-3 py-1 hover:bg-red-50">Tinjau</a>
                 </td>
             </tr>
             @empty

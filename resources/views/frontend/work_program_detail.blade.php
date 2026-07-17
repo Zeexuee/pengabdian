@@ -104,11 +104,11 @@
 
 {{-- ── Breadcrumb ── --}}
 <nav class="mb-6 text-sm text-gray-500 flex items-center gap-1.5 flex-wrap">
-    <a href="{{ route('home') }}" class="hover:text-blue-600 transition">Beranda</a>
+    <a href="{{ route('home') }}" class="hover:text-red-600 transition">Beranda</a>
     <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
     </svg>
-    <a href="{{ route('work_programs') }}" class="hover:text-blue-600 transition">Program Kerja</a>
+    <a href="{{ route('work_programs') }}" class="hover:text-red-600 transition">Program Kerja</a>
     <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
     </svg>
@@ -201,7 +201,7 @@
                         </div>
                     @else
                         <a href="{{ $block->video_url }}" target="_blank"
-                           class="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+                           class="inline-flex items-center gap-2 px-5 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
                             Buka Video
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -217,7 +217,7 @@
                     @if($block->title)
                         <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-3">{{ $block->title }}</h2>
                     @endif
-                    <div class="block-text-content prose prose-sm md:prose-base prose-blue max-w-none text-gray-600 custom-scrollbar">
+                    <div class="block-text-content prose prose-sm md:prose-base prose-red max-w-none text-gray-600 custom-scrollbar">
                         {!! nl2br(e($block->content)) !!}
                     </div>
                 </div>
@@ -230,7 +230,7 @@
 {{-- ── Kembali ── --}}
 <div class="border-t border-gray-100 pt-8 mt-4 mb-12">
     <a href="{{ route('work_programs') }}"
-       class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold transition">
+       class="inline-flex items-center gap-2 text-red-600 hover:text-red-800 font-semibold transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>

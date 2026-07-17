@@ -267,9 +267,9 @@
 
 {{-- Breadcrumb --}}
 <nav class="mb-6 text-sm text-gray-500 flex items-center gap-1.5 flex-wrap">
-    <a href="{{ route('home') }}" class="hover:text-blue-600 transition">Beranda</a>
+    <a href="{{ route('home') }}" class="hover:text-red-600 transition">Beranda</a>
     <span>/</span>
-    <a href="{{ route('products') }}" class="hover:text-blue-600 transition">Produk Kami</a>
+    <a href="{{ route('products') }}" class="hover:text-red-600 transition">Produk Kami</a>
     <span>/</span>
     <span class="text-gray-700 font-medium truncate max-w-xs">{{ $product->name }}</span>
 </nav>
@@ -425,7 +425,7 @@
 
 {{-- Kembali --}}
 <div class="border-t border-gray-100 pt-6 mb-8">
-    <a href="{{ route('products') }}" class="text-blue-600 hover:text-blue-800 text-sm font-semibold transition">
+    <a href="{{ route('products') }}" class="text-red-600 hover:text-red-800 text-sm font-semibold transition">
         &larr; Kembali ke Produk Kami
     </a>
 </div>

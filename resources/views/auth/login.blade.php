@@ -41,14 +41,14 @@
             <!-- Submit Button -->
             <div class="flex items-center justify-between">
                 <button type="submit"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
                     Masuk
                 </button>
             </div>
         </form>
         
         <div class="text-center mt-4">
-            <a href="{{ route('home') }}" class="text-sm text-blue-500 hover:text-blue-800">Kembali ke Beranda</a>
+            <a href="{{ route('home') }}" class="text-sm text-red-500 hover:text-red-800">Kembali ke Beranda</a>
         </div>
     </div>
 

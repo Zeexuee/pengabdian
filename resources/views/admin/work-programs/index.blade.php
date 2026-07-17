@@ -5,7 +5,7 @@
 @section('content')
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-xl font-bold text-gray-800">Daftar Program Kerja</h2>
-    <a href="{{ route('admin.work-programs.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+    <a href="{{ route('admin.work-programs.create') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition">
         + Tambah Program Kerja
     </a>
 </div>
@@ -44,11 +44,11 @@
                 <td class="px-5 py-5 border-b border-gray-200 text-sm">
                     <span class="relative inline-block px-3 py-1 font-semibold leading-tight 
                         @if($item->status === 'completed') text-green-900 
-                        @elseif($item->status === 'ongoing') text-blue-900 
+                        @elseif($item->status === 'ongoing') text-red-900 
                         @else text-gray-900 @endif">
                         <span aria-hidden class="absolute inset-0 opacity-50 rounded-full 
                             @if($item->status === 'completed') bg-green-200 
-                            @elseif($item->status === 'ongoing') bg-blue-200 
+                            @elseif($item->status === 'ongoing') bg-red-200 
                             @else bg-gray-200 @endif"></span>
                         <span class="relative capitalize">
                             @if($item->status === 'completed') Selesai
@@ -62,7 +62,7 @@
                         <a href="{{ route('admin.work-programs.detail', $item->id) }}"
                            class="text-purple-600 hover:text-purple-900 font-semibold">Kelola Detail</a>
                         <a href="{{ route('admin.work-programs.edit', $item->id) }}"
-                           class="text-blue-600 hover:text-blue-900 font-semibold">Edit</a>
+                           class="text-red-600 hover:text-red-900 font-semibold">Edit</a>
                         <form action="{{ route('admin.work-programs.destroy', $item->id) }}" method="POST"
                               onsubmit="return confirm('Apakah Anda yakin ingin menghapus program kerja ini?');">
                             @csrf

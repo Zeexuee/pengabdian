@@ -36,7 +36,7 @@
         <div>
             <label for="name" class="block text-gray-700 font-semibold mb-2">Nama Produk <span class="text-red-500">*</span></label>
             <input type="text" name="name" id="name" value="{{ old('name', $product->name) }}"
-                   class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 @error('name') border-red-500 @enderror"
+                   class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 @error('name') border-red-500 @enderror"
                    placeholder="Contoh: Pot Bunga Daur Ulang">
             @error('name')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -48,13 +48,13 @@
             <div>
                 <label for="category" class="block text-gray-700 font-semibold mb-2">Kategori <span class="text-gray-400 font-normal text-sm">(opsional)</span></label>
                 <input type="text" name="category" id="category" value="{{ old('category', $product->category) }}"
-                       class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
                        placeholder="Contoh: Kertas, Plastik, Organik">
             </div>
             <div>
                 <label for="price" class="block text-gray-700 font-semibold mb-2">Harga <span class="text-gray-400 font-normal text-sm">(opsional)</span></label>
                 <input type="text" name="price" id="price" value="{{ old('price', $product->price) }}"
-                       class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
                        placeholder="Contoh: Rp 15.000/buah">
             </div>
         </div>
@@ -63,7 +63,7 @@
         <div>
             <label for="description_editor" class="block text-gray-700 font-semibold mb-2">Deskripsi Produk</label>
             <textarea name="description" id="description_editor" rows="6"
-                      class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('description', $product->description) }}</textarea>
+                      class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500">{{ old('description', $product->description) }}</textarea>
         </div>
 
         {{-- Ganti Gambar --}}
@@ -113,7 +113,7 @@
                 URL Video Produk <span class="text-gray-400 font-normal text-sm">(opsional — YouTube, dll)</span>
             </label>
             <input type="text" name="video_url" id="video_url" value="{{ old('video_url', $product->video_url) }}"
-                   class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                   class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
                    placeholder="https://www.youtube.com/watch?v=...">
         </div>
 
@@ -122,7 +122,7 @@
             <input type="hidden" name="is_active" value="0">
             <input type="checkbox" name="is_active" id="is_active" value="1"
                    {{ old('is_active', $product->is_active) ? 'checked' : '' }}
-                   class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                   class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
             <label for="is_active" class="ml-2 text-gray-700 font-semibold">Produk Aktif (tampil di website)</label>
         </div>
 
@@ -131,7 +131,7 @@
             <a href="{{ route('admin.products.index') }}"
                class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 font-semibold transition">Batal</a>
             <button type="submit"
-                    class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold transition">
+                    class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-semibold transition">
                 Perbarui Produk
             </button>
         </div>

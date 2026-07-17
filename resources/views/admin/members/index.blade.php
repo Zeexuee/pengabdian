@@ -21,13 +21,13 @@
             @csrf
             <div class="flex flex-col sm:flex-row gap-3">
                 <input type="file" name="images[]" multiple accept="image/*"
-                    class="flex-grow block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    class="flex-grow block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"
                     required>
-                <select name="position" class="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 focus:ring-blue-500 focus:border-blue-500 flex-shrink-0">
+                <select name="position" class="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 focus:ring-red-500 focus:border-red-500 flex-shrink-0">
                     <option value="above">⬆ Di Atas Daftar Anggota</option>
                     <option value="below" selected>⬇ Di Bawah Daftar Anggota</option>
                 </select>
-                <button type="submit" class="flex-shrink-0 px-5 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition text-sm">
+                <button type="submit" class="flex-shrink-0 px-5 py-2 bg-red-600 text-white rounded font-bold hover:bg-red-700 transition text-sm">
                     Upload
                 </button>
             </div>
@@ -38,10 +38,10 @@
     @php $sectionsAbove = $sections->where('position', 'above'); @endphp
     <div class="mb-5">
         <div class="flex items-center gap-2 mb-2">
-            <span class="text-xs font-bold text-white bg-indigo-500 px-2 py-0.5 rounded">⬆ Di Atas Daftar Anggota</span>
+            <span class="text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded">⬆ Di Atas Daftar Anggota</span>
             <span class="text-xs text-gray-400">{{ $sectionsAbove->count() }} gambar</span>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 min-h-[80px] bg-indigo-50/50 border-2 border-dashed border-indigo-200 rounded-lg p-2" id="sortable-sections-above">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 min-h-[80px] bg-red-50/50 border-2 border-dashed border-red-200 rounded-lg p-2" id="sortable-sections-above">
             @forelse($sectionsAbove as $sec)
                 <div data-id="{{ $sec->id }}" class="relative group rounded-lg overflow-hidden border shadow-sm cursor-move bg-white">
                     <img src="{{ asset('storage/' . $sec->image) }}" class="w-full h-28 object-cover">
@@ -57,7 +57,7 @@
                     <div class="absolute top-1 left-1 bg-black/40 text-white text-[10px] px-1 py-0.5 rounded">⬆ Atas</div>
                 </div>
             @empty
-                <div class="col-span-full text-center text-xs text-indigo-300 py-4">Belum ada gambar di posisi ini.</div>
+                <div class="col-span-full text-center text-xs text-red-300 py-4">Belum ada gambar di posisi ini.</div>
             @endforelse
         </div>
     </div>
@@ -101,7 +101,7 @@
         <h2 class="text-xl font-bold text-gray-800">Daftar Anggota</h2>
         <p class="text-gray-500 text-sm mt-1">Seret baris untuk mengubah urutan tampil di halaman publik.</p>
     </div>
-    <a href="{{ route('admin.members.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition text-sm">
+    <a href="{{ route('admin.members.create') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition text-sm">
         + Tambah Anggota
     </a>
 </div>
@@ -138,7 +138,7 @@
                 </td>
                 <td class="px-4 py-4 border-b border-gray-200 text-sm">
                     <div class="flex items-center space-x-3">
-                        <a href="{{ route('admin.members.edit', $item->id) }}" class="text-blue-600 hover:text-blue-900 font-semibold">Edit</a>
+                        <a href="{{ route('admin.members.edit', $item->id) }}" class="text-red-600 hover:text-red-900 font-semibold">Edit</a>
                         <form action="{{ route('admin.members.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus anggota ini?');">
                             @csrf
                             @method('DELETE')
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (membersEl) {
         Sortable.create(membersEl, {
             animation: 150,
-            ghostClass: 'bg-blue-50',
+            ghostClass: 'bg-red-50',
             onEnd: function () {
                 var items = [];
                 membersEl.querySelectorAll('tr[data-id]').forEach(function (row, index) {

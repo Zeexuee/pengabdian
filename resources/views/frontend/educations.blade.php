@@ -112,7 +112,7 @@
 
 @section('content')
 <div class="mb-12">
-    <h1 class="text-3xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4 mb-6">Pusat Edukasi</h1>
+    <h1 class="text-3xl font-bold text-gray-900 border-l-4 border-red-600 pl-4 mb-6">Pusat Edukasi</h1>
     <p class="text-gray-600 max-w-2xl">Materi pembelajaran, tutorial, dan artikel informatif untuk meningkatkan wawasan.</p>
 </div>
 

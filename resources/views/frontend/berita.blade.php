@@ -123,7 +123,7 @@
 
 @section('content')
 <div class="mb-12">
-    <h1 class="text-3xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4 mb-6">Berita Terkini</h1>
+    <h1 class="text-3xl font-bold text-gray-900 border-l-4 border-red-600 pl-4 mb-6">Berita Terkini</h1>
     <p class="text-gray-600 max-w-2xl">Dapatkan informasi, pengumuman, dan artikel terbaru dari aktivitas komunitas kami.</p>
 </div>
 

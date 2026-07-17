@@ -105,7 +105,7 @@
 
 {{-- Page Header --}}
 <div class="mb-8 md:mb-12">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4 mb-2 md:mb-3">
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 border-l-4 border-red-600 pl-4 mb-2 md:mb-3">
         Program Kerja Komunitas
     </h1>
     <p class="text-gray-500 text-sm md:text-base max-w-2xl pl-5">
@@ -162,7 +162,7 @@
                     </div>
 
                     {{-- Indikator klik --}}
-                    <div class="mt-2 flex items-center gap-1 text-blue-600 text-sm font-semibold group-hover:gap-2 transition-all">
+                    <div class="mt-2 flex items-center gap-1 text-red-600 text-sm font-semibold group-hover:gap-2 transition-all">
                         Lihat Detail
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>

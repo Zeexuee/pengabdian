@@ -46,7 +46,7 @@
                     </p>
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 text-sm flex space-x-4">
-                    <a href="{{ route('admin.join_requests.show', $item->id) }}" class="text-blue-600 hover:text-blue-900 font-semibold">Detail</a>
+                    <a href="{{ route('admin.join_requests.show', $item->id) }}" class="text-red-600 hover:text-red-900 font-semibold">Detail</a>
                     <form action="{{ route('admin.join_requests.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
                         @csrf
                         @method('DELETE')

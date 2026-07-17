@@ -38,9 +38,9 @@
     </div>
 
     <!-- Form Aksi Keputusan Admin -->
-    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-        <h3 class="text-md font-bold text-blue-900 mb-2">Ambil Keputusan</h3>
-        <p class="text-sm text-blue-800 mb-4">Ubah status pendaftaran ini sesuai dengan hasil evaluasi komite/admin.</p>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+        <h3 class="text-md font-bold text-red-900 mb-2">Ambil Keputusan</h3>
+        <p class="text-sm text-red-800 mb-4">Ubah status pendaftaran ini sesuai dengan hasil evaluasi komite/admin.</p>
         
         <form action="{{ route('admin.join_requests.update_status', $joinRequest->id) }}" method="POST" class="flex flex-col sm:flex-row items-end gap-4">
             @csrf
@@ -48,14 +48,14 @@
             
             <div class="flex-grow w-full sm:w-auto">
                 <label for="status" class="block text-sm font-semibold text-gray-700 mb-1">Ubah Status Menjadi:</label>
-                <select name="status" id="status" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 py-2 px-3">
+                <select name="status" id="status" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 py-2 px-3">
                     <option value="pending" {{ $joinRequest->status == 'pending' ? 'selected' : '' }}>Biarkan Pending</option>
                     <option value="approved" {{ $joinRequest->status == 'approved' ? 'selected' : '' }}>Terima (Approved)</option>
                     <option value="rejected" {{ $joinRequest->status == 'rejected' ? 'selected' : '' }}>Tolak (Rejected)</option>
                 </select>
             </div>
             
-            <button type="submit" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition shadow-sm">
+            <button type="submit" class="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-md transition shadow-sm">
                 Simpan Keputusan
             </button>
         </form>

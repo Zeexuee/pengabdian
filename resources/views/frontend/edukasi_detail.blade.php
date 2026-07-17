@@ -42,7 +42,7 @@
 
 {{-- Header: judul & meta (dalam max-w-4xl) --}}
 <div class="max-w-4xl mx-auto mb-6 md:mb-8">
-    <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Materi Edukasi</span>
+    <span class="bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Materi Edukasi</span>
     <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mt-4 mb-2 leading-tight">{{ $education->title }}</h1>
     <p class="text-gray-400 text-sm">Dipublikasikan pada {{ $education->created_at->format('d M Y') }}</p>
 </div>
@@ -62,12 +62,12 @@
 
 {{-- Konten artikel (dalam max-w-4xl) --}}
 <div class="max-w-4xl mx-auto">
-    <div class="prose max-w-none prose-blue bg-white p-8 sm:p-10 rounded-2xl shadow-sm border border-gray-100">
+    <div class="prose max-w-none prose-red bg-white p-8 sm:p-10 rounded-2xl shadow-sm border border-gray-100">
         {!! $education->content !!}
     </div>
 
     <div class="mt-12 pt-8 border-t border-gray-200">
-        <a href="{{ route('educations') }}" class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center transition">
+        <a href="{{ route('educations') }}" class="text-red-600 hover:text-red-800 font-semibold flex items-center transition">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Kembali ke Pusat Edukasi
         </a>

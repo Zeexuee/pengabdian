@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="mb-6 flex justify-between items-center">
-    <a href="{{ route('admin.join_requests.index') }}" class="text-blue-600 hover:underline">&larr; Kembali ke Daftar</a>
+    <a href="{{ route('admin.join_requests.index') }}" class="text-red-600 hover:underline">&larr; Kembali ke Daftar</a>
 </div>
 
 <div class="bg-white rounded-lg shadow p-6 max-w-3xl">
@@ -17,7 +17,7 @@
         </div>
         <div>
             <p class="text-sm text-gray-500">Email</p>
-            <p class="font-semibold text-gray-800"><a href="mailto:{{ $join_request->email }}" class="text-blue-600">{{ $join_request->email }}</a></p>
+            <p class="font-semibold text-gray-800"><a href="mailto:{{ $join_request->email }}" class="text-red-600">{{ $join_request->email }}</a></p>
         </div>
         <div>
             <p class="text-sm text-gray-500">Nomor Telepon</p>
@@ -54,7 +54,7 @@
             
             <div class="mb-4">
                 <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Ubah Status:</label>
-                <select name="status" id="status" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <select name="status" id="status" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm">
                     <option value="pending" {{ $join_request->status === 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="approved" {{ $join_request->status === 'approved' ? 'selected' : '' }}>Approved (Terima)</option>
                     <option value="rejected" {{ $join_request->status === 'rejected' ? 'selected' : '' }}>Rejected (Tolak)</option>
@@ -63,10 +63,10 @@
 
             <div class="mb-4">
                 <label for="admin_notes" class="block text-sm font-medium text-gray-700 mb-1">Catatan Admin (Opsional):</label>
-                <textarea name="admin_notes" id="admin_notes" rows="3" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Tambahkan catatan mengapa diterima/ditolak...">{{ old('admin_notes', $join_request->admin_notes) }}</textarea>
+                <textarea name="admin_notes" id="admin_notes" rows="3" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Tambahkan catatan mengapa diterima/ditolak...">{{ old('admin_notes', $join_request->admin_notes) }}</textarea>
             </div>
 
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition">
                 Simpan Perubahan
             </button>
         </form>

@@ -39,12 +39,12 @@
     @endif
     
     <!-- Render konten CKEditor -->
-    <div class="prose max-w-none prose-blue prose-img:rounded-xl">
+    <div class="prose max-w-none prose-red prose-img:rounded-xl">
         {!! $news->content !!}
     </div>
     
     <div class="mt-12 pt-8 border-t border-gray-200">
-        <a href="{{ route('news') }}" class="text-blue-600 hover:text-blue-800 font-semibold flex items-center transition">
+        <a href="{{ route('news') }}" class="text-red-600 hover:text-red-800 font-semibold flex items-center transition">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             Kembali ke Daftar Berita
         </a>

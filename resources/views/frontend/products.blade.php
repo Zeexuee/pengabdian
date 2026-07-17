@@ -114,7 +114,7 @@
 @section('content')
 
 <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4 mb-2">Produk Kami</h1>
+    <h1 class="text-3xl font-bold text-gray-900 border-l-4 border-red-600 pl-4 mb-2">Produk Kami</h1>
     <p class="text-gray-500 max-w-2xl pl-5">Produk daur ulang hasil pengolahan sampah dari Bank Sampah Sejahtera Gemilang RW. 06.</p>
 </div>
 

@@ -149,13 +149,16 @@
        NEWS CARD — tinggi gambar dikunci
     ============================================= */
     .news-thumb {
-        height: 200px;
+        height: 140px; /* lebih pendek di mobile karena 2 kolom */
         overflow: hidden;
         background: #1e293b;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    @media (min-width: 640px) {
+        .news-thumb { height: 200px; }
     }
     .news-thumb img {
         width: 100%; height: 100%;
@@ -246,7 +249,7 @@
                 @if($section->title)
                     <h2 class="section-title mb-4">{{ $section->title }}</h2>
                 @endif
-                <div class="text-content-box prose prose-sm md:prose-base prose-blue max-w-none text-gray-600 custom-scrollbar">
+                <div class="text-content-box prose prose-sm md:prose-base prose-red max-w-none text-gray-600 custom-scrollbar">
                     {!! $section->content !!}
                 </div>
             </div>
@@ -273,13 +276,13 @@
                         @if($section->title)
                             <h2 class="section-title">{{ $section->title }}</h2>
                         @endif
-                        <div class="img-text-content-box prose prose-sm md:prose-base prose-blue text-gray-600 max-w-none custom-scrollbar">
+                        <div class="img-text-content-box prose prose-sm md:prose-base prose-red text-gray-600 max-w-none custom-scrollbar">
                             {!! $section->content !!}
                         </div>
                         @if($section->button_text)
                             <div class="pt-2">
                                 <a href="{{ $section->button_link ?? '#' }}"
-                                   class="inline-block px-7 py-3 bg-blue-600 text-white text-sm font-bold rounded-full hover:bg-blue-700 hover:shadow-lg transition transform hover:-translate-y-0.5">
+                                   class="inline-block px-7 py-3 bg-red-600 text-white text-sm font-bold rounded-full hover:bg-red-700 hover:shadow-lg transition transform hover:-translate-y-0.5">
                                     {{ $section->button_text }}
                                 </a>
                             </div>
@@ -312,7 +315,7 @@
                         @else
                             <div class="video-fallback flex items-center justify-center">
                                 <a href="{{ $section->video_url }}" target="_blank"
-                                   class="px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition">
+                                   class="px-6 py-3 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition">
                                     Buka Video
                                     <svg class="w-4 h-4 inline ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -343,7 +346,7 @@
             <p class="text-gray-500 mt-1 text-sm md:text-base">Kabar dan pembaruan terkini dari berbagai aktivitas komunitas.</p>
         </div>
         <a href="{{ route('news') }}"
-           class="hidden sm:inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold transition group flex-shrink-0">
+           class="hidden sm:inline-flex items-center text-red-600 hover:text-red-800 font-semibold transition group flex-shrink-0">
             Lihat Semua
             <svg class="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -352,7 +355,7 @@
     </div>
 
     {{-- Grid Kartu Berita --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
         @forelse($latest_news as $item)
             <div class="news-card bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden">
 
@@ -369,15 +372,15 @@
                             </svg>
                         </div>
                     @endif
-                    <div class="absolute top-3 right-3 bg-white/95 backdrop-blur px-2.5 py-1 rounded-full text-xs font-bold text-blue-600 shadow-sm">
+                    <div class="absolute top-3 right-3 bg-white/95 backdrop-blur px-2.5 py-1 rounded-full text-xs font-bold text-red-600 shadow-sm">
                         Baru
                     </div>
                 </div>
 
                 {{-- Konten Kartu --}}
                 <div class="p-5 flex flex-col flex-grow">
-                    <p class="text-xs text-gray-400 mb-2 font-medium flex items-center gap-1">
-                        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <p class="text-[10px] sm:text-xs text-gray-400 mb-1 sm:mb-2 font-medium flex items-center gap-1">
+                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
@@ -385,19 +388,19 @@
                     </p>
 
                     {{-- Judul — max 2 baris --}}
-                    <h3 class="text-base font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition line-clamp-2 leading-snug">
+                    <h3 class="text-sm sm:text-base font-bold text-gray-900 mb-1 sm:mb-2 group-hover:text-red-600 transition line-clamp-2 leading-snug">
                         {{ $item->title }}
                     </h3>
 
                     {{-- Excerpt — max 3 baris --}}
-                    <p class="text-gray-500 text-sm mb-4 line-clamp-3 flex-grow">
+                    <p class="text-gray-500 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-3 flex-grow">
                         {!! Str::limit(strip_tags($item->content), 110) !!}
                     </p>
 
                     <a href="{{ route('news.detail', $item->slug) }}"
-                       class="inline-flex items-center text-blue-600 text-sm font-semibold hover:underline mt-auto">
+                       class="inline-flex items-center text-red-600 text-[11px] sm:text-sm font-semibold hover:underline mt-auto">
                         Baca Selengkapnya
-                        <svg class="w-4 h-4 ml-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
                     </a>
@@ -417,7 +420,7 @@
     {{-- Tombol "Lihat Semua" versi mobile --}}
     <div class="mt-6 text-center sm:hidden">
         <a href="{{ route('news') }}"
-           class="inline-block w-full py-3 px-4 bg-blue-50 text-blue-700 font-bold rounded-xl hover:bg-blue-100 transition text-sm">
+           class="inline-block w-full py-3 px-4 bg-red-50 text-red-700 font-bold rounded-xl hover:bg-red-100 transition text-sm">
             Lihat Semua Berita →
         </a>
     </div>

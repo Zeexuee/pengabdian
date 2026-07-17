@@ -9,13 +9,13 @@
     <div class="flex items-center space-x-4">
         <form action="{{ route('admin.news.index') }}" method="GET" class="flex items-center">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari berita..." 
-                   class="border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm w-64">
+                   class="border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 text-sm w-64">
             <button type="submit" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-r-md border border-l-0 border-gray-300 transition text-sm font-semibold">
                 Cari
             </button>
         </form>
         
-        <a href="{{ route('admin.news.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition whitespace-nowrap">
+        <a href="{{ route('admin.news.create') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition whitespace-nowrap">
             + Tambah Berita
         </a>
     </div>
@@ -55,7 +55,7 @@
                     </p>
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 text-sm flex space-x-4">
-                    <a href="{{ route('admin.news.edit', $item->id) }}" class="text-blue-600 hover:text-blue-900 font-semibold">Edit</a>
+                    <a href="{{ route('admin.news.edit', $item->id) }}" class="text-red-600 hover:text-red-900 font-semibold">Edit</a>
                     <form action="{{ route('admin.news.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?');">
                         @csrf
                         @method('DELETE')

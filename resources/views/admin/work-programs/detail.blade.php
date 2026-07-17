@@ -21,7 +21,7 @@
 {{-- ── Header ── --}}
 <div class="flex flex-wrap justify-between items-start gap-3 mb-6">
     <div>
-        <a href="{{ route('admin.work-programs.index') }}" class="text-blue-600 hover:underline text-sm">
+        <a href="{{ route('admin.work-programs.index') }}" class="text-red-600 hover:underline text-sm">
             &larr; Kembali ke Daftar Program Kerja
         </a>
         <h2 class="text-lg font-bold text-gray-800 mt-1">{{ $work_program->title }}</h2>
@@ -29,7 +29,7 @@
     </div>
     @if($work_program->slug)
         <a href="{{ route('work_programs.detail', $work_program->slug) }}" target="_blank"
-           class="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 border border-gray-300 rounded-lg px-3 py-2 transition">
+           class="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-red-600 border border-gray-300 rounded-lg px-3 py-2 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -54,7 +54,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tipe Konten <span class="text-red-500">*</span></label>
                     <select id="type" name="type" onchange="toggleTypeFields()" required
-                            class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-red-500 focus:border-red-500">
                         <option value="">-- Pilih Tipe --</option>
                         <option value="image" {{ old('type') === 'image' ? 'selected' : '' }}>🖼️ Gambar</option>
                         <option value="video" {{ old('type') === 'video' ? 'selected' : '' }}>🎬 Video (YouTube)</option>
@@ -67,7 +67,7 @@
                 <div id="field-title">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Judul (opsional)</label>
                     <input type="text" name="title" value="{{ old('title') }}"
-                           class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-blue-500 focus:border-blue-500"
+                           class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-red-500 focus:border-red-500"
                            placeholder="Judul sub-bagian…">
                     @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -76,7 +76,7 @@
                 <div id="field-image" class="hidden">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Upload Gambar <span class="text-red-500">*</span></label>
                     <input type="file" name="image" accept="image/*"
-                           class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                           class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100">
                     <p class="text-xs text-gray-400 mt-1">JPG, PNG, WEBP — maks 8 MB</p>
                     @error('image') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -85,7 +85,7 @@
                 <div id="field-video" class="hidden">
                     <label class="block text-sm font-medium text-gray-700 mb-1">URL YouTube <span class="text-red-500">*</span></label>
                     <input type="url" name="video_url" value="{{ old('video_url') }}"
-                           class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-blue-500 focus:border-blue-500"
+                           class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-red-500 focus:border-red-500"
                            placeholder="https://www.youtube.com/watch?v=...">
                     @error('video_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -94,13 +94,13 @@
                 <div id="field-text" class="hidden">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Isi Teks <span class="text-red-500">*</span></label>
                     <textarea name="content" id="block-content" rows="5"
-                              class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-blue-500 focus:border-blue-500"
+                              class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-red-500 focus:border-red-500"
                               placeholder="Tulis konten teks di sini…">{{ old('content') }}</textarea>
                     @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <button type="submit"
-                        class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition shadow">
+                        class="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition shadow">
                     Tambah Konten
                 </button>
             </form>
@@ -117,7 +117,7 @@
                     <div class="flex items-center gap-2">
                         <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full
                             {{ $block->type === 'image' ? 'bg-green-100 text-green-700' :
-                               ($block->type === 'video' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700') }}">
+                               ($block->type === 'video' ? 'bg-red-100 text-red-700' : 'bg-red-100 text-red-700') }}">
                             {{ $block->type === 'image' ? '🖼️ Gambar' : ($block->type === 'video' ? '🎬 Video' : '📝 Teks') }}
                         </span>
                         @if($block->title)
@@ -158,7 +158,7 @@
                                         frameborder="0" allowfullscreen></iframe>
                             </div>
                         @else
-                            <a href="{{ $block->video_url }}" target="_blank" class="text-blue-600 underline text-sm break-all">
+                            <a href="{{ $block->video_url }}" target="_blank" class="text-red-600 underline text-sm break-all">
                                 {{ $block->video_url }}
                             </a>
                         @endif

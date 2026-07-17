@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="mb-6 flex justify-between items-center">
-    <a href="{{ route('admin.contacts.index') }}" class="text-blue-600 hover:underline">&larr; Kembali ke Daftar Pesan</a>
+    <a href="{{ route('admin.contacts.index') }}" class="text-red-600 hover:underline">&larr; Kembali ke Daftar Pesan</a>
 </div>
 
 <div class="bg-white rounded-lg shadow p-6 max-w-3xl">
@@ -17,7 +17,7 @@
         </div>
         <div>
             <p class="text-sm text-gray-500">Email</p>
-            <p class="font-semibold text-gray-800"><a href="mailto:{{ $contact->email }}" class="text-blue-600">{{ $contact->email }}</a></p>
+            <p class="font-semibold text-gray-800"><a href="mailto:{{ $contact->email }}" class="text-red-600">{{ $contact->email }}</a></p>
         </div>
         <div>
             <p class="text-sm text-gray-500">Tanggal Dikirim</p>
@@ -47,11 +47,11 @@
             @csrf
             @method('PUT')
             <label for="is_read" class="text-sm font-medium text-gray-700">Ubah Status:</label>
-            <select name="is_read" id="is_read" class="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <select name="is_read" id="is_read" class="border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm">
                 <option value="1" {{ $contact->is_read ? 'selected' : '' }}>Sudah Dibaca</option>
                 <option value="0" {{ !$contact->is_read ? 'selected' : '' }}>Belum Dibaca</option>
             </select>
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition text-sm">
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition text-sm">
                 Simpan
             </button>
         </form>

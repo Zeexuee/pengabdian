@@ -16,8 +16,8 @@
     <div class="bg-white p-4 rounded-lg shadow-sm border mb-4">
         <form action="{{ route('admin.home-sections.hero.store') }}" method="POST" enctype="multipart/form-data" class="flex items-center space-x-4">
             @csrf
-            <input type="file" name="images[]" multiple accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" required>
-            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition flex-shrink-0">
+            <input type="file" name="images[]" multiple accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100" required>
+            <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded font-bold hover:bg-red-700 transition flex-shrink-0">
                 Upload Gambar
             </button>
         </form>
@@ -53,7 +53,7 @@
         <h2 class="text-xl font-bold text-gray-800">Daftar Komponen Lainnya</h2>
         <p class="text-gray-600 text-sm mt-1">Komponen yang akan tampil di bawah Hero Banner.</p>
     </div>
-    <a href="{{ route('admin.home-sections.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+    <a href="{{ route('admin.home-sections.create') }}" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
         + Tambah Komponen
     </a>
 </div>
@@ -100,7 +100,7 @@
                         @endif
                     </td>
                     <td class="py-3 px-4 flex items-center space-x-3">
-                        <a href="{{ route('admin.home-sections.edit', $item->id) }}" class="text-blue-600 hover:text-blue-800 transition">Edit</a>
+                        <a href="{{ route('admin.home-sections.edit', $item->id) }}" class="text-red-600 hover:text-red-800 transition">Edit</a>
                         <form action="{{ route('admin.home-sections.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus komponen ini?');">
                             @csrf
                             @method('DELETE')
@@ -129,7 +129,7 @@
         if (el) {
             var sortable = Sortable.create(el, {
                 animation: 150,
-                ghostClass: 'bg-blue-50',
+                ghostClass: 'bg-red-50',
                 onEnd: function (evt) {
                     var items = [];
                     el.querySelectorAll('tr').forEach(function(row, index) {
@@ -166,7 +166,7 @@
         if (elHero) {
             var sortableHero = Sortable.create(elHero, {
                 animation: 150,
-                ghostClass: 'bg-blue-50',
+                ghostClass: 'bg-red-50',
                 onEnd: function (evt) {
                     var items = [];
                     elHero.querySelectorAll('div[data-id]').forEach(function(row, index) {

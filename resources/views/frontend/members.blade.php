@@ -100,7 +100,7 @@
 
 {{-- Page Header --}}
 <div class="mb-8 md:mb-12">
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4 mb-2 md:mb-3">Struktur Pengurus &amp; Anggota</h1>
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 border-l-4 border-red-600 pl-4 mb-2 md:mb-3">Struktur Pengurus &amp; Anggota</h1>
     <p class="text-gray-500 text-sm md:text-base max-w-2xl pl-5">Mengenal lebih dekat para penggerak komunitas yang berdedikasi.</p>
 </div>
 
@@ -134,8 +134,8 @@
                          alt="{{ $member->name }}"
                          class="w-full h-full object-cover">
                 @else
-                    <div class="w-full h-full flex items-center justify-center bg-blue-50">
-                        <svg class="w-10 h-10 text-blue-200" fill="currentColor" viewBox="0 0 24 24">
+                    <div class="w-full h-full flex items-center justify-center bg-red-50">
+                        <svg class="w-10 h-10 text-red-200" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                     </div>
@@ -145,7 +145,7 @@
             {{-- Info block — fixed-height clamped text --}}
             <div class="member-info">
                 <h3 class="member-name text-sm md:text-base font-bold text-gray-900 leading-tight">{{ $member->name }}</h3>
-                <p class="member-position text-blue-600 text-xs md:text-sm font-semibold mt-1">{{ $member->position }}</p>
+                <p class="member-position text-red-600 text-xs md:text-sm font-semibold mt-1">{{ $member->position }}</p>
                 {{-- Bio: only visible sm+ and always reserves 3 lines of space --}}
                 <p class="member-bio text-gray-400 text-xs mt-2">{{ $member->bio ?? '' }}</p>
             </div>
