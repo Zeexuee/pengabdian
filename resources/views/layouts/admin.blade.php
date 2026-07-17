@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - CMS Komunitas</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Admin Panel - Bank Sampah Sejahtera Gemilang</title>
     <!-- Integrasi Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -12,14 +13,12 @@
     <!-- Sidebar (Kiri - Fixed) -->
     <aside class="bg-gray-800 text-white w-64 min-h-screen fixed left-0 top-0 overflow-y-auto shadow-lg z-20">
         <div class="p-6 flex items-center justify-center border-b border-gray-700">
-            <span class="text-2xl font-bold tracking-wider">CMS Komunitas</span>
+            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10 w-auto mr-2" style="filter: brightness(0) invert(1);">
+            <span class="text-lg font-bold tracking-wider leading-tight">Bank Sampah<br>Sejahtera Gemilang</span>
         </div>
         <nav class="mt-6 px-4">
             <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Main Menu</p>
             <ul class="space-y-2">
-                <li>
-                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Dashboard</a>
-                </li>
                 <li>
                     <a href="{{ route('admin.home-sections.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.home-sections.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Pengaturan Beranda</a>
                 </li>
@@ -35,17 +34,11 @@
                 <li>
                     <a href="{{ route('admin.news.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.news.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Berita</a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.products.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.products.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Produk Kami</a>
+                </li>
             </ul>
 
-            <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Interaksi Publik</p>
-            <ul class="space-y-2">
-                <li>
-                    <a href="{{ route('admin.contacts.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.contacts.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Kontak</a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.join_requests.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.join_requests.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Permintaan Gabung</a>
-                </li>
-            </ul>
 
             <div class="mt-8 border-t border-gray-700 pt-6">
                 <!-- Form Logout -->

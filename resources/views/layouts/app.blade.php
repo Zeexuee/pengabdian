@@ -3,24 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMS Komunitas - @yield('title', 'Beranda')</title>
+    <title>Bank Sampah Sejahtera Gemilang RW. 06 - @yield('title', 'Beranda')</title>
     
     @hasSection('meta_tags')
         @yield('meta_tags')
     @else
-        <meta name="title" content="CMS Komunitas - @yield('title', 'Beranda')">
-        <meta name="description" content="Portal informasi dan manajemen CMS Komunitas yang terpercaya.">
+        <meta name="title" content="Bank Sampah Sejahtera Gemilang RW. 06 - @yield('title', 'Beranda')">
+        <meta name="description" content="Portal informasi Bank Sampah Sejahtera Gemilang RW. 06.">
     @endif
 
     <!-- Integrasi Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Script sederhana untuk toggle menu mobile -->
+    <!-- Script untuk toggle menu mobile & dropdown -->
     <script>
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         }
+
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Tutup dropdown jika klik di luar
+        document.addEventListener('click', function(event) {
+            const desktopDropdown = document.getElementById('tentang-dropdown');
+            const desktopTrigger = document.getElementById('tentang-trigger');
+            if (desktopDropdown && !desktopDropdown.contains(event.target) && !desktopTrigger.contains(event.target)) {
+                desktopDropdown.classList.add('hidden');
+            }
+        });
     </script>
     @stack('styles')
 </head>
@@ -29,27 +43,42 @@
     <!-- Komponen Navbar Responsif -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <!-- Logo / Nama Komunitas -->
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center text-2xl font-bold text-blue-600 tracking-tight">
-                        KOMUNITAS
+            <div class="relative flex items-center h-16">
+                <!-- Logo / Nama Komunitas (kiri) -->
+                <div class="flex items-center flex-shrink-0">
+                    <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo Bank Sampah" class="h-10 w-auto mr-2">
+                        <span class="text-lg font-bold text-blue-600 leading-tight hidden sm:inline">Bank Sampah<br class="hidden lg:block"> Sejahtera Gemilang</span>
                     </a>
                 </div>
-                
-                <!-- Menu Navigasi Desktop -->
-                <div class="hidden md:flex sm:items-center sm:space-x-2 lg:space-x-6">
+
+                <!-- Menu Navigasi Desktop (tengah absolute) -->
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-2 absolute left-1/2 -translate-x-1/2">
                     <a href="{{ route('home') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('home') ? 'text-blue-600 font-bold' : '' }}">Beranda</a>
                     <a href="{{ route('members') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('members') ? 'text-blue-600 font-bold' : '' }}">Struktur Anggota</a>
-                    <a href="{{ route('work_programs') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('work_programs') ? 'text-blue-600 font-bold' : '' }}">Program Kerja</a>
+
+                    <!-- Dropdown Tentang Kami -->
+                    <div class="relative">
+                        <button id="tentang-trigger" onclick="toggleDropdown('tentang-dropdown')" class="flex items-center text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition focus:outline-none {{ request()->routeIs('work_programs', 'work_programs.*', 'news', 'news.*') ? 'text-blue-600 font-bold' : '' }}">
+                            Tentang Kami
+                            <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="tentang-dropdown" class="hidden absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+                            <div class="py-1">
+                                <a href="{{ route('work_programs') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition {{ request()->routeIs('work_programs', 'work_programs.*') ? 'text-blue-600 bg-blue-50 font-semibold' : '' }}">Program Kerja</a>
+                                <a href="{{ route('news') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition {{ request()->routeIs('news', 'news.*') ? 'text-blue-600 bg-blue-50 font-semibold' : '' }}">Berita</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="{{ route('educations') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('educations') ? 'text-blue-600 font-bold' : '' }}">Edukasi</a>
-                    <a href="{{ route('news') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('news') ? 'text-blue-600 font-bold' : '' }}">Berita</a>
-                    <a href="{{ route('contact') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('contact') ? 'text-blue-600 font-bold' : '' }}">Kontak</a>
-                    <a href="{{ route('join') }}" class="bg-blue-600 text-white hover:bg-blue-700 px-5 py-2.5 rounded-full text-sm font-semibold transition shadow-md hover:shadow-lg">Gabung</a>
+                    <a href="{{ route('products') }}" class="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition {{ request()->routeIs('products', 'products.*') ? 'text-blue-600 font-bold' : '' }}">Produk Kami</a>
                 </div>
-                
-                <!-- Tombol Menu Hamburger (Mobile) -->
-                <div class="flex items-center md:hidden">
+
+                <!-- Tombol Menu Hamburger (Mobile) - kanan -->
+                <div class="flex items-center md:hidden ml-auto">
                     <button type="button" onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-expanded="false">
                         <span class="sr-only">Buka menu utama</span>
                         <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -65,11 +94,23 @@
             <div class="px-4 pt-2 pb-4 space-y-1 bg-white border-t border-gray-100 shadow-lg">
                 <a href="{{ route('home') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('home') ? 'text-blue-600 bg-blue-50' : '' }}">Beranda</a>
                 <a href="{{ route('members') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('members') ? 'text-blue-600 bg-blue-50' : '' }}">Struktur Anggota</a>
-                <a href="{{ route('work_programs') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('work_programs') ? 'text-blue-600 bg-blue-50' : '' }}">Program Kerja</a>
+
+                <!-- Tentang Kami accordion mobile -->
+                <div>
+                    <button onclick="toggleDropdown('mobile-tentang-submenu')" class="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('work_programs', 'work_programs.*', 'news', 'news.*') ? 'text-blue-600 bg-blue-50' : '' }}">
+                        <span>Tentang Kami</span>
+                        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="mobile-tentang-submenu" class="{{ request()->routeIs('work_programs', 'work_programs.*', 'news', 'news.*') ? '' : 'hidden' }} pl-4 mt-1 space-y-1">
+                        <a href="{{ route('work_programs') }}" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('work_programs', 'work_programs.*') ? 'text-blue-600 bg-blue-50 font-semibold' : '' }}">Program Kerja</a>
+                        <a href="{{ route('news') }}" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('news', 'news.*') ? 'text-blue-600 bg-blue-50 font-semibold' : '' }}">Berita</a>
+                    </div>
+                </div>
+
                 <a href="{{ route('educations') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('educations') ? 'text-blue-600 bg-blue-50' : '' }}">Edukasi</a>
-                <a href="{{ route('news') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('news') ? 'text-blue-600 bg-blue-50' : '' }}">Berita</a>
-                <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('contact') ? 'text-blue-600 bg-blue-50' : '' }}">Kontak</a>
-                <a href="{{ route('join') }}" class="block w-full text-center px-3 py-3 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 mt-4 shadow">Gabung Komunitas</a>
+                <a href="{{ route('products') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 {{ request()->routeIs('products', 'products.*') ? 'text-blue-600 bg-blue-50' : '' }}">Produk Kami</a>
             </div>
         </div>
     </nav>
@@ -118,7 +159,8 @@
             <div class="md:flex md:items-center md:justify-between">
                 <!-- Branding Footer -->
                 <div class="flex justify-center md:justify-start mb-6 md:mb-0">
-                    <span class="text-2xl font-bold tracking-wider">KOMUNITAS</span>
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo Bank Sampah" class="h-10 w-auto mr-3" style="filter: brightness(0) invert(1);">
+                    <span class="text-xl font-bold tracking-wider">Bank Sampah Sejahtera Gemilang</span>
                 </div>
                 <!-- Navigasi Cepat -->
                 <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 text-center md:text-left text-sm text-gray-400">
@@ -129,7 +171,7 @@
             </div>
             
             <div class="mt-8 border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-sm text-gray-500 text-center md:text-left">&copy; {{ date('Y') }} Komunitas CMS. Hak cipta dilindungi undang-undang.</p>
+                <p class="text-sm text-gray-500 text-center md:text-left">&copy; {{ date('Y') }} Bank Sampah Sejahtera Gemilang RW. 06. Hak cipta dilindungi undang-undang.</p>
                 <!-- Ikon Sosial Media (Dummy) -->
                 <div class="flex space-x-6 mt-4 md:mt-0">
                     <a href="#" class="text-gray-500 hover:text-white transition">

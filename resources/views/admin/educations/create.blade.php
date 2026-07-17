@@ -29,7 +29,7 @@
                 <!-- Input Konten / Artikel -->
                 <div>
                     <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Isi Artikel Edukasi <span class="text-red-500">*</span></label>
-                    <textarea name="content" id="content_editor" rows="10" required 
+                    <textarea name="content" id="content_editor" rows="10"
                         class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         placeholder="Tuliskan materi edukasi secara lengkap di sini...">{{ old('content') }}</textarea>
                     @error('content')
@@ -89,7 +89,25 @@
 
 @push('scripts')
 <script>
-    ClassicEditor.create(document.querySelector('#content_editor')).catch(error => { console.error(error); });
+    let contentEditor;
+    ClassicEditor
+        .create(document.querySelector('#content_editor'))
+        .then(editor => {
+            contentEditor = editor;
+        })
+        .catch(error => { console.error(error); });
+
+    // Salin konten CKEditor ke textarea sebelum form di-submit
+    document.querySelector('form').addEventListener('submit', function (e) {
+        if (contentEditor) {
+            document.querySelector('#content_editor').value = contentEditor.getData();
+        }
+        // Validasi manual: pastikan konten tidak kosong
+        if (!document.querySelector('#content_editor').value.trim()) {
+            e.preventDefault();
+            alert('Isi Artikel Edukasi tidak boleh kosong.');
+        }
+    });
 </script>
 @endpush
 @endsection

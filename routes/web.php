@@ -1,17 +1,45 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\FrontEndController;
+
+// ── Test Upload (HAPUS SETELAH SELESAI DEBUG) ──
+Route::get('/test-upload', function () {
+    return '<!DOCTYPE html><html><body>
+    <form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_token" value="' . csrf_token() . '">
+    <p>Pilih beberapa gambar:</p>
+    <input type="file" name="images[]" multiple accept="image/*"><br><br>
+    <button type="submit">Kirim</button>
+    </form></body></html>';
+});
+Route::post('/test-upload', function (Request $request) {
+    $result = ['has_file' => $request->hasFile('images')];
+    if ($request->hasFile('images')) {
+        $files = $request->file('images');
+        if (!is_array($files)) $files = [$files];
+        foreach ($files as $i => $f) {
+            $result['files'][] = ['index'=>$i,'name'=>$f->getClientOriginalName(),'valid'=>$f->isValid()];
+        }
+    }
+    return response()->json($result);
+});
+// ── End Test Upload ──
 
 // Public Routes
 Route::get('/', [FrontEndController::class, 'home'])->name('home');
 Route::get('/struktur-anggota', [FrontEndController::class, 'members'])->name('members');
 Route::get('/program-kerja', [FrontEndController::class, 'workPrograms'])->name('work_programs');
+Route::get('/program-kerja/{work_program:slug}', [FrontEndController::class, 'workProgramDetail'])->name('work_programs.detail');
 Route::get('/edukasi', [FrontEndController::class, 'educations'])->name('educations');
 Route::get('/edukasi/{education:slug}', [FrontEndController::class, 'educationDetail'])->name('educations.detail');
 Route::get('/berita', [FrontEndController::class, 'news'])->name('news');
 Route::get('/berita/{news:slug}', [FrontEndController::class, 'newsDetail'])->name('news.detail');
+
+Route::get('/produk', [FrontEndController::class, 'products'])->name('products');
+Route::get('/produk/{product:slug}', [FrontEndController::class, 'productDetail'])->name('products.detail');
 
 Route::get('/kontak', [FrontEndController::class, 'contact'])->name('contact');
 Route::post('/kontak', [FrontEndController::class, 'storeContact'])->name('contact.store')->middleware('throttle:3,1');
@@ -40,8 +68,14 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::delete('members/sections/{id}', [\App\Http\Controllers\Admin\MemberController::class, 'destroySectionImage'])->name('members.sections.destroy');
     Route::resource('members', \App\Http\Controllers\Admin\MemberController::class);
     Route::resource('work-programs', \App\Http\Controllers\Admin\WorkProgramController::class);
+    // Detail / Content Blocks
+    Route::get('work-programs/{work_program}/detail', [\App\Http\Controllers\Admin\WorkProgramController::class, 'showDetail'])->name('work-programs.detail');
+    Route::post('work-programs/{work_program}/blocks', [\App\Http\Controllers\Admin\WorkProgramController::class, 'storeBlock'])->name('work-programs.blocks.store');
+    Route::delete('work-programs/{work_program}/blocks/{block}', [\App\Http\Controllers\Admin\WorkProgramController::class, 'destroyBlock'])->name('work-programs.blocks.destroy');
     Route::resource('educations', \App\Http\Controllers\Admin\EducationController::class);
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
+    Route::delete('products/{product}/images/{image}', [\App\Http\Controllers\Admin\ProductController::class, 'destroyImage'])->name('products.images.destroy');
+    Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
 
     // Page Builder Home
     Route::post('home-sections/hero/reorder', [\App\Http\Controllers\Admin\HomeSectionController::class, 'reorderHero'])->name('home-sections.hero.reorder');

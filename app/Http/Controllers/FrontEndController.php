@@ -7,6 +7,7 @@ use App\Models\Education;
 use App\Models\JoinRequest;
 use App\Models\Member;
 use App\Models\News;
+use App\Models\Product;
 use App\Models\WorkProgram;
 use Illuminate\Http\Request;
 
@@ -38,6 +39,13 @@ class FrontEndController extends Controller
         return view('frontend.work_programs', compact('workPrograms'));
     }
 
+    public function workProgramDetail(WorkProgram $work_program)
+    {
+        $blocks = $work_program->blocks;
+        return view('frontend.work_program_detail', compact('work_program', 'blocks'));
+    }
+
+
     public function educations()
     {
         // Mengambil data edukasi yang dipublikasikan
@@ -66,6 +74,28 @@ class FrontEndController extends Controller
             abort(404);
         }
         return view('frontend.berita_detail', compact('news'));
+    }
+
+    public function products()
+    {
+        $products = Product::active()->with('images')->latest()->paginate(12);
+        return view('frontend.products', compact('products'));
+    }
+
+    public function productDetail(Product $product)
+    {
+        if (!$product->is_active) {
+            abort(404);
+        }
+        $product->load('images');
+        // Saran produk lain (mungkin kamu suka) — 4 produk aktif selain produk ini
+        $suggestions = Product::active()
+            ->with('images')
+            ->where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+        return view('frontend.product_detail', compact('product', 'suggestions'));
     }
 
     public function contact()

@@ -64,19 +64,34 @@
     }
     
     /* Styling for custom scrollbar in member-bio */
-    .member-bio::-webkit-scrollbar {
-        width: 4px;
+    .member-bio::-webkit-scrollbar { width: 4px; }
+    .member-bio::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+    .member-bio::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .member-bio::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* ======================================================
+       FOTO KEGIATAN (atas & bawah) — gambar penuh tanpa crop
+    ====================================================== */
+    .activity-photo-box {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        max-height: 560px;
+        overflow: hidden;
+        border-radius: 1rem;
+        background: #1e293b;        /* letterbox area */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 24px rgba(0,0,0,.10);
     }
-    .member-bio::-webkit-scrollbar-track {
-        background: #f1f1f1; 
-        border-radius: 4px;
+    .activity-photo-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
     }
-    .member-bio::-webkit-scrollbar-thumb {
-        background: #cbd5e1; 
-        border-radius: 4px;
-    }
-    .member-bio::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8; 
+    @media (max-width: 639px) {
+        .activity-photo-box { aspect-ratio: 4 / 3; }
     }
 </style>
 @endpush
@@ -98,10 +113,9 @@
 @if($sectionsAbove->count() > 0)
     <div class="space-y-4 md:space-y-8 mb-8 md:mb-12">
         @foreach($sectionsAbove as $sec)
-            <div class="w-full">
+            <div class="activity-photo-box">
                 <img src="{{ asset('storage/' . $sec->image) }}"
-                     alt="Foto Kegiatan"
-                     class="w-full rounded-2xl shadow-md object-cover max-h-[300px] md:max-h-[560px]">
+                     alt="Foto Kegiatan">
             </div>
         @endforeach
     </div>
@@ -148,10 +162,9 @@
 @if($sectionsBelow->count() > 0)
     <div class="space-y-4 md:space-y-8 mb-8">
         @foreach($sectionsBelow as $sec)
-            <div class="w-full">
+            <div class="activity-photo-box">
                 <img src="{{ asset('storage/' . $sec->image) }}"
-                     alt="Foto Kegiatan"
-                     class="w-full rounded-2xl shadow-md object-cover max-h-[300px] md:max-h-[560px]">
+                     alt="Foto Kegiatan">
             </div>
         @endforeach
     </div>

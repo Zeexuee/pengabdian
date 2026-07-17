@@ -57,13 +57,19 @@
                         </span>
                     </span>
                 </td>
-                <td class="px-5 py-5 border-b border-gray-200 text-sm flex items-center space-x-4 mt-2">
-                    <a href="{{ route('admin.work-programs.edit', $item->id) }}" class="text-blue-600 hover:text-blue-900 font-semibold">Edit</a>
-                    <form action="{{ route('admin.work-programs.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus program kerja ini?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-red-600 hover:text-red-900 font-semibold">Hapus</button>
-                    </form>
+                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <a href="{{ route('admin.work-programs.detail', $item->id) }}"
+                           class="text-purple-600 hover:text-purple-900 font-semibold">Kelola Detail</a>
+                        <a href="{{ route('admin.work-programs.edit', $item->id) }}"
+                           class="text-blue-600 hover:text-blue-900 font-semibold">Edit</a>
+                        <form action="{{ route('admin.work-programs.destroy', $item->id) }}" method="POST"
+                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus program kerja ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-900 font-semibold">Hapus</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @empty
