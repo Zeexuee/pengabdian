@@ -99,4 +99,31 @@
         </div>
     </form>
 </div>
+
+@push('scripts')
+<script>
+    let descriptionEditor;
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.querySelector('#description')) {
+            ClassicEditor
+                .create(document.querySelector('#description'))
+                .then(editor => {
+                    descriptionEditor = editor;
+                })
+                .catch(error => { console.error(error); });
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        if (descriptionEditor) {
+            document.querySelector('#description').value = descriptionEditor.getData();
+        }
+    });
+</script>
+<style>
+    .ck-editor__editable_inline {
+        min-height: 200px;
+    }
+</style>
+@endpush
 @endsection

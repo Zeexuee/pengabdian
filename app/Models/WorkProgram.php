@@ -26,14 +26,8 @@ class WorkProgram extends Model
      */
     protected static function booted(): void
     {
-        static::creating(function (WorkProgram $model) {
+        static::saving(function (WorkProgram $model) {
             if (empty($model->slug)) {
-                $model->slug = static::generateUniqueSlug($model->title);
-            }
-        });
-
-        static::updating(function (WorkProgram $model) {
-            if ($model->isDirty('title') && empty($model->slug)) {
                 $model->slug = static::generateUniqueSlug($model->title, $model->id);
             }
         });

@@ -32,7 +32,7 @@ Route::post('/test-upload', function (Request $request) {
 Route::get('/', [FrontEndController::class, 'home'])->name('home');
 Route::get('/struktur-anggota', [FrontEndController::class, 'members'])->name('members');
 Route::get('/program-kerja', [FrontEndController::class, 'workPrograms'])->name('work_programs');
-Route::get('/program-kerja/{work_program:slug}', [FrontEndController::class, 'workProgramDetail'])->name('work_programs.detail');
+Route::get('/program-kerja/{work_program}', [FrontEndController::class, 'workProgramDetail'])->name('work_programs.detail');
 Route::get('/edukasi', [FrontEndController::class, 'educations'])->name('educations');
 Route::get('/edukasi/{education:slug}', [FrontEndController::class, 'educationDetail'])->name('educations.detail');
 Route::get('/berita', [FrontEndController::class, 'news'])->name('news');

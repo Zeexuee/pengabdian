@@ -39,8 +39,12 @@ class FrontEndController extends Controller
         return view('frontend.work_programs', compact('workPrograms'));
     }
 
-    public function workProgramDetail(WorkProgram $work_program)
+    public function workProgramDetail($slug)
     {
+        $work_program = WorkProgram::where('slug', $slug)
+            ->orWhere('id', is_numeric($slug) ? $slug : 0)
+            ->firstOrFail();
+
         $blocks = $work_program->blocks;
         return view('frontend.work_program_detail', compact('work_program', 'blocks'));
     }

@@ -68,9 +68,65 @@
        TEXT BLOCK
     ============================================= */
     .block-text-content {
-        max-height: 400px;
-        overflow-y: auto;
-        padding-right: 6px;
+        width: 100%;
+        line-height: 1.8;
+        font-size: 1.05rem;
+        color: #334155;
+    }
+    .block-text-content p {
+        margin-bottom: 1.25rem;
+    }
+    .block-text-content h1, 
+    .block-text-content h2, 
+    .block-text-content h3, 
+    .block-text-content h4 {
+        color: #0f172a;
+        font-weight: 700;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+    .block-text-content h1 { font-size: 1.85rem; }
+    .block-text-content h2 { font-size: 1.5rem; }
+    .block-text-content h3 { font-size: 1.25rem; }
+    .block-text-content ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+    .block-text-content ol {
+        list-style-type: decimal;
+        padding-left: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+    .block-text-content li {
+        margin-bottom: 0.4rem;
+    }
+    .block-text-content blockquote {
+        border-left: 4px solid #dc2626;
+        padding-left: 1rem;
+        font-style: italic;
+        color: #475569;
+        margin: 1.25rem 0;
+        background: #f8fafc;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+    .block-text-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.25rem;
+    }
+    .block-text-content table th,
+    .block-text-content table td {
+        border: 1px solid #cbd5e1;
+        padding: 0.75rem 1rem;
+    }
+    .block-text-content table th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+        color: #1e293b;
     }
 
     /* =============================================
@@ -154,10 +210,14 @@
 
     {{-- Deskripsi singkat --}}
     @if($work_program->description)
-        <div class="bg-white border border-gray-100 rounded-2xl p-5 md:p-6 shadow-sm">
-            <p class="text-gray-600 leading-relaxed text-sm md:text-base whitespace-pre-line">
-                {{ $work_program->description }}
-            </p>
+        <div class="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm">
+            <div class="block-text-content">
+                @if(Str::startsWith(trim($work_program->description), '<'))
+                    {!! $work_program->description !!}
+                @else
+                    {!! nl2br(e($work_program->description)) !!}
+                @endif
+            </div>
         </div>
     @endif
 </div>
@@ -213,12 +273,16 @@
 
             {{-- Teks --}}
             @elseif($block->type === 'text')
-                <div class="block-card px-5 py-6 md:px-7 md:py-7 max-w-4xl mx-auto">
+                <div class="block-card p-6 md:p-10 w-full">
                     @if($block->title)
-                        <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-3">{{ $block->title }}</h2>
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-100">{{ $block->title }}</h2>
                     @endif
-                    <div class="block-text-content prose prose-sm md:prose-base prose-red max-w-none text-gray-600 custom-scrollbar">
-                        {!! nl2br(e($block->content)) !!}
+                    <div class="block-text-content">
+                        @if(Str::startsWith(trim($block->content), '<'))
+                            {!! $block->content !!}
+                        @else
+                            {!! nl2br(e($block->content)) !!}
+                        @endif
                     </div>
                 </div>
             @endif

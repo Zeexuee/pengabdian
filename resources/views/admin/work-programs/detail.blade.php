@@ -4,7 +4,8 @@
 
 @push('scripts')
 <script>
-    // Toggle form fields berdasarkan tipe yang dipilih
+    let blockEditor;
+
     function toggleTypeFields() {
         const type = document.getElementById('type').value;
         document.getElementById('field-image').classList.toggle('hidden', type !== 'image');
@@ -12,8 +13,40 @@
         document.getElementById('field-text').classList.toggle('hidden',  type !== 'text');
         document.getElementById('field-title').classList.toggle('hidden', type === '');
     }
-    document.addEventListener('DOMContentLoaded', toggleTypeFields);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleTypeFields();
+
+        if (document.querySelector('#block-content')) {
+            ClassicEditor
+                .create(document.querySelector('#block-content'))
+                .then(editor => {
+                    blockEditor = editor;
+                })
+                .catch(error => { console.error(error); });
+        }
+
+        const blockForm = document.querySelector('form[action*="blocks"]');
+        if (blockForm) {
+            blockForm.addEventListener('submit', function (e) {
+                const type = document.getElementById('type').value;
+                if (type === 'text' && blockEditor) {
+                    const data = blockEditor.getData();
+                    document.querySelector('#block-content').value = data;
+                    if (!data.trim()) {
+                        e.preventDefault();
+                        alert('Isi Teks tidak boleh kosong.');
+                    }
+                }
+            });
+        }
+    });
 </script>
+<style>
+    .ck-editor__editable_inline {
+        min-height: 250px;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -21,15 +54,15 @@
 {{-- ── Header ── --}}
 <div class="flex flex-wrap justify-between items-start gap-3 mb-6">
     <div>
-        <a href="{{ route('admin.work-programs.index') }}" class="text-red-600 hover:underline text-sm">
+        <a href="{{ route('admin.work-programs.index') }}" class="text-red-600 hover:underline text-sm font-semibold">
             &larr; Kembali ke Daftar Program Kerja
         </a>
-        <h2 class="text-lg font-bold text-gray-800 mt-1">{{ $work_program->title }}</h2>
-        <p class="text-sm text-gray-500">Kelola konten tambahan yang ditampilkan di halaman detail program ini.</p>
+        <h2 class="text-xl font-bold text-gray-800 mt-1">{{ $work_program->title }}</h2>
+        <p class="text-sm text-gray-500">Kelola konten tambahan (teks berformat Word, gambar, video) yang ditampilkan di halaman detail program ini.</p>
     </div>
     @if($work_program->slug)
         <a href="{{ route('work_programs.detail', $work_program->slug) }}" target="_blank"
-           class="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-red-600 border border-gray-300 rounded-lg px-3 py-2 transition">
+           class="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-red-600 border border-gray-300 bg-white rounded-lg px-3 py-2 shadow-sm transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -39,12 +72,15 @@
     @endif
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
     {{-- ── Form Tambah Block (kiri) ── --}}
-    <div class="lg:col-span-1">
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 sticky top-6">
-            <h3 class="font-semibold text-gray-700 mb-4">+ Tambah Konten</h3>
+    <div class="lg:col-span-6">
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 sticky top-6 shadow-sm">
+            <h3 class="font-bold text-gray-800 text-base mb-4 flex items-center gap-2">
+                <span class="bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">+</span>
+                Tambah Konten Detail
+            </h3>
 
             <form action="{{ route('admin.work-programs.blocks.store', $work_program->id) }}"
                   method="POST" enctype="multipart/form-data" class="space-y-4">
@@ -56,16 +92,16 @@
                     <select id="type" name="type" onchange="toggleTypeFields()" required
                             class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-red-500 focus:border-red-500">
                         <option value="">-- Pilih Tipe --</option>
+                        <option value="text"  {{ old('type', 'text') === 'text'  ? 'selected' : '' }}>📝 Teks (Rich Text / Seperti Word)</option>
                         <option value="image" {{ old('type') === 'image' ? 'selected' : '' }}>🖼️ Gambar</option>
                         <option value="video" {{ old('type') === 'video' ? 'selected' : '' }}>🎬 Video (YouTube)</option>
-                        <option value="text"  {{ old('type') === 'text'  ? 'selected' : '' }}>📝 Teks</option>
                     </select>
                     @error('type') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Judul (semua tipe) --}}
                 <div id="field-title">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Judul (opsional)</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Judul Sub-Bagian (opsional)</label>
                     <input type="text" name="title" value="{{ old('title') }}"
                            class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-red-500 focus:border-red-500"
                            placeholder="Judul sub-bagian…">
@@ -92,8 +128,8 @@
 
                 {{-- Field: Teks --}}
                 <div id="field-text" class="hidden">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Isi Teks <span class="text-red-500">*</span></label>
-                    <textarea name="content" id="block-content" rows="5"
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Isi Teks (Format Word) <span class="text-red-500">*</span></label>
+                    <textarea name="content" id="block-content" rows="8"
                               class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-red-500 focus:border-red-500"
                               placeholder="Tulis konten teks di sini…">{{ old('content') }}</textarea>
                     @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -108,8 +144,8 @@
     </div>
 
     {{-- ── Daftar Blocks (kanan) ── --}}
-    <div class="lg:col-span-2 space-y-4">
-        <h3 class="font-semibold text-gray-700">Konten Halaman Detail ({{ $blocks->count() }} item)</h3>
+    <div class="lg:col-span-6 space-y-4">
+        <h3 class="font-bold text-gray-800 text-base">Konten Halaman Detail ({{ $blocks->count() }} item)</h3>
 
         @forelse($blocks as $block)
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
@@ -164,8 +200,12 @@
                         @endif
 
                     @elseif($block->type === 'text')
-                        <div class="prose prose-sm max-w-none text-gray-600 max-h-40 overflow-y-auto">
-                            {!! nl2br(e($block->content)) !!}
+                        <div class="prose prose-sm max-w-none text-gray-700 max-h-48 overflow-y-auto">
+                            @if(Str::startsWith(trim($block->content), '<'))
+                                {!! $block->content !!}
+                            @else
+                                {!! nl2br(e($block->content)) !!}
+                            @endif
                         </div>
                     @endif
                 </div>

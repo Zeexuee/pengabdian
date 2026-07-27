@@ -117,7 +117,7 @@
 <div class="space-y-6 mb-16">
     @forelse($workPrograms as $program)
 
-        <a href="{{ $program->slug ? route('work_programs.detail', $program->slug) : '#' }}"
+        <a href="{{ route('work_programs.detail', $program->slug ?: $program->id) }}"
            class="block program-card group">
             <div class="flex flex-col {{ $program->image ? 'md:flex-row' : '' }}" style="align-items: stretch;">
 
