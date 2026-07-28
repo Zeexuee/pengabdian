@@ -38,7 +38,7 @@ class WorkProgramController extends Controller
             'description' => 'required|string',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'start_date'  => 'nullable|date',
-            'end_date'    => 'nullable|date|after_or_equal:start_date',
+            'end_date'    => 'nullable|date' . ($request->filled('start_date') ? '|after_or_equal:start_date' : ''),
             'status'      => 'required|in:planned,ongoing,completed',
         ]);
 
@@ -66,7 +66,7 @@ class WorkProgramController extends Controller
             'description' => 'required|string',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'start_date'  => 'nullable|date',
-            'end_date'    => 'nullable|date|after_or_equal:start_date',
+            'end_date'    => 'nullable|date' . ($request->filled('start_date') ? '|after_or_equal:start_date' : ''),
             'status'      => 'required|in:planned,ongoing,completed',
         ]);
 

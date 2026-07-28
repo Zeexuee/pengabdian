@@ -36,9 +36,19 @@
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 text-sm">
                     <p class="text-gray-900 whitespace-no-wrap">
-                        {{ $item->start_date ? $item->start_date->format('d M Y') : '-' }} <br> 
-                        <span class="text-gray-500 text-xs">s/d</span> <br> 
-                        {{ $item->end_date ? $item->end_date->format('d M Y') : '-' }}
+                        @if($item->start_date && $item->end_date)
+                            {{ $item->start_date->format('d M Y') }} <br> 
+                            <span class="text-gray-500 text-xs">s/d</span> <br> 
+                            {{ $item->end_date->format('d M Y') }}
+                        @elseif($item->start_date)
+                            {{ $item->start_date->format('d M Y') }} <br>
+                            <span class="text-gray-500 text-xs">(Mulai)</span>
+                        @elseif($item->end_date)
+                            {{ $item->end_date->format('d M Y') }} <br>
+                            <span class="text-gray-500 text-xs">(Selesai)</span>
+                        @else
+                            <span class="text-gray-400 italic">Opsional</span>
+                        @endif
                     </p>
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 text-sm">

@@ -151,9 +151,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        {{ $program->start_date ? $program->start_date->format('d M Y') : 'TBA' }}
-                        &nbsp;—&nbsp;
-                        {{ $program->end_date ? $program->end_date->format('d M Y') : 'TBA' }}
+                        @if($program->start_date && $program->end_date)
+                            {{ $program->start_date->format('d M Y') }} &nbsp;—&nbsp; {{ $program->end_date->format('d M Y') }}
+                        @elseif($program->start_date)
+                            Mulai: {{ $program->start_date->format('d M Y') }}
+                        @elseif($program->end_date)
+                            Selesai: {{ $program->end_date->format('d M Y') }}
+                        @else
+                            Jadwal menyesuaikan (Opsional)
+                        @endif
                     </p>
 
                     {{-- Deskripsi — max 4 baris, scrollable jika panjang --}}

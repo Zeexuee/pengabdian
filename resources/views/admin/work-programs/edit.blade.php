@@ -25,7 +25,7 @@
         <!-- Input Tanggal Pelaksanaan -->
         <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai <span class="text-gray-400 font-normal text-xs">(Opsional)</span></label>
                 <input type="date" name="start_date" id="start_date" 
                     value="{{ old('start_date', $work_program->start_date ? $work_program->start_date->format('Y-m-d') : '') }}" 
                     class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm">
@@ -34,7 +34,7 @@
                 @enderror
             </div>
             <div>
-                <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
+                <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai <span class="text-gray-400 font-normal text-xs">(Opsional)</span></label>
                 <input type="date" name="end_date" id="end_date" 
                     value="{{ old('end_date', $work_program->end_date ? $work_program->end_date->format('Y-m-d') : '') }}" 
                     class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm">
@@ -60,7 +60,7 @@
         <!-- Input Deskripsi -->
         <div class="mb-4">
             <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi Detail <span class="text-red-500">*</span></label>
-            <textarea name="description" id="description" rows="5" required 
+            <textarea name="description" id="description" rows="5" 
                 class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm">{{ old('description', $work_program->description) }}</textarea>
             @error('description')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -109,14 +109,20 @@
                 .create(document.querySelector('#description'))
                 .then(editor => {
                     descriptionEditor = editor;
+                    editor.model.document.on('change:data', () => {
+                        document.querySelector('#description').value = editor.getData();
+                    });
                 })
                 .catch(error => { console.error(error); });
         }
-    });
 
-    document.querySelector('form').addEventListener('submit', function (e) {
-        if (descriptionEditor) {
-            document.querySelector('#description').value = descriptionEditor.getData();
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                if (descriptionEditor) {
+                    document.querySelector('#description').value = descriptionEditor.getData();
+                }
+            });
         }
     });
 </script>

@@ -203,9 +203,15 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
-        {{ $work_program->start_date ? $work_program->start_date->format('d M Y') : 'TBA' }}
-        &nbsp;—&nbsp;
-        {{ $work_program->end_date ? $work_program->end_date->format('d M Y') : 'TBA' }}
+        @if($work_program->start_date && $work_program->end_date)
+            {{ $work_program->start_date->format('d M Y') }} &nbsp;—&nbsp; {{ $work_program->end_date->format('d M Y') }}
+        @elseif($work_program->start_date)
+            Mulai: {{ $work_program->start_date->format('d M Y') }}
+        @elseif($work_program->end_date)
+            Selesai: {{ $work_program->end_date->format('d M Y') }}
+        @else
+            Jadwal menyesuaikan (Opsional)
+        @endif
     </p>
 
     {{-- Deskripsi singkat --}}
