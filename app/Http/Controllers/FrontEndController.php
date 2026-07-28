@@ -34,8 +34,8 @@ class FrontEndController extends Controller
 
     public function workPrograms()
     {
-        // Mengambil semua program kerja
-        $workPrograms = WorkProgram::latest()->get();
+        // Mengambil semua program kerja sesuai urutan admin
+        $workPrograms = WorkProgram::orderBy('order', 'asc')->get();
         return view('frontend.work_programs', compact('workPrograms'));
     }
 

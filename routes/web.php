@@ -67,6 +67,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::post('members/sections', [\App\Http\Controllers\Admin\MemberController::class, 'storeSectionImage'])->name('members.sections.store');
     Route::delete('members/sections/{id}', [\App\Http\Controllers\Admin\MemberController::class, 'destroySectionImage'])->name('members.sections.destroy');
     Route::resource('members', \App\Http\Controllers\Admin\MemberController::class);
+    Route::post('work-programs/reorder', [\App\Http\Controllers\Admin\WorkProgramController::class, 'reorder'])->name('work-programs.reorder');
     Route::resource('work-programs', \App\Http\Controllers\Admin\WorkProgramController::class);
     // Detail / Content Blocks
     Route::get('work-programs/{work_program}/detail', [\App\Http\Controllers\Admin\WorkProgramController::class, 'showDetail'])->name('work-programs.detail');

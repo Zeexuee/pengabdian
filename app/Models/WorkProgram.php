@@ -11,7 +11,7 @@ class WorkProgram extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'description', 'image', 'start_date', 'end_date', 'status', 'schedule'];
+    protected $fillable = ['title', 'slug', 'description', 'image', 'start_date', 'end_date', 'status', 'schedule', 'order'];
 
     protected function casts(): array
     {

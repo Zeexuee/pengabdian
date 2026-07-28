@@ -3,9 +3,12 @@
 @section('page_title', 'Kelola Program Kerja')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
-    <h2 class="text-xl font-bold text-gray-800">Daftar Program Kerja</h2>
-    <a href="{{ route('admin.work-programs.create') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition">
+<div class="flex flex-wrap justify-between items-center mb-6 gap-3">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">Daftar Program Kerja</h2>
+        <p class="text-sm text-gray-500 mt-1">Gunakan ikon <strong>⋮⋮ (Drag)</strong> di sebelah kiri untuk mengubah urutan tampilan card program kerja secara bebas.</p>
+    </div>
+    <a href="{{ route('admin.work-programs.create') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition text-sm">
         + Tambah Program Kerja
     </a>
 </div>
@@ -14,16 +17,20 @@
     <table class="min-w-full leading-normal">
         <thead>
             <tr>
+                <th class="w-10 px-3 py-3 border-b-2 border-gray-200 bg-gray-50 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Urutan</th>
                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Gambar</th>
                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Judul</th>
-                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal / Jadwal</th>
                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="sortable-work-programs">
             @forelse($workPrograms as $item)
-            <tr class="hover:bg-gray-50">
+            <tr data-id="{{ $item->id }}" class="hover:bg-gray-50 transition-colors">
+                <td class="px-3 py-5 border-b border-gray-200 text-center text-gray-400 font-bold drag-handle cursor-move select-none" title="Tarik untuk mengubah urutan">
+                    <span class="text-base text-gray-400 hover:text-red-600 font-extrabold px-2 py-1 bg-gray-100 rounded">⋮⋮</span>
+                </td>
                 <td class="px-5 py-5 border-b border-gray-200 text-sm">
                     @if($item->image)
                         <img src="{{ Storage::url($item->image) }}" alt="{{ $item->title }}" class="w-16 h-12 rounded object-cover shadow-sm">
@@ -89,7 +96,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="px-5 py-8 border-b border-gray-200 text-sm text-center text-gray-500">
+                <td colspan="6" class="px-5 py-8 border-b border-gray-200 text-sm text-center text-gray-500">
                     Belum ada data program kerja.
                 </td>
             </tr>
@@ -103,4 +110,43 @@
     {{ $workPrograms->links() }}
 </div>
 @endif
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const el = document.getElementById('sortable-work-programs');
+    if (!el) return;
+
+    Sortable.create(el, {
+        animation: 150,
+        handle: '.drag-handle',
+        ghostClass: 'bg-red-50',
+        onEnd: function () {
+            const items = [];
+            el.querySelectorAll('tr[data-id]').forEach(function (row, index) {
+                items.push({ id: row.getAttribute('data-id'), order: index + 1 });
+            });
+
+            if (items.length === 0) return;
+
+            fetch('{{ route("admin.work-programs.reorder") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ orders: items })
+            }).then(r => r.json()).then(data => {
+                if (data.success) {
+                    el.style.transition = 'opacity 0.2s';
+                    el.style.opacity = '0.5';
+                    setTimeout(() => el.style.opacity = '1', 300);
+                }
+            });
+        }
+    });
+});
+</script>
+@endpush
 @endsection

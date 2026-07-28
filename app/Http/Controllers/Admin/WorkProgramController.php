@@ -16,14 +16,29 @@ class WorkProgramController extends Controller
 
     public function index()
     {
-        $query = WorkProgram::latest();
+        $query = WorkProgram::orderBy('order', 'asc');
 
         if (request('search')) {
             $query->where('title', 'like', '%' . request('search') . '%');
         }
 
-        $workPrograms = $query->paginate(10)->withQueryString();
+        $workPrograms = $query->paginate(15)->withQueryString();
         return view('admin.work-programs.index', compact('workPrograms'));
+    }
+
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'orders'         => 'required|array',
+            'orders.*.id'    => 'required|integer|exists:work_programs,id',
+            'orders.*.order' => 'required|integer',
+        ]);
+
+        foreach ($request->orders as $item) {
+            WorkProgram::where('id', $item['id'])->update(['order' => $item['order']]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function create()
@@ -44,6 +59,7 @@ class WorkProgramController extends Controller
         ]);
 
         $data = $request->except('image');
+        $data['order'] = WorkProgram::max('order') + 1;
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('work_programs', 'public');
