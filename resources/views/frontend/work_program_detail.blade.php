@@ -215,7 +215,7 @@
         @elseif($work_program->end_date)
             Selesai: {{ $work_program->end_date->format('d M Y') }}
         @else
-            Jadwal menyesuaikan (Opsional)
+            Jadwal menyesuaikan
         @endif
     </p>
 

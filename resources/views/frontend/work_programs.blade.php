@@ -11,14 +11,6 @@
     body { overflow-x: hidden; }
 
     /* =============================================
-       SCROLLBAR CUSTOM
-    ============================================= */
-    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-    /* =============================================
        PROGRAM CARD — konsisten ukuran antar kartu
     ============================================= */
     .program-card {
@@ -33,6 +25,11 @@
         box-shadow: 0 8px 28px rgba(0,0,0,.10);
         transform: translateY(-2px);
     }
+    @media (min-width: 768px) {
+        .program-card {
+            height: 240px;
+        }
+    }
 
     /* =============================================
        GAMBAR PROGRAM — contain, tampil penuh & simetris
@@ -46,16 +43,15 @@
         background: #1e293b;
         flex-shrink: 0;
     }
-    /* Desktop: lebar tetap, tinggi mengikuti tinggi kartu secara otomatis */
+    /* Desktop: lebar tetap, tinggi 100% mengisi tinggi kartu */
     @media (min-width: 768px) {
         .program-img-box {
             width: 280px;
+            height: 100%;
             aspect-ratio: unset;
-            /* align-self: stretch sudah diatur oleh parent flex items-stretch */
-            min-height: 200px;
         }
     }
-    /* Gambar mengisi kotak sepenuhnya via absolute positioning */
+    /* Gambar mengisi kotak sepenuhnya */
     .program-img-box img {
         position: absolute;
         inset: 0;
@@ -70,7 +66,7 @@
        JUDUL — max 2 baris
     ============================================= */
     .program-title {
-        font-size: clamp(1rem, 2.5vw, 1.25rem);
+        font-size: clamp(1rem, 2vw, 1.2rem);
         font-weight: 700;
         color: #111827;
         line-height: 1.35;
@@ -81,15 +77,20 @@
     }
 
     /* =============================================
-       DESKRIPSI — max 4 baris, scrollable
+       DESKRIPSI — max 2 baris, ringkas & rapi
     ============================================= */
     .program-desc {
-        max-height: 6rem;      /* ~4 baris teks */
-        overflow-y: auto;
-        padding-right: 4px;
-        font-size: .9rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        font-size: .875rem;
         color: #4b5563;
-        line-height: 1.6;
+        line-height: 1.5;
+    }
+    .program-desc p {
+        margin: 0;
+        display: inline;
     }
 
     /* =============================================
@@ -119,7 +120,7 @@
 
         <a href="{{ route('work_programs.detail', $program->slug ?: $program->id) }}"
            class="block program-card group">
-            <div class="flex flex-col {{ $program->image ? 'md:flex-row' : '' }}" style="align-items: stretch;">
+            <div class="flex flex-col {{ $program->image ? 'md:flex-row' : '' }} h-full">
 
                 {{-- Gambar — contain, tampil penuh --}}
                 @if($program->image)
@@ -130,54 +131,56 @@
                 @endif
 
                 {{-- Konten --}}
-                <div class="flex flex-col justify-center gap-3 p-5 md:p-7 flex-grow min-w-0">
+                <div class="flex flex-col justify-between p-5 md:p-6 flex-grow min-w-0 h-full">
 
-                    {{-- Baris judul + badge --}}
-                    <div class="flex items-start justify-between gap-3">
-                        <h2 class="program-title flex-1 min-w-0">{{ $program->title }}</h2>
-                        <span class="flex-shrink-0 px-3 py-1 text-xs font-semibold rounded-full
-                            {{ $program->status === 'completed' ? 'badge-completed' :
-                               ($program->status === 'ongoing'   ? 'badge-ongoing'   : 'badge-planned') }}">
-                            @php
-                                $labels = ['completed' => 'Selesai', 'ongoing' => 'Berlangsung', 'planned' => 'Direncanakan'];
-                                echo $labels[$program->status] ?? ucfirst($program->status);
-                            @endphp
-                        </span>
-                    </div>
+                    <div class="space-y-2">
+                        {{-- Baris judul + badge --}}
+                        <div class="flex items-start justify-between gap-3">
+                            <h2 class="program-title flex-1 min-w-0">{{ $program->title }}</h2>
+                            <span class="flex-shrink-0 px-3 py-1 text-xs font-semibold rounded-full
+                                {{ $program->status === 'completed' ? 'badge-completed' :
+                                   ($program->status === 'ongoing'   ? 'badge-ongoing'   : 'badge-planned') }}">
+                                @php
+                                    $labels = ['completed' => 'Selesai', 'ongoing' => 'Berlangsung', 'planned' => 'Direncanakan'];
+                                    echo $labels[$program->status] ?? ucfirst($program->status);
+                                @endphp
+                            </span>
+                        </div>
 
-                    {{-- Jadwal --}}
-                    <p class="text-xs text-gray-500 flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        @if($program->schedule)
-                            <span class="font-semibold text-gray-800">{{ $program->schedule }}</span>
-                            @if($program->start_date || $program->end_date)
-                                <span class="text-gray-400 font-normal">({{ $program->start_date ? $program->start_date->format('d M Y') : '' }} {{ $program->end_date ? '— ' . $program->end_date->format('d M Y') : '' }})</span>
+                        {{-- Jadwal --}}
+                        <p class="text-xs text-gray-500 flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            @if($program->schedule)
+                                <span class="font-semibold text-gray-800">{{ $program->schedule }}</span>
+                                @if($program->start_date || $program->end_date)
+                                    <span class="text-gray-400 font-normal">({{ $program->start_date ? $program->start_date->format('d M Y') : '' }} {{ $program->end_date ? '— ' . $program->end_date->format('d M Y') : '' }})</span>
+                                @endif
+                            @elseif($program->start_date && $program->end_date)
+                                {{ $program->start_date->format('d M Y') }} &nbsp;—&nbsp; {{ $program->end_date->format('d M Y') }}
+                            @elseif($program->start_date)
+                                Mulai: {{ $program->start_date->format('d M Y') }}
+                            @elseif($program->end_date)
+                                Selesai: {{ $program->end_date->format('d M Y') }}
+                            @else
+                                Jadwal menyesuaikan
                             @endif
-                        @elseif($program->start_date && $program->end_date)
-                            {{ $program->start_date->format('d M Y') }} &nbsp;—&nbsp; {{ $program->end_date->format('d M Y') }}
-                        @elseif($program->start_date)
-                            Mulai: {{ $program->start_date->format('d M Y') }}
-                        @elseif($program->end_date)
-                            Selesai: {{ $program->end_date->format('d M Y') }}
-                        @else
-                            Jadwal menyesuaikan (Opsional)
-                        @endif
-                    </p>
+                        </p>
 
-                    {{-- Deskripsi — max 4 baris, scrollable jika panjang --}}
-                    <div class="program-desc custom-scrollbar">
-                        @if(Str::startsWith(trim($program->description), '<'))
-                            {!! $program->description !!}
-                        @else
-                            {!! nl2br(e($program->description)) !!}
-                        @endif
+                        {{-- Deskripsi --}}
+                        <div class="program-desc">
+                            @if(Str::startsWith(trim($program->description), '<'))
+                                {!! $program->description !!}
+                            @else
+                                {!! nl2br(e($program->description)) !!}
+                            @endif
+                        </div>
                     </div>
 
                     {{-- Indikator klik --}}
-                    <div class="mt-2 flex items-center gap-1 text-red-600 text-sm font-semibold group-hover:gap-2 transition-all">
+                    <div class="mt-3 flex items-center gap-1 text-red-600 text-sm font-semibold group-hover:gap-2 transition-all">
                         Lihat Detail
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
