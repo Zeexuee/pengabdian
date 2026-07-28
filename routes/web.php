@@ -71,6 +71,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     // Detail / Content Blocks
     Route::get('work-programs/{work_program}/detail', [\App\Http\Controllers\Admin\WorkProgramController::class, 'showDetail'])->name('work-programs.detail');
     Route::post('work-programs/{work_program}/blocks', [\App\Http\Controllers\Admin\WorkProgramController::class, 'storeBlock'])->name('work-programs.blocks.store');
+    Route::put('work-programs/{work_program}/blocks/{block}', [\App\Http\Controllers\Admin\WorkProgramController::class, 'updateBlock'])->name('work-programs.blocks.update');
     Route::delete('work-programs/{work_program}/blocks/{block}', [\App\Http\Controllers\Admin\WorkProgramController::class, 'destroyBlock'])->name('work-programs.blocks.destroy');
     Route::resource('educations', \App\Http\Controllers\Admin\EducationController::class);
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);

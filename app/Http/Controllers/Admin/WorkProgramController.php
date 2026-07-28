@@ -36,6 +36,7 @@ class WorkProgramController extends Controller
         $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'required|string',
+            'schedule'    => 'nullable|string|max:255',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'start_date'  => 'nullable|date',
             'end_date'    => 'nullable|date' . ($request->filled('start_date') ? '|after_or_equal:start_date' : ''),
@@ -64,6 +65,7 @@ class WorkProgramController extends Controller
         $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'required|string',
+            'schedule'    => 'nullable|string|max:255',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
             'start_date'  => 'nullable|date',
             'end_date'    => 'nullable|date' . ($request->filled('start_date') ? '|after_or_equal:start_date' : ''),
@@ -162,6 +164,44 @@ class WorkProgramController extends Controller
         WorkProgramBlock::create($data);
 
         return back()->with('success', 'Konten berhasil ditambahkan.');
+    }
+
+    /**
+     * Perbarui block yang sudah ada.
+     */
+    public function updateBlock(Request $request, WorkProgram $work_program, WorkProgramBlock $block)
+    {
+        abort_if($block->work_program_id !== $work_program->id, 403);
+
+        $request->validate([
+            'type'      => 'required|in:image,video,text',
+            'title'     => 'nullable|string|max:255',
+            'content'   => 'nullable|string',
+            'image'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
+            'video_url' => 'nullable|url|max:500',
+        ]);
+
+        if ($request->type === 'video' && empty($request->video_url)) {
+            return back()->withErrors(['video_url' => 'URL video wajib diisi untuk tipe "Video".']);
+        }
+
+        $data = [
+            'type'      => $request->type,
+            'title'     => $request->title,
+            'content'   => $request->content,
+            'video_url' => $request->video_url,
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($block->image && Storage::disk('public')->exists($block->image)) {
+                Storage::disk('public')->delete($block->image);
+            }
+            $data['image'] = $request->file('image')->store('work_program_blocks', 'public');
+        }
+
+        $block->update($data);
+
+        return back()->with('success', 'Konten berhasil diperbarui.');
     }
 
     /**

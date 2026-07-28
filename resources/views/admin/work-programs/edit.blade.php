@@ -22,6 +22,20 @@
             @enderror
         </div>
 
+        <!-- Input Jadwal / Hari Pelaksanaan (Teks Hari/Jadwal Rutin) -->
+        <div class="mb-4">
+            <label for="schedule" class="block text-sm font-medium text-gray-700 mb-1">
+                Jadwal Pelaksanaan / Hari Kegiatan <span class="text-gray-400 font-normal text-xs">(Opsional)</span>
+            </label>
+            <input type="text" name="schedule" id="schedule" value="{{ old('schedule', $work_program->schedule) }}" 
+                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                placeholder="Contoh: Setiap Hari Minggu, Setiap Senin & Kamis, Setiap Akhir Bulan, dll.">
+            <p class="text-xs text-gray-500 mt-1">Dapat diisi dengan hari rutin acara tanpa harus memilih tanggal spesifik.</p>
+            @error('schedule')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
         <!-- Input Tanggal Pelaksanaan -->
         <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
