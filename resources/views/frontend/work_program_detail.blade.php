@@ -254,31 +254,41 @@
 
             {{-- Video --}}
             @elseif($block->type === 'video')
-                <div class="block-card px-5 py-6 md:px-7 md:py-7 max-w-4xl mx-auto">
+                <div class="block-card p-4 md:p-6 max-w-4xl mx-auto">
                     @if($block->title)
                         <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-4 text-center">{{ $block->title }}</h2>
                     @endif
-                    @php
-                        $vid = '';
-                        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $block->video_url, $m);
-                        if (isset($m[1])) $vid = $m[1];
-                    @endphp
-                    @if($vid)
-                        <div class="block-video-wrapper">
-                            <iframe src="https://www.youtube.com/embed/{{ $vid }}"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen></iframe>
+
+                    @if($block->video_file)
+                        <div class="rounded-xl overflow-hidden bg-black shadow-md flex items-center justify-center">
+                            <video controls class="w-full max-h-[500px] rounded-xl">
+                                <source src="{{ asset('storage/' . $block->video_file) }}">
+                                Browser Anda tidak mendukung pemutaran video HTML5.
+                            </video>
                         </div>
-                    @else
-                        <a href="{{ $block->video_url }}" target="_blank"
-                           class="inline-flex items-center gap-2 px-5 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
-                            Buka Video
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                            </svg>
-                        </a>
+                    @elseif($block->video_url)
+                        @php
+                            $vid = '';
+                            preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $block->video_url, $m);
+                            if (isset($m[1])) $vid = $m[1];
+                        @endphp
+                        @if($vid)
+                            <div class="block-video-wrapper">
+                                <iframe src="https://www.youtube.com/embed/{{ $vid }}"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                            </div>
+                        @else
+                            <a href="{{ $block->video_url }}" target="_blank"
+                               class="inline-flex items-center gap-2 px-5 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
+                                Buka Video
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
+                            </a>
+                        @endif
                     @endif
                 </div>
 

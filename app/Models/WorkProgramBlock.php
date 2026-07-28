@@ -10,7 +10,7 @@ class WorkProgramBlock extends Model
     use HasFactory;
 
     protected $fillable = [
-        'work_program_id', 'type', 'title', 'content', 'image', 'video_url', 'order',
+        'work_program_id', 'type', 'title', 'content', 'image', 'video_url', 'video_file', 'order',
     ];
 
     public function workProgram()

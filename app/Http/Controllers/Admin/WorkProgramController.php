@@ -147,19 +147,20 @@ class WorkProgramController extends Controller
     public function storeBlock(Request $request, WorkProgram $work_program)
     {
         $request->validate([
-            'type'      => 'required|in:image,video,text',
-            'title'     => 'nullable|string|max:255',
-            'content'   => 'nullable|string',
-            'image'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
-            'video_url' => 'nullable|url|max:500',
+            'type'       => 'required|in:image,video,text',
+            'title'      => 'nullable|string|max:255',
+            'content'    => 'nullable|string',
+            'image'      => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
+            'video_url'  => 'nullable|url|max:500',
+            'video_file' => 'nullable|file|mimes:mp4,webm,ogg,qt,mov|max:102400',
         ]);
 
         // Validasi tambahan per-tipe
         if ($request->type === 'image' && !$request->hasFile('image')) {
             return back()->withErrors(['image' => 'Gambar wajib diupload untuk tipe "Gambar".']);
         }
-        if ($request->type === 'video' && empty($request->video_url)) {
-            return back()->withErrors(['video_url' => 'URL video wajib diisi untuk tipe "Video".']);
+        if ($request->type === 'video' && empty($request->video_url) && !$request->hasFile('video_file')) {
+            return back()->withErrors(['video_file' => 'Upload file video atau isi URL YouTube untuk tipe "Video".']);
         }
 
         $lastOrder = $work_program->blocks()->max('order') ?? -1;
@@ -176,6 +177,9 @@ class WorkProgramController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('work_program_blocks', 'public');
         }
+        if ($request->hasFile('video_file')) {
+            $data['video_file'] = $request->file('video_file')->store('work_program_blocks/videos', 'public');
+        }
 
         WorkProgramBlock::create($data);
 
@@ -190,16 +194,13 @@ class WorkProgramController extends Controller
         abort_if($block->work_program_id !== $work_program->id, 403);
 
         $request->validate([
-            'type'      => 'required|in:image,video,text',
-            'title'     => 'nullable|string|max:255',
-            'content'   => 'nullable|string',
-            'image'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
-            'video_url' => 'nullable|url|max:500',
+            'type'       => 'required|in:image,video,text',
+            'title'      => 'nullable|string|max:255',
+            'content'    => 'nullable|string',
+            'image'      => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
+            'video_url'  => 'nullable|url|max:500',
+            'video_file' => 'nullable|file|mimes:mp4,webm,ogg,qt,mov|max:102400',
         ]);
-
-        if ($request->type === 'video' && empty($request->video_url)) {
-            return back()->withErrors(['video_url' => 'URL video wajib diisi untuk tipe "Video".']);
-        }
 
         $data = [
             'type'      => $request->type,
@@ -213,6 +214,13 @@ class WorkProgramController extends Controller
                 Storage::disk('public')->delete($block->image);
             }
             $data['image'] = $request->file('image')->store('work_program_blocks', 'public');
+        }
+
+        if ($request->hasFile('video_file')) {
+            if ($block->video_file && Storage::disk('public')->exists($block->video_file)) {
+                Storage::disk('public')->delete($block->video_file);
+            }
+            $data['video_file'] = $request->file('video_file')->store('work_program_blocks/videos', 'public');
         }
 
         $block->update($data);
@@ -250,6 +258,9 @@ class WorkProgramController extends Controller
 
         if ($block->image && Storage::disk('public')->exists($block->image)) {
             Storage::disk('public')->delete($block->image);
+        }
+        if ($block->video_file && Storage::disk('public')->exists($block->video_file)) {
+            Storage::disk('public')->delete($block->video_file);
         }
 
         $block->delete();

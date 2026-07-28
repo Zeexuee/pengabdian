@@ -176,7 +176,7 @@
                         <option value="">-- Pilih Tipe --</option>
                         <option value="text"  {{ old('type', 'text') === 'text'  ? 'selected' : '' }}>Teks (Rich Text / Format Word)</option>
                         <option value="image" {{ old('type') === 'image' ? 'selected' : '' }}>Gambar</option>
-                        <option value="video" {{ old('type') === 'video' ? 'selected' : '' }}>Video (YouTube)</option>
+                        <option value="video" {{ old('type') === 'video' ? 'selected' : '' }}>Video (File MP4 / YouTube)</option>
                     </select>
                     @error('type') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -200,12 +200,28 @@
                 </div>
 
                 {{-- Field: Video --}}
-                <div id="field-video" class="hidden">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">URL YouTube <span class="text-red-500">*</span></label>
-                    <input type="url" name="video_url" value="{{ old('video_url') }}"
-                           class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-red-500 focus:border-red-500"
-                           placeholder="https://www.youtube.com/watch?v=...">
-                    @error('video_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                <div id="field-video" class="hidden space-y-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Upload File Video Langsung (.mp4, .webm, .mov)</label>
+                        <input type="file" name="video_file" accept="video/mp4,video/webm,video/ogg,video/quicktime"
+                               class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100">
+                        <p class="text-xs text-gray-400 mt-1">Format: MP4, WEBM, MOV (Maks: 100 MB)</p>
+                        @error('video_file') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="relative flex py-1 items-center">
+                        <div class="flex-grow border-t border-gray-300"></div>
+                        <span class="flex-shrink mx-2 text-xs text-gray-400 font-semibold uppercase">Atau Link YouTube</span>
+                        <div class="flex-grow border-t border-gray-300"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">URL YouTube</label>
+                        <input type="url" name="video_url" value="{{ old('video_url') }}"
+                               class="w-full border-gray-300 rounded-lg shadow-sm text-sm focus:ring-red-500 focus:border-red-500"
+                               placeholder="https://www.youtube.com/watch?v=...">
+                        @error('video_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
                 {{-- Field: Teks --}}
@@ -281,7 +297,7 @@
                                         class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
                                     <option value="text"  {{ $block->type === 'text'  ? 'selected' : '' }}>Teks (Rich Text)</option>
                                     <option value="image" {{ $block->type === 'image' ? 'selected' : '' }}>Gambar</option>
-                                    <option value="video" {{ $block->type === 'video' ? 'selected' : '' }}>Video (YouTube)</option>
+                                    <option value="video" {{ $block->type === 'video' ? 'selected' : '' }}>Video (File MP4 / YouTube)</option>
                                 </select>
                             </div>
 
@@ -301,10 +317,24 @@
                                 <input type="file" name="image" accept="image/*" class="w-full text-xs">
                             </div>
 
-                            <div id="edit-field-video-{{ $block->id }}" class="hidden">
-                                <label class="block text-xs font-medium text-gray-700 mb-1">URL YouTube</label>
-                                <input type="url" name="video_url" value="{{ old('video_url', $block->video_url) }}"
-                                       class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
+                            <div id="edit-field-video-{{ $block->id }}" class="hidden space-y-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Upload / Ganti File Video (.mp4, .webm, .mov)</label>
+                                    @if($block->video_file)
+                                        <div class="mb-2">
+                                            <video controls class="max-h-32 w-full rounded border bg-black">
+                                                <source src="{{ asset('storage/' . $block->video_file) }}">
+                                            </video>
+                                        </div>
+                                    @endif
+                                    <input type="file" name="video_file" accept="video/mp4,video/webm,video/ogg,video/quicktime" class="w-full text-xs">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Atau URL YouTube</label>
+                                    <input type="url" name="video_url" value="{{ old('video_url', $block->video_url) }}"
+                                           class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
+                                </div>
                             </div>
 
                             <div id="edit-field-text-{{ $block->id }}" class="hidden">
@@ -336,22 +366,31 @@
                                      class="w-full h-full object-contain">
                             </div>
 
-                        @elseif($block->type === 'video' && $block->video_url)
-                            @php
-                                $vid = '';
-                                preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $block->video_url, $m);
-                                if (isset($m[1])) $vid = $m[1];
-                            @endphp
-                            @if($vid)
-                                <div style="position:relative;padding-top:56.25%;border-radius:.5rem;overflow:hidden;">
-                                    <iframe src="https://www.youtube.com/embed/{{ $vid }}"
-                                            class="absolute inset-0 w-full h-full"
-                                            frameborder="0" allowfullscreen></iframe>
+                        @elseif($block->type === 'video')
+                            @if($block->video_file)
+                                <div class="rounded-lg overflow-hidden bg-black flex items-center justify-center">
+                                    <video controls class="w-full max-h-[360px] rounded-lg">
+                                        <source src="{{ asset('storage/' . $block->video_file) }}">
+                                        Browser Anda tidak mendukung pemutaran video HTML5.
+                                    </video>
                                 </div>
-                            @else
-                                <a href="{{ $block->video_url }}" target="_blank" class="text-red-600 underline text-sm break-all">
-                                    {{ $block->video_url }}
-                                </a>
+                            @elseif($block->video_url)
+                                @php
+                                    $vid = '';
+                                    preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $block->video_url, $m);
+                                    if (isset($m[1])) $vid = $m[1];
+                                @endphp
+                                @if($vid)
+                                    <div style="position:relative;padding-top:56.25%;border-radius:.5rem;overflow:hidden;">
+                                        <iframe src="https://www.youtube.com/embed/{{ $vid }}"
+                                                class="absolute inset-0 w-full h-full"
+                                                frameborder="0" allowfullscreen></iframe>
+                                    </div>
+                                @else
+                                    <a href="{{ $block->video_url }}" target="_blank" class="text-red-600 underline text-sm break-all">
+                                        {{ $block->video_url }}
+                                    </a>
+                                @endif
                             @endif
 
                         @elseif($block->type === 'text')
