@@ -36,7 +36,12 @@
                 </td>
                 <td class="px-5 py-5 border-b border-gray-200 text-sm">
                     <p class="text-gray-900 whitespace-no-wrap">
-                        @if($item->start_date && $item->end_date)
+                        @if($item->schedule)
+                            <span class="font-semibold text-red-700 bg-red-50 px-2.5 py-1 rounded border border-red-100 text-xs inline-block">{{ $item->schedule }}</span>
+                            @if($item->start_date || $item->end_date)
+                                <br><span class="text-xs text-gray-500 mt-1 inline-block">{{ $item->start_date ? $item->start_date->format('d M Y') : '' }} {{ $item->end_date ? 's/d ' . $item->end_date->format('d M Y') : '' }}</span>
+                            @endif
+                        @elseif($item->start_date && $item->end_date)
                             {{ $item->start_date->format('d M Y') }} <br> 
                             <span class="text-gray-500 text-xs">s/d</span> <br> 
                             {{ $item->end_date->format('d M Y') }}

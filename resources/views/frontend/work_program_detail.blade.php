@@ -198,12 +198,17 @@
     </div>
 
     {{-- Tanggal --}}
-    <p class="text-sm text-gray-400 flex items-center gap-1.5 mb-5">
+    <p class="text-sm text-gray-500 flex items-center gap-1.5 mb-5">
         <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
-        @if($work_program->start_date && $work_program->end_date)
+        @if($work_program->schedule)
+            <span class="font-semibold text-red-600 bg-red-50 px-3 py-1 rounded-full text-xs border border-red-100">{{ $work_program->schedule }}</span>
+            @if($work_program->start_date || $work_program->end_date)
+                <span class="text-gray-400 text-xs">({{ $work_program->start_date ? $work_program->start_date->format('d M Y') : '' }} {{ $work_program->end_date ? '— ' . $work_program->end_date->format('d M Y') : '' }})</span>
+            @endif
+        @elseif($work_program->start_date && $work_program->end_date)
             {{ $work_program->start_date->format('d M Y') }} &nbsp;—&nbsp; {{ $work_program->end_date->format('d M Y') }}
         @elseif($work_program->start_date)
             Mulai: {{ $work_program->start_date->format('d M Y') }}

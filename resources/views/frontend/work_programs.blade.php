@@ -146,12 +146,17 @@
                     </div>
 
                     {{-- Jadwal --}}
-                    <p class="text-xs text-gray-400 flex items-center gap-1.5">
+                    <p class="text-xs text-gray-500 flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        @if($program->start_date && $program->end_date)
+                        @if($program->schedule)
+                            <span class="font-semibold text-gray-800">{{ $program->schedule }}</span>
+                            @if($program->start_date || $program->end_date)
+                                <span class="text-gray-400 font-normal">({{ $program->start_date ? $program->start_date->format('d M Y') : '' }} {{ $program->end_date ? '— ' . $program->end_date->format('d M Y') : '' }})</span>
+                            @endif
+                        @elseif($program->start_date && $program->end_date)
                             {{ $program->start_date->format('d M Y') }} &nbsp;—&nbsp; {{ $program->end_date->format('d M Y') }}
                         @elseif($program->start_date)
                             Mulai: {{ $program->start_date->format('d M Y') }}
@@ -164,7 +169,11 @@
 
                     {{-- Deskripsi — max 4 baris, scrollable jika panjang --}}
                     <div class="program-desc custom-scrollbar">
-                        {{ $program->description }}
+                        @if(Str::startsWith(trim($program->description), '<'))
+                            {!! $program->description !!}
+                        @else
+                            {!! nl2br(e($program->description)) !!}
+                        @endif
                     </div>
 
                     {{-- Indikator klik --}}
