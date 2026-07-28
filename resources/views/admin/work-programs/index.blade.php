@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (items.length === 0) return;
 
-            fetch('{{ route("admin.work-programs.reorder") }}', {
+            fetch('{{ url("admin/work-programs/reorder") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

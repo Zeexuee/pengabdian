@@ -3,6 +3,7 @@
 @section('page_title', 'Kelola Detail: ' . $work_program->title)
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
     let blockEditor;
     const editEditors = {};
@@ -78,6 +79,39 @@
                         e.preventDefault();
                         alert('Isi Teks tidak boleh kosong.');
                     }
+                }
+            });
+        }
+
+        // ── Drag & Drop Reorder Component Blocks ──
+        const sortableContainer = document.getElementById('sortable-blocks');
+        if (sortableContainer) {
+            Sortable.create(sortableContainer, {
+                animation: 150,
+                handle: '.drag-handle',
+                ghostClass: 'opacity-40',
+                onEnd: function () {
+                    const items = [];
+                    sortableContainer.querySelectorAll('div[data-id]').forEach(function (div, index) {
+                        items.push({ id: div.getAttribute('data-id'), order: index + 1 });
+                    });
+
+                    if (items.length === 0) return;
+
+                    fetch('{{ url("admin/work-programs/" . $work_program->id . "/blocks/reorder") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ orders: items })
+                    }).then(r => r.json()).then(data => {
+                        if (data.success) {
+                            sortableContainer.style.transition = 'opacity 0.2s';
+                            sortableContainer.style.opacity = '0.5';
+                            setTimeout(() => sortableContainer.style.opacity = '1', 300);
+                        }
+                    });
                 }
             });
         }
@@ -193,144 +227,150 @@
 
     {{-- Daftar Blocks (kanan) --}}
     <div class="lg:col-span-7 space-y-4">
-        <h3 class="font-bold text-gray-800 text-base">Konten Halaman Detail ({{ $blocks->count() }} item)</h3>
+        <div>
+            <h3 class="font-bold text-gray-800 text-base">Konten Halaman Detail ({{ $blocks->count() }} item)</h3>
+            <p class="text-xs text-gray-500 mt-1">Gunakan ikon <strong>⋮⋮ (Drag)</strong> di sebelah kiri setiap kartu untuk mengubah urutan tampilan komponen secara bebas.</p>
+        </div>
 
-        @forelse($blocks as $block)
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-                <div class="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full
-                            {{ $block->type === 'image' ? 'bg-green-100 text-green-700' :
-                               ($block->type === 'video' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700') }}">
-                            {{ $block->type === 'image' ? 'Gambar' : ($block->type === 'video' ? 'Video' : 'Teks') }}
-                        </span>
-                        @if($block->title)
-                            <span class="text-sm font-semibold text-gray-700">{{ $block->title }}</span>
-                        @endif
-                    </div>
-                    
-                    <div class="flex items-center gap-3">
-                        <button type="button" onclick="toggleEditBlock({{ $block->id }})"
-                                class="text-xs text-blue-600 hover:text-blue-800 font-semibold transition">
-                            Edit
-                        </button>
-                        <form action="{{ route('admin.work-programs.blocks.destroy', [$work_program->id, $block->id]) }}"
-                              method="POST"
-                              onsubmit="return confirm('Hapus konten ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                    class="text-xs text-red-500 hover:text-red-700 font-semibold transition">
-                                Hapus
+        <div id="sortable-blocks" class="space-y-4">
+            @forelse($blocks as $block)
+                <div data-id="{{ $block->id }}" class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <div class="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
+                        <div class="flex items-center gap-2">
+                            <span class="drag-handle cursor-move text-gray-400 font-extrabold px-1.5 py-0.5 bg-gray-200/70 hover:bg-red-100 hover:text-red-600 rounded select-none text-xs" title="Geser untuk mengatur urutan">⋮⋮</span>
+                            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full
+                                {{ $block->type === 'image' ? 'bg-green-100 text-green-700' :
+                                   ($block->type === 'video' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700') }}">
+                                {{ $block->type === 'image' ? 'Gambar' : ($block->type === 'video' ? 'Video' : 'Teks') }}
+                            </span>
+                            @if($block->title)
+                                <span class="text-sm font-semibold text-gray-700">{{ $block->title }}</span>
+                            @endif
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <button type="button" onclick="toggleEditBlock({{ $block->id }})"
+                                    class="text-xs text-blue-600 hover:text-blue-800 font-semibold transition">
+                                Edit
                             </button>
+                            <form action="{{ route('admin.work-programs.blocks.destroy', [$work_program->id, $block->id]) }}"
+                                  method="POST"
+                                  onsubmit="return confirm('Hapus konten ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="text-xs text-red-500 hover:text-red-700 font-semibold transition">
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    {{-- Form Edit Inline (Hidden default) --}}
+                    <div id="edit-block-{{ $block->id }}" class="hidden p-4 border-b border-gray-200 bg-gray-50/80">
+                        <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3">Edit Konten</h4>
+                        <form action="{{ route('admin.work-programs.blocks.update', [$work_program->id, $block->id]) }}"
+                              method="POST" enctype="multipart/form-data" class="space-y-3"
+                              onsubmit="handleEditSubmit(event, {{ $block->id }})">
+                            @csrf
+                            @method('PUT')
+
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Tipe Konten <span class="text-red-500">*</span></label>
+                                <select id="edit-type-{{ $block->id }}" name="type" onchange="toggleEditTypeFields({{ $block->id }})" required
+                                        class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
+                                    <option value="text"  {{ $block->type === 'text'  ? 'selected' : '' }}>Teks (Rich Text)</option>
+                                    <option value="image" {{ $block->type === 'image' ? 'selected' : '' }}>Gambar</option>
+                                    <option value="video" {{ $block->type === 'video' ? 'selected' : '' }}>Video (YouTube)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Judul Sub-Bagian (opsional)</label>
+                                <input type="text" name="title" value="{{ old('title', $block->title) }}"
+                                       class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
+                            </div>
+
+                            <div id="edit-field-image-{{ $block->id }}" class="hidden">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Ganti Gambar (opsional)</label>
+                                @if($block->image)
+                                    <div class="mb-2">
+                                        <img src="{{ asset('storage/' . $block->image) }}" class="h-20 object-contain rounded border">
+                                    </div>
+                                @endif
+                                <input type="file" name="image" accept="image/*" class="w-full text-xs">
+                            </div>
+
+                            <div id="edit-field-video-{{ $block->id }}" class="hidden">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">URL YouTube</label>
+                                <input type="url" name="video_url" value="{{ old('video_url', $block->video_url) }}"
+                                       class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
+                            </div>
+
+                            <div id="edit-field-text-{{ $block->id }}" class="hidden">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Isi Teks</label>
+                                <textarea name="content" id="edit-content-{{ $block->id }}" rows="6"
+                                          class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">{{ old('content', $block->content) }}</textarea>
+                            </div>
+
+                            <div class="flex justify-end gap-2 pt-2">
+                                <button type="button" onclick="toggleEditBlock({{ $block->id }})"
+                                        class="px-3 py-1.5 text-xs bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                                    Batal
+                                </button>
+                                <button type="submit"
+                                        class="px-4 py-1.5 text-xs bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition shadow">
+                                    Simpan Perubahan
+                                </button>
+                            </div>
                         </form>
                     </div>
-                </div>
 
-                {{-- Form Edit Inline (Hidden default) --}}
-                <div id="edit-block-{{ $block->id }}" class="hidden p-4 border-b border-gray-200 bg-gray-50/80">
-                    <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wide mb-3">Edit Konten</h4>
-                    <form action="{{ route('admin.work-programs.blocks.update', [$work_program->id, $block->id]) }}"
-                          method="POST" enctype="multipart/form-data" class="space-y-3"
-                          onsubmit="handleEditSubmit(event, {{ $block->id }})">
-                        @csrf
-                        @method('PUT')
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 mb-1">Tipe Konten <span class="text-red-500">*</span></label>
-                            <select id="edit-type-{{ $block->id }}" name="type" onchange="toggleEditTypeFields({{ $block->id }})" required
-                                    class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
-                                <option value="text"  {{ $block->type === 'text'  ? 'selected' : '' }}>Teks (Rich Text)</option>
-                                <option value="image" {{ $block->type === 'image' ? 'selected' : '' }}>Gambar</option>
-                                <option value="video" {{ $block->type === 'video' ? 'selected' : '' }}>Video (YouTube)</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 mb-1">Judul Sub-Bagian (opsional)</label>
-                            <input type="text" name="title" value="{{ old('title', $block->title) }}"
-                                   class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
-                        </div>
-
-                        <div id="edit-field-image-{{ $block->id }}" class="hidden">
-                            <label class="block text-xs font-medium text-gray-700 mb-1">Ganti Gambar (opsional)</label>
-                            @if($block->image)
-                                <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $block->image) }}" class="h-20 object-contain rounded border">
-                                </div>
-                            @endif
-                            <input type="file" name="image" accept="image/*" class="w-full text-xs">
-                        </div>
-
-                        <div id="edit-field-video-{{ $block->id }}" class="hidden">
-                            <label class="block text-xs font-medium text-gray-700 mb-1">URL YouTube</label>
-                            <input type="url" name="video_url" value="{{ old('video_url', $block->video_url) }}"
-                                   class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
-                        </div>
-
-                        <div id="edit-field-text-{{ $block->id }}" class="hidden">
-                            <label class="block text-xs font-medium text-gray-700 mb-1">Isi Teks</label>
-                            <textarea name="content" id="edit-content-{{ $block->id }}" rows="6"
-                                      class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">{{ old('content', $block->content) }}</textarea>
-                        </div>
-
-                        <div class="flex justify-end gap-2 pt-2">
-                            <button type="button" onclick="toggleEditBlock({{ $block->id }})"
-                                    class="px-3 py-1.5 text-xs bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
-                                Batal
-                            </button>
-                            <button type="submit"
-                                    class="px-4 py-1.5 text-xs bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition shadow">
-                                Simpan Perubahan
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                {{-- Preview Content --}}
-                <div class="p-4">
-                    @if($block->type === 'image' && $block->image)
-                        <div class="bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center"
-                             style="aspect-ratio:16/9; max-height:260px;">
-                            <img src="{{ asset('storage/' . $block->image) }}"
-                                 alt="{{ $block->title }}"
-                                 class="w-full h-full object-contain">
-                        </div>
-
-                    @elseif($block->type === 'video' && $block->video_url)
-                        @php
-                            $vid = '';
-                            preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $block->video_url, $m);
-                            if (isset($m[1])) $vid = $m[1];
-                        @endphp
-                        @if($vid)
-                            <div style="position:relative;padding-top:56.25%;border-radius:.5rem;overflow:hidden;">
-                                <iframe src="https://www.youtube.com/embed/{{ $vid }}"
-                                        class="absolute inset-0 w-full h-full"
-                                        frameborder="0" allowfullscreen></iframe>
+                    {{-- Preview Content --}}
+                    <div class="p-4">
+                        @if($block->type === 'image' && $block->image)
+                            <div class="bg-slate-900 rounded-lg overflow-hidden flex items-center justify-center"
+                                 style="aspect-ratio:16/9; max-height:260px;">
+                                <img src="{{ asset('storage/' . $block->image) }}"
+                                     alt="{{ $block->title }}"
+                                     class="w-full h-full object-contain">
                             </div>
-                        @else
-                            <a href="{{ $block->video_url }}" target="_blank" class="text-red-600 underline text-sm break-all">
-                                {{ $block->video_url }}
-                            </a>
-                        @endif
 
-                    @elseif($block->type === 'text')
-                        <div class="prose prose-sm max-w-none text-gray-700 max-h-48 overflow-y-auto">
-                            @if(Str::startsWith(trim($block->content), '<'))
-                                {!! $block->content !!}
+                        @elseif($block->type === 'video' && $block->video_url)
+                            @php
+                                $vid = '';
+                                preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $block->video_url, $m);
+                                if (isset($m[1])) $vid = $m[1];
+                            @endphp
+                            @if($vid)
+                                <div style="position:relative;padding-top:56.25%;border-radius:.5rem;overflow:hidden;">
+                                    <iframe src="https://www.youtube.com/embed/{{ $vid }}"
+                                            class="absolute inset-0 w-full h-full"
+                                            frameborder="0" allowfullscreen></iframe>
+                                </div>
                             @else
-                                {!! nl2br(e($block->content)) !!}
+                                <a href="{{ $block->video_url }}" target="_blank" class="text-red-600 underline text-sm break-all">
+                                    {{ $block->video_url }}
+                                </a>
                             @endif
-                        </div>
-                    @endif
+
+                        @elseif($block->type === 'text')
+                            <div class="prose prose-sm max-w-none text-gray-700 max-h-48 overflow-y-auto">
+                                @if(Str::startsWith(trim($block->content), '<'))
+                                    {!! $block->content !!}
+                                @else
+                                    {!! nl2br(e($block->content)) !!}
+                                @endif
+                            </div>
+                        @endif
+                    </div>
                 </div>
-            </div>
-        @empty
-            <div class="py-16 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                <p class="text-gray-400 font-medium text-sm">Belum ada konten. Tambahkan dari panel kiri.</p>
-            </div>
-        @endforelse
+            @empty
+                <div class="py-16 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                    <p class="text-gray-400 font-medium text-sm">Belum ada konten. Tambahkan dari panel kiri.</p>
+                </div>
+            @endforelse
+        </div>
     </div>
 
 </div>

@@ -221,6 +221,26 @@ class WorkProgramController extends Controller
     }
 
     /**
+     * Reorder blocks.
+     */
+    public function reorderBlocks(Request $request, WorkProgram $work_program)
+    {
+        $request->validate([
+            'orders'         => 'required|array',
+            'orders.*.id'    => 'required|integer|exists:work_program_blocks,id',
+            'orders.*.order' => 'required|integer',
+        ]);
+
+        foreach ($request->orders as $item) {
+            WorkProgramBlock::where('id', $item['id'])
+                ->where('work_program_id', $work_program->id)
+                ->update(['order' => $item['order']]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
      * Hapus block.
      */
     public function destroyBlock(WorkProgram $work_program, WorkProgramBlock $block)
