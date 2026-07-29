@@ -28,68 +28,90 @@
         <tbody id="sortable-work-programs">
             @forelse($workPrograms as $item)
             <tr data-id="{{ $item->id }}" class="hover:bg-gray-50 transition-colors">
-                <td class="px-3 py-5 border-b border-gray-200 text-center text-gray-400 font-bold drag-handle cursor-move select-none" title="Tarik untuk mengubah urutan">
+                <td class="px-3 py-4 border-b border-gray-200 text-center text-gray-400 font-bold drag-handle cursor-move select-none" title="Tarik untuk mengubah urutan">
                     <span class="text-base text-gray-400 hover:text-red-600 font-extrabold px-2 py-1 bg-gray-100 rounded">⋮⋮</span>
                 </td>
-                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                <td class="px-5 py-4 border-b border-gray-200 text-sm">
                     @if($item->image)
                         <img src="{{ Storage::url($item->image) }}" alt="{{ $item->title }}" class="w-16 h-12 rounded object-cover shadow-sm">
                     @else
                         <div class="w-16 h-12 rounded bg-gray-200 flex items-center justify-center text-gray-500 text-xs shadow-sm">No Image</div>
                     @endif
                 </td>
-                <td class="px-5 py-5 border-b border-gray-200 text-sm">
-                    <p class="text-gray-900 whitespace-no-wrap font-semibold">{{ $item->title }}</p>
+                <td class="px-5 py-4 border-b border-gray-200 text-sm">
+                    <p class="text-gray-900 font-semibold max-w-xs">{{ $item->title }}</p>
                 </td>
-                <td class="px-5 py-5 border-b border-gray-200 text-sm">
-                    <p class="text-gray-900 whitespace-no-wrap">
-                        @if($item->schedule)
-                            <span class="font-semibold text-red-700 bg-red-50 px-2.5 py-1 rounded border border-red-100 text-xs inline-block">{{ $item->schedule }}</span>
-                            @if($item->start_date || $item->end_date)
-                                <br><span class="text-xs text-gray-500 mt-1 inline-block">{{ $item->start_date ? $item->start_date->format('d M Y') : '' }} {{ $item->end_date ? 's/d ' . $item->end_date->format('d M Y') : '' }}</span>
-                            @endif
-                        @elseif($item->start_date && $item->end_date)
-                            {{ $item->start_date->format('d M Y') }} <br> 
-                            <span class="text-gray-500 text-xs">s/d</span> <br> 
-                            {{ $item->end_date->format('d M Y') }}
-                        @elseif($item->start_date)
-                            {{ $item->start_date->format('d M Y') }} <br>
-                            <span class="text-gray-500 text-xs">(Mulai)</span>
-                        @elseif($item->end_date)
-                            {{ $item->end_date->format('d M Y') }} <br>
-                            <span class="text-gray-500 text-xs">(Selesai)</span>
-                        @else
-                            <span class="text-gray-400 italic">Opsional</span>
-                        @endif
-                    </p>
-                </td>
-                <td class="px-5 py-5 border-b border-gray-200 text-sm">
-                    <span class="relative inline-block px-3 py-1 font-semibold leading-tight 
-                        @if($item->status === 'completed') text-green-900 
-                        @elseif($item->status === 'ongoing') text-red-900 
-                        @else text-gray-900 @endif">
-                        <span aria-hidden class="absolute inset-0 opacity-50 rounded-full 
-                            @if($item->status === 'completed') bg-green-200 
-                            @elseif($item->status === 'ongoing') bg-red-200 
-                            @else bg-gray-200 @endif"></span>
-                        <span class="relative capitalize">
-                            @if($item->status === 'completed') Selesai
-                            @elseif($item->status === 'ongoing') Sedang Berjalan
-                            @else Direncanakan @endif
+                <td class="px-5 py-4 border-b border-gray-200 text-sm whitespace-nowrap">
+                    @if($item->schedule)
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200 mb-1">
+                            {{ $item->schedule }}
                         </span>
-                    </span>
+                        @if($item->start_date || $item->end_date)
+                            <div class="text-xs text-gray-500 mt-0.5">
+                                @if($item->start_date && $item->end_date)
+                                    {{ $item->start_date->format('d M Y') }}
+                                    @if(!$item->start_date->isSameDay($item->end_date))
+                                        s/d {{ $item->end_date->format('d M Y') }}
+                                    @endif
+                                @elseif($item->start_date)
+                                    {{ $item->start_date->format('d M Y') }} (Mulai)
+                                @elseif($item->end_date)
+                                    {{ $item->end_date->format('d M Y') }} (Selesai)
+                                @endif
+                            </div>
+                        @endif
+                    @elseif($item->start_date && $item->end_date)
+                        <div class="text-sm text-gray-900 font-medium">
+                            @if($item->start_date->isSameDay($item->end_date))
+                                {{ $item->start_date->format('d M Y') }}
+                            @else
+                                {{ $item->start_date->format('d M Y') }} <span class="text-xs text-gray-400 font-normal">s/d</span> {{ $item->end_date->format('d M Y') }}
+                            @endif
+                        </div>
+                    @elseif($item->start_date)
+                        <div class="text-sm text-gray-900 font-medium">
+                            {{ $item->start_date->format('d M Y') }} <span class="text-xs text-gray-400 font-normal">(Mulai)</span>
+                        </div>
+                    @elseif($item->end_date)
+                        <div class="text-sm text-gray-900 font-medium">
+                            {{ $item->end_date->format('d M Y') }} <span class="text-xs text-gray-400 font-normal">(Selesai)</span>
+                        </div>
+                    @else
+                        <span class="text-gray-400 text-xs italic">Opsional</span>
+                    @endif
                 </td>
-                <td class="px-5 py-5 border-b border-gray-200 text-sm">
-                    <div class="flex items-center gap-3 flex-wrap">
+                <td class="px-5 py-4 border-b border-gray-200 text-sm whitespace-nowrap">
+                    @if($item->status === 'completed')
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-200">
+                            Selesai
+                        </span>
+                    @elseif($item->status === 'ongoing')
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800 border border-red-200">
+                            Sedang Berjalan
+                        </span>
+                    @else
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200">
+                            Direncanakan
+                        </span>
+                    @endif
+                </td>
+                <td class="px-5 py-4 border-b border-gray-200 text-sm whitespace-nowrap">
+                    <div class="flex items-center space-x-2">
                         <a href="{{ route('admin.work-programs.detail', $item->id) }}"
-                           class="text-purple-600 hover:text-purple-900 font-semibold">Kelola Detail</a>
+                           class="inline-flex items-center text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-2.5 py-1.5 rounded transition shadow-sm">
+                            Kelola Detail
+                        </a>
                         <a href="{{ route('admin.work-programs.edit', $item->id) }}"
-                           class="text-red-600 hover:text-red-900 font-semibold">Edit</a>
+                           class="inline-flex items-center text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1.5 rounded transition shadow-sm">
+                            Edit
+                        </a>
                         <form action="{{ route('admin.work-programs.destroy', $item->id) }}" method="POST"
-                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus program kerja ini?');">
+                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus program kerja ini?');" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900 font-semibold">Hapus</button>
+                            <button type="submit" class="inline-flex items-center text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 px-2.5 py-1.5 rounded transition shadow-sm">
+                                Hapus
+                            </button>
                         </form>
                     </div>
                 </td>
