@@ -150,19 +150,35 @@
         align-items: center;
     }
     .market-icon-shopee,
-    .market-icon-tokopedia {
-        display: inline-block;
+    .market-icon-tokopedia,
+    .market-icon-wa {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         width: 56px;
         height: 56px;
         text-decoration: none;
         flex-shrink: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        transition: transform 0.2s ease;
+    }
+    .market-icon-shopee:hover,
+    .market-icon-tokopedia:hover,
+    .market-icon-wa:hover {
+        transform: scale(1.08);
     }
     .market-icon-shopee img,
-    .market-icon-tokopedia img {
+    .market-icon-tokopedia img,
+    .market-icon-wa img {
         width: 100%;
         height: 100%;
         object-fit: contain;
         display: block;
+        background: transparent;
+        border: none;
+        box-shadow: none;
     }
 
 
@@ -318,8 +334,8 @@
 
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin-bottom: 0;">
 
-        {{-- Kotak Harga + Marketplace --}}
-        @if($product->price || $product->shopee_url || $product->tokopedia_url)
+        {{-- Kotak Harga + Marketplace & WhatsApp --}}
+        @if($product->price || $product->shopee_url || $product->tokopedia_url || $product->whatsapp_url)
         <div class="price-box">
             <div class="price-box-inner">
                 {{-- Harga --}}
@@ -330,8 +346,8 @@
                 </div>
                 @endif
 
-            {{-- Ikon marketplace --}}
-                @if($product->shopee_url || $product->tokopedia_url)
+                {{-- Ikon marketplace & WhatsApp --}}
+                @if($product->shopee_url || $product->tokopedia_url || $product->whatsapp_url)
                 <div class="market-section">
                     <p class="market-label">Tersedia di</p>
                     <div class="market-icons">
@@ -345,6 +361,12 @@
                             <a href="{{ $product->tokopedia_url }}" target="_blank" rel="noopener noreferrer"
                                class="market-icon-tokopedia" title="Tokopedia">
                                 <img src="{{ asset('images/tokopedia.png') }}" alt="Tokopedia">
+                            </a>
+                        @endif
+                        @if($product->whatsapp_url)
+                            <a href="{{ $product->formatted_whatsapp_url }}" target="_blank" rel="noopener noreferrer"
+                               class="market-icon-wa" title="WhatsApp">
+                                <img src="{{ asset('images/wa.png') }}" alt="WhatsApp">
                             </a>
                         @endif
                     </div>

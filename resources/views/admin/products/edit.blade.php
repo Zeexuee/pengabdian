@@ -90,9 +90,9 @@
             <div id="new-image-preview" class="mt-3 flex flex-wrap gap-2"></div>
         </div>
 
-        {{-- Link Marketplace --}}
+        {{-- Link Marketplace & WhatsApp --}}
         <div class="border border-gray-200 rounded-lg p-4 space-y-4">
-            <h3 class="text-gray-700 font-semibold">Tersedia di Marketplace <span class="text-gray-400 font-normal text-sm">(opsional)</span></h3>
+            <h3 class="text-gray-700 font-semibold">Tersedia di Marketplace & WhatsApp <span class="text-gray-400 font-normal text-sm">(opsional)</span></h3>
             <div>
                 <label for="shopee_url" class="block text-gray-600 text-sm mb-1">Link Shopee</label>
                 <input type="text" name="shopee_url" id="shopee_url" value="{{ old('shopee_url', $product->shopee_url) }}"
@@ -104,6 +104,15 @@
                 <input type="text" name="tokopedia_url" id="tokopedia_url" value="{{ old('tokopedia_url', $product->tokopedia_url) }}"
                        class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
                        placeholder="https://www.tokopedia.com/...">
+            </div>
+            <div>
+                <label for="whatsapp_url" class="block text-gray-600 text-sm mb-1">Link / Nomor WhatsApp</label>
+                <input type="text" name="whatsapp_url" id="whatsapp_url" value="{{ old('whatsapp_url', $product->whatsapp_url) }}"
+                       class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm @error('whatsapp_url') border-red-500 @enderror"
+                       placeholder="Contoh: 081234567890 atau https://wa.me/6281234567890">
+                @error('whatsapp_url')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
         </div>
 

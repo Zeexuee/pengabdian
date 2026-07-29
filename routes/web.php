@@ -92,6 +92,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::put('news/{news}/blocks/{block}', [\App\Http\Controllers\Admin\NewsController::class, 'updateBlock'])->name('news.blocks.update');
     Route::delete('news/{news}/blocks/{block}', [\App\Http\Controllers\Admin\NewsController::class, 'destroyBlock'])->name('news.blocks.destroy');
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
+    Route::post('products/reorder', [\App\Http\Controllers\Admin\ProductController::class, 'reorder'])->name('products.reorder');
     Route::delete('products/{product}/images/{image}', [\App\Http\Controllers\Admin\ProductController::class, 'destroyImage'])->name('products.images.destroy');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
 

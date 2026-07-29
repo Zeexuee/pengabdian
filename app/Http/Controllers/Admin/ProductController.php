@@ -38,7 +38,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $query = Product::with('images')->latest();
+        $query = Product::with('images')->orderBy('order', 'asc')->latest();
 
         if (request('search')) {
             $query->where('name', 'like', '%' . request('search') . '%');
@@ -46,6 +46,21 @@ class ProductController extends Controller
 
         $products = $query->paginate(10)->withQueryString();
         return view('admin.products.index', compact('products'));
+    }
+
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'orders'         => 'required|array',
+            'orders.*.id'    => 'required|integer|exists:products,id',
+            'orders.*.order' => 'required|integer',
+        ]);
+
+        foreach ($request->orders as $item) {
+            Product::where('id', $item['id'])->update(['order' => $item['order']]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function create()
@@ -62,6 +77,7 @@ class ProductController extends Controller
             'category'      => 'nullable|string|max:255',
             'shopee_url'    => 'nullable|string|max:500',
             'tokopedia_url' => 'nullable|string|max:500',
+            'whatsapp_url'  => 'nullable|string|max:500',
             'video_url'     => 'nullable|string|max:500',
             'is_active'     => 'boolean',
             'images'        => 'nullable|array',
@@ -70,7 +86,7 @@ class ProductController extends Controller
 
         $data = $request->only([
             'name', 'description', 'price', 'category',
-            'shopee_url', 'tokopedia_url', 'video_url',
+            'shopee_url', 'tokopedia_url', 'whatsapp_url', 'video_url',
         ]);
         $data['is_active'] = $request->boolean('is_active', true);
 
@@ -113,6 +129,7 @@ class ProductController extends Controller
             'category'      => 'nullable|string|max:255',
             'shopee_url'    => 'nullable|string|max:500',
             'tokopedia_url' => 'nullable|string|max:500',
+            'whatsapp_url'  => 'nullable|string|max:500',
             'video_url'     => 'nullable|string|max:500',
             'is_active'     => 'boolean',
             'images'        => 'nullable|array',
@@ -121,7 +138,7 @@ class ProductController extends Controller
 
         $data = $request->only([
             'name', 'description', 'price', 'category',
-            'shopee_url', 'tokopedia_url', 'video_url',
+            'shopee_url', 'tokopedia_url', 'whatsapp_url', 'video_url',
         ]);
         $data['is_active'] = $request->boolean('is_active');
 

@@ -4,7 +4,10 @@
 
 @section('content')
 <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-    <h2 class="text-xl font-bold text-gray-800">Daftar Produk</h2>
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">Daftar Produk</h2>
+        <p class="text-xs text-gray-500 mt-1">Seret baris (drag &amp; drop / swap) untuk mengubah urutan tampilan produk di website.</p>
+    </div>
 
     <div class="flex items-center space-x-4">
         <form action="{{ route('admin.products.index') }}" method="GET" class="flex items-center">
@@ -15,7 +18,7 @@
             </button>
         </form>
 
-        <a href="{{ route('admin.products.create') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition whitespace-nowrap">
+        <a href="{{ route('admin.products.create') }}" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded shadow transition whitespace-nowrap text-sm">
             + Tambah Produk
         </a>
     </div>
@@ -25,6 +28,7 @@
     <table class="min-w-full leading-normal">
         <thead>
             <tr>
+                <th class="px-4 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-8"></th>
                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Gambar</th>
                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Produk</th>
                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kategori</th>
@@ -33,9 +37,12 @@
                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="sortable-products">
             @forelse($products as $product)
-            <tr class="hover:bg-gray-50">
+            <tr data-id="{{ $product->id }}" class="hover:bg-gray-50 cursor-move">
+                <td class="px-4 py-4 border-b border-gray-200 text-gray-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </td>
                 <td class="px-5 py-4 border-b border-gray-200">
                     @if($product->images->count() > 0)
                         <img src="{{ asset($product->images->first()->image) }}" alt="{{ $product->name }}" class="h-14 w-14 object-cover rounded-lg">
@@ -74,7 +81,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="6" class="px-5 py-8 border-b border-gray-200 text-sm text-center text-gray-500">
+                <td colspan="7" class="px-5 py-8 border-b border-gray-200 text-sm text-center text-gray-500">
                     Belum ada data produk. <a href="{{ route('admin.products.create') }}" class="text-red-600 hover:underline">Tambah produk pertama</a>.
                 </td>
             </tr>
@@ -89,3 +96,37 @@
 </div>
 @endif
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = '{{ csrf_token() }}';
+
+    var productsEl = document.getElementById('sortable-products');
+    if (productsEl) {
+        Sortable.create(productsEl, {
+            animation: 150,
+            ghostClass: 'bg-red-50',
+            onEnd: function () {
+                var items = [];
+                productsEl.querySelectorAll('tr[data-id]').forEach(function (row, index) {
+                    items.push({ id: row.getAttribute('data-id'), order: index + 1 });
+                });
+                fetch('{{ route("admin.products.reorder") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                    body: JSON.stringify({ orders: items })
+                }).then(r => r.json()).then(data => {
+                    if (data.success) {
+                        productsEl.style.transition = 'opacity 0.2s';
+                        productsEl.style.opacity = '0.5';
+                        setTimeout(() => productsEl.style.opacity = '1', 300);
+                    }
+                });
+            }
+        });
+    }
+});
+</script>
+@endpush

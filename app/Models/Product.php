@@ -18,9 +18,44 @@ class Product extends Model
         'category',
         'shopee_url',
         'tokopedia_url',
+        'whatsapp_url',
         'video_url',
         'is_active',
+        'order',
     ];
+
+    /**
+     * Helper accessor untuk URL WhatsApp yang terformat rapi.
+     */
+    public function getFormattedWhatsappUrlAttribute(): ?string
+    {
+        if (empty($this->whatsapp_url)) {
+            return null;
+        }
+
+        $url = trim($this->whatsapp_url);
+
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            return $url;
+        }
+
+        if (str_starts_with($url, 'wa.me/')) {
+            return 'https://' . $url;
+        }
+
+        // Jika diinput berupa nomor telepon (misal: 081234567890 atau +6281234567890)
+        $number = preg_replace('/[^0-9]/', '', $url);
+        if (str_starts_with($number, '0')) {
+            $number = '62' . substr($number, 1);
+        }
+
+        if (!empty($number)) {
+            $text = urlencode("Halo, saya tertarik dengan produk " . $this->name);
+            return "https://wa.me/{$number}?text={$text}";
+        }
+
+        return $url;
+    }
 
     protected function casts(): array
     {

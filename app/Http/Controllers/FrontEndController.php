@@ -86,7 +86,7 @@ class FrontEndController extends Controller
 
     public function products()
     {
-        $products = Product::active()->with('images')->latest()->paginate(12);
+        $products = Product::active()->with('images')->orderBy('order', 'asc')->latest()->paginate(12);
         return view('frontend.products', compact('products'));
     }
 
