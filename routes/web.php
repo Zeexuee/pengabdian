@@ -61,7 +61,10 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::get('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
 
-    // CRUD Resources
+    // CRUD Divisions & Members
+    Route::post('divisions/reorder', [\App\Http\Controllers\Admin\DivisionController::class, 'reorder'])->name('divisions.reorder');
+    Route::resource('divisions', \App\Http\Controllers\Admin\DivisionController::class);
+
     Route::post('members/reorder', [\App\Http\Controllers\Admin\MemberController::class, 'reorderMembers'])->name('members.reorder');
     Route::post('members/sections/reorder', [\App\Http\Controllers\Admin\MemberController::class, 'reorderSections'])->name('members.sections.reorder');
     Route::post('members/sections', [\App\Http\Controllers\Admin\MemberController::class, 'storeSectionImage'])->name('members.sections.store');

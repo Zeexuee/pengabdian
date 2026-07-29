@@ -107,10 +107,10 @@
 {{-- Page Header --}}
 <div class="mb-8 md:mb-12">
     <h1 class="text-2xl md:text-3xl font-bold text-gray-900 border-l-4 border-red-600 pl-4 mb-2 md:mb-3">
-        Program Kerja Komunitas
+        Program Kerja RW 006 Pakulonan Barat
     </h1>
     <p class="text-gray-500 text-sm md:text-base max-w-2xl pl-5">
-        Daftar kegiatan dan inisiatif yang kami rencanakan dan sedang jalankan.
+        Daftar Program Kerja yang ada di RW006 Pakulonan Barat.
     </p>
 </div>
 

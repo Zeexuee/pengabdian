@@ -27,9 +27,11 @@ class FrontEndController extends Controller
 
     public function members()
     {
-        $members = Member::orderBy('order', 'asc')->get();
-        $sections = \App\Models\MemberPageSection::orderBy('order')->get();
-        return view('frontend.members', compact('members', 'sections'));
+        $divisions = \App\Models\Division::with(['members' => function($q) {
+            $q->orderBy('order', 'asc');
+        }])->orderBy('order', 'asc')->get();
+
+        return view('frontend.members', compact('divisions'));
     }
 
     public function workPrograms()

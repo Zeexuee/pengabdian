@@ -32,6 +32,25 @@
             @enderror
         </div>
 
+        <!-- Input Divisi (Select dari tabel Divisions) -->
+        <div class="mb-4">
+            <div class="flex justify-between items-center mb-1">
+                <label for="division_id" class="block text-sm font-medium text-gray-700">Divisi / Departemen <span class="text-red-500">*</span></label>
+                <a href="{{ route('admin.divisions.create') }}" target="_blank" class="text-xs text-red-600 hover:underline font-semibold">+ Tambah Divisi Baru</a>
+            </div>
+            <select name="division_id" id="division_id" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm">
+                <option value="">-- Pilih Divisi --</option>
+                @foreach($divisions as $div)
+                    <option value="{{ $div->id }}" {{ old('division_id', $member->division_id) == $div->id ? 'selected' : '' }}>
+                        {{ $div->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('division_id')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
         <!-- Input Urutan -->
         <div class="mb-4">
             <label for="order" class="block text-sm font-medium text-gray-700 mb-1">Urutan (Struktur) <span class="text-red-500">*</span></label>

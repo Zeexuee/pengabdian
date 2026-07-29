@@ -23,6 +23,9 @@
                     <a href="{{ route('admin.home-sections.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.home-sections.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Pengaturan Beranda</a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.divisions.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.divisions.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Kelola Divisi</a>
+                </li>
+                <li>
                     <a href="{{ route('admin.members.index') }}" class="block px-4 py-2 rounded-md hover:bg-gray-700 transition-colors {{ request()->routeIs('admin.members.*') ? 'bg-gray-700 text-white' : 'text-gray-300' }}">Struktur Anggota</a>
                 </li>
                 <li>
