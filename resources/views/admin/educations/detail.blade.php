@@ -13,6 +13,7 @@
         document.getElementById('field-image').classList.toggle('hidden', type !== 'image');
         document.getElementById('field-video').classList.toggle('hidden', type !== 'video');
         document.getElementById('field-text').classList.toggle('hidden',  type !== 'text');
+        document.getElementById('field-pdf').classList.toggle('hidden',   type !== 'pdf');
         document.getElementById('field-title').classList.toggle('hidden', type === '');
     }
 
@@ -21,6 +22,7 @@
         document.getElementById('edit-field-image-' + blockId).classList.toggle('hidden', type !== 'image');
         document.getElementById('edit-field-video-' + blockId).classList.toggle('hidden', type !== 'video');
         document.getElementById('edit-field-text-' + blockId).classList.toggle('hidden',  type !== 'text');
+        document.getElementById('edit-field-pdf-' + blockId).classList.toggle('hidden',   type !== 'pdf');
     }
 
     function toggleEditBlock(blockId) {
@@ -142,10 +144,10 @@
             &larr; Kembali ke Daftar Edukasi
         </a>
         <h2 class="text-xl font-bold text-gray-800 mt-1">{{ $education->title }}</h2>
-        <p class="text-sm text-gray-500">Kelola konten tambahan (teks berformat Word, gambar pendukung, video MP4/YouTube) yang ditampilkan di halaman detail edukasi ini.</p>
+        <p class="text-sm text-gray-500">Kelola konten tambahan (teks berformat Word, gambar, video MP4/YouTube, dokumen PDF) yang ditampilkan di halaman detail edukasi ini.</p>
     </div>
     @if($education->slug)
-        <a href="{{ route('education.detail', $education->slug) }}" target="_blank"
+        <a href="{{ route('educations.detail', $education->slug) }}" target="_blank"
            class="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-red-600 border border-gray-300 bg-white rounded-lg px-3 py-2 shadow-sm transition">
             Lihat Halaman Publik
         </a>
@@ -174,6 +176,7 @@
                         <option value="text"  {{ old('type', 'text') === 'text'  ? 'selected' : '' }}>Teks (Rich Text / Format Word)</option>
                         <option value="image" {{ old('type') === 'image' ? 'selected' : '' }}>Gambar Pendukung</option>
                         <option value="video" {{ old('type') === 'video' ? 'selected' : '' }}>Video (File MP4 / YouTube)</option>
+                        <option value="pdf"   {{ old('type') === 'pdf'   ? 'selected' : '' }}>Dokumen PDF (Modul/Materi)</option>
                     </select>
                     @error('type') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -221,6 +224,15 @@
                     </div>
                 </div>
 
+                {{-- Field: PDF --}}
+                <div id="field-pdf" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Upload Dokumen PDF <span class="text-red-500">*</span></label>
+                    <input type="file" name="pdf_file" accept=".pdf,application/pdf"
+                           class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100">
+                    <p class="text-xs text-gray-400 mt-1">Format PDF (Maks: 30 MB)</p>
+                    @error('pdf_file') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
                 {{-- Field: Teks --}}
                 <div id="field-text" class="hidden">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Isi Teks (Format Word) <span class="text-red-500">*</span></label>
@@ -253,8 +265,9 @@
                             <span class="drag-handle cursor-move text-gray-400 font-extrabold px-1.5 py-0.5 bg-gray-200/70 hover:bg-red-100 hover:text-red-600 rounded select-none text-xs" title="Geser untuk mengatur urutan">⋮⋮</span>
                             <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full
                                 {{ $block->type === 'image' ? 'bg-green-100 text-green-700' :
-                                   ($block->type === 'video' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700') }}">
-                                {{ $block->type === 'image' ? 'Gambar' : ($block->type === 'video' ? 'Video' : 'Teks') }}
+                                   ($block->type === 'video' ? 'bg-blue-100 text-blue-700' :
+                                   ($block->type === 'pdf' ? 'bg-purple-100 text-purple-700' : 'bg-red-100 text-red-700')) }}">
+                                {{ $block->type === 'image' ? 'Gambar' : ($block->type === 'video' ? 'Video' : ($block->type === 'pdf' ? 'Dokumen PDF' : 'Teks')) }}
                             </span>
                             @if($block->title)
                                 <span class="text-sm font-semibold text-gray-700">{{ $block->title }}</span>
@@ -295,6 +308,7 @@
                                     <option value="text"  {{ $block->type === 'text'  ? 'selected' : '' }}>Teks (Rich Text)</option>
                                     <option value="image" {{ $block->type === 'image' ? 'selected' : '' }}>Gambar</option>
                                     <option value="video" {{ $block->type === 'video' ? 'selected' : '' }}>Video (File MP4 / YouTube)</option>
+                                    <option value="pdf"   {{ $block->type === 'pdf'   ? 'selected' : '' }}>Dokumen PDF</option>
                                 </select>
                             </div>
 
@@ -332,6 +346,17 @@
                                     <input type="url" name="video_url" value="{{ old('video_url', $block->video_url) }}"
                                            class="w-full border-gray-300 rounded-lg shadow-sm text-xs focus:ring-red-500 focus:border-red-500">
                                 </div>
+                            </div>
+
+                            <div id="edit-field-pdf-{{ $block->id }}" class="hidden">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Ganti Dokumen PDF (.pdf)</label>
+                                @if($block->pdf_file)
+                                    <div class="mb-2 text-xs text-purple-700 font-medium flex items-center gap-1.5">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>
+                                        <span>File tersimpan: {{ basename($block->pdf_file) }}</span>
+                                    </div>
+                                @endif
+                                <input type="file" name="pdf_file" accept=".pdf,application/pdf" class="w-full text-xs">
                             </div>
 
                             <div id="edit-field-text-{{ $block->id }}" class="hidden">
@@ -389,6 +414,23 @@
                                     </a>
                                 @endif
                             @endif
+
+                        @elseif($block->type === 'pdf' && $block->pdf_file)
+                            <div class="bg-purple-50 border border-purple-200 rounded-xl p-4 flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+                                        PDF
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-800">{{ $block->title ?? basename($block->pdf_file) }}</p>
+                                        <p class="text-xs text-purple-600 font-mono">{{ basename($block->pdf_file) }}</p>
+                                    </div>
+                                </div>
+                                <a href="{{ asset('storage/' . $block->pdf_file) }}" target="_blank"
+                                   class="inline-flex items-center gap-1.5 text-xs bg-purple-600 hover:bg-purple-700 text-white font-semibold px-3 py-2 rounded-lg transition shadow-sm whitespace-nowrap">
+                                    Buka / Unduh PDF
+                                </a>
+                            </div>
 
                         @elseif($block->type === 'text')
                             <div class="prose prose-sm max-w-none text-gray-700 max-h-48 overflow-y-auto">

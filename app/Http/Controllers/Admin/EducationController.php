@@ -112,6 +112,9 @@ class EducationController extends Controller
             if ($block->video_file && Storage::disk('public')->exists($block->video_file)) {
                 Storage::disk('public')->delete($block->video_file);
             }
+            if ($block->pdf_file && Storage::disk('public')->exists($block->pdf_file)) {
+                Storage::disk('public')->delete($block->pdf_file);
+            }
         }
         
         $education->delete();
@@ -132,12 +135,13 @@ class EducationController extends Controller
     public function storeBlock(Request $request, Education $education)
     {
         $request->validate([
-            'type'       => 'required|in:image,video,text',
+            'type'       => 'required|in:image,video,text,pdf',
             'title'      => 'nullable|string|max:255',
             'content'    => 'nullable|string',
             'image'      => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
             'video_url'  => 'nullable|url|max:500',
             'video_file' => 'nullable|file|mimes:mp4,webm,ogg,qt,mov|max:102400',
+            'pdf_file'   => 'nullable|file|mimes:pdf|max:30720',
         ]);
 
         if ($request->type === 'image' && !$request->hasFile('image')) {
@@ -145,6 +149,9 @@ class EducationController extends Controller
         }
         if ($request->type === 'video' && empty($request->video_url) && !$request->hasFile('video_file')) {
             return back()->withErrors(['video_file' => 'Upload file video atau isi URL YouTube untuk tipe "Video".']);
+        }
+        if ($request->type === 'pdf' && !$request->hasFile('pdf_file')) {
+            return back()->withErrors(['pdf_file' => 'File PDF wajib diupload untuk tipe "Dokumen PDF".']);
         }
 
         $lastOrder = $education->blocks()->max('order') ?? -1;
@@ -164,6 +171,9 @@ class EducationController extends Controller
         if ($request->hasFile('video_file')) {
             $data['video_file'] = $request->file('video_file')->store('education_blocks/videos', 'public');
         }
+        if ($request->hasFile('pdf_file')) {
+            $data['pdf_file'] = $request->file('pdf_file')->store('education_blocks/pdfs', 'public');
+        }
 
         EducationBlock::create($data);
 
@@ -175,12 +185,13 @@ class EducationController extends Controller
         abort_if($block->education_id !== $education->id, 403);
 
         $request->validate([
-            'type'       => 'required|in:image,video,text',
+            'type'       => 'required|in:image,video,text,pdf',
             'title'      => 'nullable|string|max:255',
             'content'    => 'nullable|string',
             'image'      => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:8192',
             'video_url'  => 'nullable|url|max:500',
             'video_file' => 'nullable|file|mimes:mp4,webm,ogg,qt,mov|max:102400',
+            'pdf_file'   => 'nullable|file|mimes:pdf|max:30720',
         ]);
 
         $data = [
@@ -202,6 +213,13 @@ class EducationController extends Controller
                 Storage::disk('public')->delete($block->video_file);
             }
             $data['video_file'] = $request->file('video_file')->store('education_blocks/videos', 'public');
+        }
+
+        if ($request->hasFile('pdf_file')) {
+            if ($block->pdf_file && Storage::disk('public')->exists($block->pdf_file)) {
+                Storage::disk('public')->delete($block->pdf_file);
+            }
+            $data['pdf_file'] = $request->file('pdf_file')->store('education_blocks/pdfs', 'public');
         }
 
         $block->update($data);
@@ -235,6 +253,9 @@ class EducationController extends Controller
         }
         if ($block->video_file && Storage::disk('public')->exists($block->video_file)) {
             Storage::disk('public')->delete($block->video_file);
+        }
+        if ($block->pdf_file && Storage::disk('public')->exists($block->pdf_file)) {
+            Storage::disk('public')->delete($block->pdf_file);
         }
 
         $block->delete();

@@ -203,8 +203,7 @@
                         </div>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed max-w-sm">
-                        Mewujudkan lingkungan RW. 06 yang bersih, hijau, dan mandiri melalui pengelolaan sampah berdaya
-                        guna.
+                        Website Resmi dan dikelola RW. 006 Kelurahan Pakulonan Barat, Kecamatan Tangerang, Kota Tangerang, Provinsi Banten.
                     </p>
                 </div>
 

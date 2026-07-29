@@ -245,6 +245,48 @@
                         @endif
                     </div>
 
+                {{-- PDF Block --}}
+                @elseif($block->type === 'pdf' && $block->pdf_file)
+                    <div class="block-card p-6 md:p-8 w-full">
+                        @if($block->title)
+                            <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4 pb-3 border-b border-gray-100 flex items-center gap-2">
+                                <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>
+                                {{ $block->title }}
+                            </h2>
+                        @endif
+
+                        {{-- Action Header / Download Button --}}
+                        <div class="bg-purple-50 border border-purple-100 rounded-xl p-4 mb-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-purple-600 text-white flex items-center justify-center font-extrabold text-xs flex-shrink-0">
+                                    PDF
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">{{ $block->title ?? basename($block->pdf_file) }}</p>
+                                    <p class="text-xs text-purple-600 font-mono">Dokumen Edukasi PDF</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <a href="{{ asset('storage/' . $block->pdf_file) }}" target="_blank" download
+                                   class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition shadow-sm text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    Unduh PDF
+                                </a>
+                                <a href="{{ asset('storage/' . $block->pdf_file) }}" target="_blank"
+                                   class="inline-flex items-center justify-center p-2.5 bg-white text-purple-700 border border-purple-200 rounded-xl hover:bg-purple-50 transition" title="Buka di tab baru">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        {{-- Embedded Interactive PDF Viewer --}}
+                        <div class="rounded-xl overflow-hidden border border-gray-200 bg-slate-100 shadow-inner">
+                            <iframe src="{{ asset('storage/' . $block->pdf_file) }}#toolbar=1"
+                                    class="w-full h-[550px] md:h-[650px] border-0"
+                                    title="{{ $block->title ?? 'Viewer Dokumen PDF' }}"></iframe>
+                        </div>
+                    </div>
+
                 {{-- Teks --}}
                 @elseif($block->type === 'text')
                     <div class="block-card p-6 md:p-10 w-full">

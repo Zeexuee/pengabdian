@@ -10,7 +10,7 @@ class EducationBlock extends Model
     use HasFactory;
 
     protected $fillable = [
-        'education_id', 'type', 'title', 'content', 'image', 'video_url', 'video_file', 'order',
+        'education_id', 'type', 'title', 'content', 'image', 'video_url', 'video_file', 'pdf_file', 'order',
     ];
 
     public function education()
