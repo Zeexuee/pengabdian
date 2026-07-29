@@ -79,6 +79,12 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::put('work-programs/{work_program}/blocks/{block}', [\App\Http\Controllers\Admin\WorkProgramController::class, 'updateBlock'])->name('work-programs.blocks.update');
     Route::delete('work-programs/{work_program}/blocks/{block}', [\App\Http\Controllers\Admin\WorkProgramController::class, 'destroyBlock'])->name('work-programs.blocks.destroy');
     Route::resource('educations', \App\Http\Controllers\Admin\EducationController::class);
+    Route::post('news/reorder', [\App\Http\Controllers\Admin\NewsController::class, 'reorder'])->name('news.reorder');
+    Route::get('news/{news}/detail', [\App\Http\Controllers\Admin\NewsController::class, 'showDetail'])->name('news.detail');
+    Route::post('news/{news}/blocks/reorder', [\App\Http\Controllers\Admin\NewsController::class, 'reorderBlocks'])->name('news.blocks.reorder');
+    Route::post('news/{news}/blocks', [\App\Http\Controllers\Admin\NewsController::class, 'storeBlock'])->name('news.blocks.store');
+    Route::put('news/{news}/blocks/{block}', [\App\Http\Controllers\Admin\NewsController::class, 'updateBlock'])->name('news.blocks.update');
+    Route::delete('news/{news}/blocks/{block}', [\App\Http\Controllers\Admin\NewsController::class, 'destroyBlock'])->name('news.blocks.destroy');
     Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
     Route::delete('products/{product}/images/{image}', [\App\Http\Controllers\Admin\ProductController::class, 'destroyImage'])->name('products.images.destroy');
     Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);

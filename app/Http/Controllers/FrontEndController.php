@@ -15,8 +15,8 @@ class FrontEndController extends Controller
 {
     public function home()
     {
-        // Data lama (berita terbaru)
-        $latest_news = News::where('status', 'published')->latest('published_at')->take(3)->get();
+        // Data berita (sesuai urutan drag & drop admin)
+        $latest_news = News::where('status', 'published')->orderBy('order', 'asc')->latest('published_at')->take(3)->get();
         
         // Data dinamis Page Builder
         $hero_slides = \App\Models\HeroBanner::orderBy('order')->get();
@@ -69,8 +69,8 @@ class FrontEndController extends Controller
 
     public function news()
     {
-        // Mengambil semua berita dengan pagination
-        $news = News::with('author')->where('status', 'published')->latest('published_at')->paginate(9);
+        // Mengambil semua berita sesuai urutan drag & drop admin
+        $news = News::with('author')->where('status', 'published')->orderBy('order', 'asc')->latest('published_at')->paginate(9);
         return view('frontend.berita', compact('news'));
     }
 
@@ -79,7 +79,8 @@ class FrontEndController extends Controller
         if ($news->status !== 'published') {
             abort(404);
         }
-        return view('frontend.berita_detail', compact('news'));
+        $blocks = $news->blocks;
+        return view('frontend.berita_detail', compact('news', 'blocks'));
     }
 
     public function products()

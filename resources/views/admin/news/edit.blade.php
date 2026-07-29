@@ -55,6 +55,17 @@
             @enderror
         </div>
 
+        <div>
+            <label for="published_at" class="block text-gray-700 font-semibold mb-2">Tanggal &amp; Waktu Publish (Opsional)</label>
+            <input type="datetime-local" name="published_at" id="published_at" 
+                   value="{{ old('published_at', $news->published_at ? $news->published_at->format('Y-m-d\TH:i') : '') }}" 
+                   class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 @error('published_at') border-red-500 @enderror">
+            <p class="text-xs text-gray-500 mt-1">Ubah jika Anda ingin mengatur tanggal/waktu rilis berita secara kustom.</p>
+            @error('published_at')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
         <div class="flex justify-end space-x-4 pt-4">
             <a href="{{ route('admin.news.index') }}" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 font-semibold transition">Batal</a>
             <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 font-semibold transition">Update Berita</button>

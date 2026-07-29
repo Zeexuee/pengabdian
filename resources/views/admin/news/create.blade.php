@@ -41,10 +41,20 @@
             <select name="status" id="status" 
                     class="w-full px-4 py-2 bg-white border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 @error('status') border-red-500 @enderror">
                 <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
+                <option value="published" {{ old('status', 'published') == 'published' ? 'selected' : '' }}>Published</option>
                 <option value="archived" {{ old('status') == 'archived' ? 'selected' : '' }}>Archived</option>
             </select>
             @error('status')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
+            <label for="published_at" class="block text-gray-700 font-semibold mb-2">Tanggal &amp; Waktu Publish (Opsional)</label>
+            <input type="datetime-local" name="published_at" id="published_at" value="{{ old('published_at') }}" 
+                   class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 @error('published_at') border-red-500 @enderror">
+            <p class="text-xs text-gray-500 mt-1">Biarkan kosong jika ingin otomatis menggunakan waktu saat ini saat dipublikasikan.</p>
+            @error('published_at')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
