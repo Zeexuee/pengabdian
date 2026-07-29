@@ -244,29 +244,21 @@
                     </h3>
                     <ul class="space-y-2 text-sm text-slate-400">
                         <li class="leading-relaxed">
-                            RW. 06, Sejahtera Gemilang, Kota Banten
+                            RW. 006, Sejahtera Gemilang, Pakulonan Barat, Tangerang Utara, Banten
                         </li>
                         <li>
                             WA: <a href="https://wa.me/628123456789" target="_blank"
-                                class="hover:text-red-500 transition-colors">+62 812-3456-7890</a>
+                                class="hover:text-red-500 transition-colors">+6281-2345-6789</a>
                         </li>
                         <li>
-                            Email: <a href="mailto:info@banksampahsg.id"
-                                class="hover:text-red-500 transition-colors">info@banksampahsg.id</a>
+                            Email: <a href="mailto:fathanfarizi@fathan.lt"
+                                class="hover:text-red-500 transition-colors">fathanfarizi@fathan.lt</a>
                         </li>
                     </ul>
 
                     <!-- Media Sosial Icons -->
                     <div class="flex space-x-4 pt-2">
-                        <a href="#" class="text-slate-400 hover:text-red-500 transition-colors">
-                            <span class="sr-only">Facebook</span>
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill-rule="evenodd"
-                                    d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-slate-400 hover:text-red-500 transition-colors">
+                        <a href="https://www.instagram.com/rw.06_pakbar?igsh=YnVlbTZ0NXQzZ2Jy" class="text-slate-400 hover:text-red-500 transition-colors">
                             <span class="sr-only">Instagram</span>
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path fill-rule="evenodd"
@@ -282,10 +274,9 @@
             <!-- Bottom Copyright & Admin Login -->
             <div
                 class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 space-y-2 sm:space-y-0">
-                <p>&copy; {{ date('Y') }} Bank Sampah Sejahtera Gemilang RW. 06. Hak Cipta Dilindungi.</p>
+                <p>&copy; {{ date('Y') }} Bank Sampah Sejahtera Gemilang RW. 006 Pakulonan Barat. Hak Cipta Dilindungi.</p>
                 <div class="flex space-x-4">
-                    <a href="{{ route('contact') }}" class="hover:text-red-500 transition-colors">Hubungi Kami</a>
-                    <span>|</span>
+                    
                     <a href="{{ route('login') }}" class="hover:text-red-500 transition-colors">Admin Login</a>
                 </div>
             </div>

@@ -54,8 +54,8 @@ class FrontEndController extends Controller
 
     public function educations()
     {
-        // Mengambil data edukasi yang dipublikasikan
-        $educations = Education::where('is_published', true)->latest()->paginate(9);
+        // Mengambil data edukasi yang dipublikasikan (sesuai urutan drag & drop admin)
+        $educations = Education::where('is_published', true)->orderBy('order', 'asc')->latest()->paginate(9);
         return view('frontend.educations', compact('educations'));
     }
 
@@ -64,7 +64,8 @@ class FrontEndController extends Controller
         if (!$education->is_published) {
             abort(404);
         }
-        return view('frontend.edukasi_detail', compact('education'));
+        $blocks = $education->blocks;
+        return view('frontend.edukasi_detail', compact('education', 'blocks'));
     }
 
     public function news()

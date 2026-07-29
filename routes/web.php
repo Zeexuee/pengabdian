@@ -78,6 +78,12 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::post('work-programs/{work_program}/blocks', [\App\Http\Controllers\Admin\WorkProgramController::class, 'storeBlock'])->name('work-programs.blocks.store');
     Route::put('work-programs/{work_program}/blocks/{block}', [\App\Http\Controllers\Admin\WorkProgramController::class, 'updateBlock'])->name('work-programs.blocks.update');
     Route::delete('work-programs/{work_program}/blocks/{block}', [\App\Http\Controllers\Admin\WorkProgramController::class, 'destroyBlock'])->name('work-programs.blocks.destroy');
+    Route::post('educations/reorder', [\App\Http\Controllers\Admin\EducationController::class, 'reorder'])->name('educations.reorder');
+    Route::get('educations/{education}/detail', [\App\Http\Controllers\Admin\EducationController::class, 'showDetail'])->name('educations.detail');
+    Route::post('educations/{education}/blocks/reorder', [\App\Http\Controllers\Admin\EducationController::class, 'reorderBlocks'])->name('educations.blocks.reorder');
+    Route::post('educations/{education}/blocks', [\App\Http\Controllers\Admin\EducationController::class, 'storeBlock'])->name('educations.blocks.store');
+    Route::put('educations/{education}/blocks/{block}', [\App\Http\Controllers\Admin\EducationController::class, 'updateBlock'])->name('educations.blocks.update');
+    Route::delete('educations/{education}/blocks/{block}', [\App\Http\Controllers\Admin\EducationController::class, 'destroyBlock'])->name('educations.blocks.destroy');
     Route::resource('educations', \App\Http\Controllers\Admin\EducationController::class);
     Route::post('news/reorder', [\App\Http\Controllers\Admin\NewsController::class, 'reorder'])->name('news.reorder');
     Route::get('news/{news}/detail', [\App\Http\Controllers\Admin\NewsController::class, 'showDetail'])->name('news.detail');
