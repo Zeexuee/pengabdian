@@ -159,7 +159,7 @@
             Bank Sampah Sejahtera Gemilang
         </h1>
         <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Portal resmi informasi kegiatan, program kerja, edukasi lingkungan, dan produk daur ulang RW. 006 Kelurahan Pakulonan Barat.
+            Informasi kegiatan, program kerja, edukasi lingkungan, dan produk daur ulang Bank Sampah Sejahtera Gemilang RW. 006 Kelurahan Pakulonan Barat.
         </p>
     </div>
     @endif
@@ -250,6 +250,39 @@
                         </div>
                     @endif
                 </div>
+
+            {{-- KOMPONEN: BANNER PENGUMUMAN / INFORMASI --}}
+            @elseif($section->type == 'callout')
+                <div class="bg-emerald-50/90 rounded-2xl border border-emerald-200/80 p-6 sm:p-8 max-w-4xl mx-auto shadow-sm">
+                    @if($section->title)
+                        <h2 class="text-lg sm:text-xl font-bold text-emerald-950 mb-3 flex items-center gap-2">
+                            <span>📢</span> {{ $section->title }}
+                        </h2>
+                    @endif
+                    <div class="prose prose-sm sm:prose-base prose-emerald max-w-none text-emerald-900 leading-relaxed mb-4">
+                        {!! $section->content !!}
+                    </div>
+                    @if($section->button_text)
+                        <div>
+                            <a href="{{ $section->button_link ?? '#' }}" class="inline-block px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-semibold rounded-lg transition shadow-sm">
+                                {{ $section->button_text }} →
+                            </a>
+                        </div>
+                    @endif
+                </div>
+
+            {{-- KOMPONEN: TANYA JAWAB (FAQ) --}}
+            @elseif($section->type == 'faq')
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 max-w-4xl mx-auto">
+                    @if($section->title)
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-4 pb-3 border-b border-slate-100 flex items-center gap-2">
+                            <span>❓</span> {{ $section->title }}
+                        </h2>
+                    @endif
+                    <div class="prose prose-sm sm:prose-base max-w-none text-slate-700 leading-relaxed">
+                        {!! $section->content !!}
+                    </div>
+                </div>
             @endif
 
         @endforeach
@@ -265,7 +298,7 @@
         <div class="flex justify-between items-end mb-6">
             <div>
                 <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Program Kerja</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1">Inisiatif dan program pengelolaan lingkungan oleh pengurus.</p>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">program-program dan kegiatan RW.006 Pakulonan Barat.</p>
             </div>
             <a href="{{ route('work_programs') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
                 Lihat Semua →
@@ -389,7 +422,7 @@
         <div class="flex justify-between items-end mb-6">
             <div>
                 <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Berita Terbaru</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1">Publikasi dan warta kegiatan komunitas terbaru.</p>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">Publikasi dan warta kegiatan Bank Sampah Sejahtera Gemilang RW.006 Pakulonan Barat.</p>
             </div>
             <a href="{{ route('news') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
                 Arsip Berita →

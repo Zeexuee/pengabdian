@@ -31,8 +31,8 @@
         <div class="space-y-6">
             
             <!-- Judul -->
-            <div class="field-group" data-show-for="text,image_text,video">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Judul (Opsional)</label>
+            <div class="field-group" data-show-for="text,image_text,video,callout,faq">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Judul Komponen (Opsional)</label>
                 <input type="text" name="title" value="{{ old('title', $homeSection->title) }}" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">
                 @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
@@ -68,14 +68,14 @@
             </div>
 
             <!-- Konten (Teks) -->
-            <div class="field-group" data-show-for="text,image_text">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Konten / Teks</label>
+            <div class="field-group" data-show-for="text,image_text,callout,faq">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Konten / Isi Teks</label>
                 <textarea name="content" id="content_editor" rows="5" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">{{ old('content', $homeSection->content) }}</textarea>
                 @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
-            <!-- Tombol Aksi (Hanya Image Text) -->
-            <div class="field-group grid grid-cols-2 gap-4" data-show-for="image_text">
+            <!-- Tombol Aksi (Image Text & Callout) -->
+            <div class="field-group grid grid-cols-2 gap-4" data-show-for="image_text,callout">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Teks Tombol (Opsional)</label>
                     <input type="text" name="button_text" value="{{ old('button_text', $homeSection->button_text) }}" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">

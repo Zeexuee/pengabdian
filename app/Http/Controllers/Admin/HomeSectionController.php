@@ -25,7 +25,7 @@ class HomeSectionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'type' => 'required|in:image,text,image_text,video',
+            'type' => 'required|in:image,text,image_text,video,callout,faq',
             'title' => 'nullable|string|max:255',
             'content' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -56,7 +56,7 @@ class HomeSectionController extends Controller
     public function update(Request $request, HomeSection $homeSection)
     {
         $validated = $request->validate([
-            'type' => 'required|in:image,text,image_text,video',
+            'type' => 'required|in:image,text,image_text,video,callout,faq',
             'title' => 'nullable|string|max:255',
             'content' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',

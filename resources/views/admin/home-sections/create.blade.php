@@ -24,6 +24,8 @@
                 <option value="text" {{ old('type') == 'text' ? 'selected' : '' }}>Teks (Rich Text)</option>
                 <option value="image_text" {{ old('type') == 'image_text' ? 'selected' : '' }}>Gambar & Teks</option>
                 <option value="video" {{ old('type') == 'video' ? 'selected' : '' }}>Video (YouTube dll)</option>
+                <option value="callout" {{ old('type') == 'callout' ? 'selected' : '' }}>Banner Pengumuman / Informasi</option>
+                <option value="faq" {{ old('type') == 'faq' ? 'selected' : '' }}>Tanya Jawab (FAQ / Q&A)</option>
             </select>
             @error('type') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
@@ -34,8 +36,8 @@
         <div class="space-y-6">
             
             <!-- Judul -->
-            <div class="field-group" data-show-for="text,image_text,video">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Judul (Opsional)</label>
+            <div class="field-group" data-show-for="text,image_text,video,callout,faq">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Judul Komponen (Opsional)</label>
                 <input type="text" name="title" value="{{ old('title') }}" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">
                 @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
@@ -65,21 +67,21 @@
             </div>
 
             <!-- Konten (Teks) -->
-            <div class="field-group" data-show-for="text,image_text">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Konten / Teks</label>
+            <div class="field-group" data-show-for="text,image_text,callout,faq">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Konten / Isi Teks</label>
                 <textarea name="content" id="content_editor" rows="5" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">{{ old('content') }}</textarea>
                 @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
-            <!-- Tombol Aksi (Hanya Image Text yang pakai tombol jika diizinkan, hero sudah tidak ada) -->
-            <div class="field-group grid grid-cols-2 gap-4" data-show-for="image_text">
+            <!-- Tombol Aksi (Image Text & Callout) -->
+            <div class="field-group grid grid-cols-2 gap-4" data-show-for="image_text,callout">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Teks Tombol (Opsional)</label>
                     <input type="text" name="button_text" value="{{ old('button_text') }}" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Link Tombol (Opsional)</label>
-                    <input type="text" name="button_link" value="{{ old('button_link') }}" placeholder="/gabung" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">
+                    <input type="text" name="button_link" value="{{ old('button_link') }}" placeholder="/kontak" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">
                 </div>
             </div>
 
