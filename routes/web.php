@@ -101,6 +101,7 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     Route::post('home-sections/hero', [\App\Http\Controllers\Admin\HomeSectionController::class, 'storeHero'])->name('home-sections.hero.store');
     Route::delete('home-sections/hero/{id}', [\App\Http\Controllers\Admin\HomeSectionController::class, 'destroyHero'])->name('home-sections.hero.destroy');
     Route::post('home-sections/reorder', [\App\Http\Controllers\Admin\HomeSectionController::class, 'reorder'])->name('home-sections.reorder');
+    Route::patch('home-sections/{homeSection}/toggle-status', [\App\Http\Controllers\Admin\HomeSectionController::class, 'toggleStatus'])->name('home-sections.toggle-status');
     Route::resource('home-sections', \App\Http\Controllers\Admin\HomeSectionController::class);
 
     // Read, Update (change status), Delete for Contacts & Join Requests

@@ -18,8 +18,8 @@ class FrontEndController extends Controller
         // Data Hero Swiper dari Admin
         $hero_slides = \App\Models\HeroBanner::orderBy('order')->get();
 
-        // Data Dynamic Sections dari Admin Page Builder
-        $sections = \App\Models\HomeSection::where('type', '!=', 'hero')->where('is_active', true)->orderBy('order')->get();
+        // Data Dynamic & System Sections dari Admin Page Builder
+        $sections = \App\Models\HomeSection::where('is_active', true)->orderBy('order', 'asc')->get();
 
         // Data Konten Terbaru dari CMS
         $latest_news = News::where('status', 'published')->orderBy('order', 'asc')->latest('published_at')->take(3)->get();

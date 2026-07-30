@@ -125,55 +125,214 @@
 </script>
 @endpush
 
-{{-- ===================================================
-     HERO SLIDER (FULL WIDTH CONTAINER)
-=================================================== --}}
-@section('full_width_content')
-@if($hero_slides->count() > 0)
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <div class="swiper hero-swiper w-full" style="height: clamp(260px, 50vw, 550px);">
-            <div class="swiper-wrapper">
-                @foreach($hero_slides as $slide)
-                    <div class="swiper-slide">
-                        <img src="{{ asset('storage/' . $slide->image) }}" alt="Hero Banner">
-                    </div>
-                @endforeach
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-    </div>
-@endif
-@endsection
-
-{{-- ===================================================
-     KONTEN UTAMA LANDING PAGE (CMS INFORMASIONAL)
-=================================================== --}}
 @section('content')
 
 <div class="space-y-14 sm:space-y-20 py-4">
 
-    {{-- HEADER PROFILE SINGKAT JIKA BELUM ADA BANNER HERO --}}
-    @if($hero_slides->count() == 0)
-    <div class="bg-white rounded-2xl border border-slate-200/80 p-8 sm:p-12 text-center max-w-4xl mx-auto space-y-3">
-        <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Bank Sampah Sejahtera Gemilang
-        </h1>
-        <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Informasi kegiatan, program kerja, edukasi lingkungan, dan produk daur ulang Bank Sampah Sejahtera Gemilang RW. 006 Kelurahan Pakulonan Barat.
-        </p>
-    </div>
-    @endif
-
-
-    {{-- -----------------------------------------------
-         1. DYNAMIC PAGE BUILDER SECTIONS (ADMIN)
-    ----------------------------------------------- --}}
     @if(isset($sections) && $sections->count() > 0)
-    <div class="space-y-10">
         @foreach($sections as $section)
 
-            {{-- KOMPONEN: GAMBAR --}}
-            @if($section->type == 'image')
+            {{-- -----------------------------------------------
+                 HERO SLIDER BANNER
+            ----------------------------------------------- --}}
+            @if($section->type == 'hero')
+                @if(isset($hero_slides) && $hero_slides->count() > 0)
+                    <div class="swiper hero-swiper w-full" style="height: clamp(260px, 50vw, 550px);">
+                        <div class="swiper-wrapper">
+                            @foreach($hero_slides as $slide)
+                                <div class="swiper-slide">
+                                    <img src="{{ asset('storage/' . $slide->image) }}" alt="Hero Banner">
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                @else
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-8 sm:p-12 text-center max-w-4xl mx-auto space-y-3">
+                        <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                            Bank Sampah Sejahtera Gemilang
+                        </h1>
+                        <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+                            Informasi kegiatan, program kerja, edukasi lingkungan, dan produk daur ulang Bank Sampah Sejahtera Gemilang RW. 006 Kelurahan Pakulonan Barat.
+                        </p>
+                    </div>
+                @endif
+
+            {{-- -----------------------------------------------
+                 SYSTEM: PROGRAM KERJA HIGHLIGHT
+            ----------------------------------------------- --}}
+            @elseif($section->type == 'system_program_kerja')
+                @if(isset($featured_programs) && $featured_programs->count() > 0)
+                <div>
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $section->title ?: 'Program Kerja' }}</h2>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">program-program dan kegiatan RW.006 Pakulonan Barat.</p>
+                        </div>
+                        <a href="{{ route('work_programs') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
+                            Lihat Semua →
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        @foreach($featured_programs as $prog)
+                            <div class="bg-white rounded-xl border border-slate-200/80 overflow-hidden clean-card flex flex-col">
+                                @if($prog->thumbnail)
+                                    <div class="h-44 overflow-hidden bg-slate-100">
+                                        <img src="{{ asset('storage/' . $prog->thumbnail) }}" alt="{{ $prog->title }}" class="w-full h-full object-cover">
+                                    </div>
+                                @endif
+                                <div class="p-5 flex flex-col flex-grow">
+                                    <h3 class="font-bold text-slate-900 text-base mb-2 line-clamp-2">
+                                        {{ $prog->title }}
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-slate-500 mb-4 line-clamp-3 leading-relaxed flex-grow">
+                                        {{ Str::limit(strip_tags($prog->description), 110) }}
+                                    </p>
+                                    <a href="{{ route('work_programs.detail', $prog->id) }}" class="inline-flex items-center text-xs font-semibold text-emerald-700 hover:underline mt-auto">
+                                        Baca Rincian Program →
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+            {{-- -----------------------------------------------
+                 SYSTEM: PRODUK DAUR ULANG HIGHLIGHT
+            ----------------------------------------------- --}}
+            @elseif($section->type == 'system_produk')
+                @if(isset($featured_products) && $featured_products->count() > 0)
+                <div>
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $section->title ?: 'Produk Daur Ulang' }}</h2>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Karya dan produk hasil olahan sampah organik/anorganik.</p>
+                        </div>
+                        <a href="{{ route('products') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
+                            Katalog Lengkap →
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                        @foreach($featured_products as $prod)
+                            @php
+                                $img = $prod->images->first() ? asset('storage/' . $prod->images->first()->image_path) : null;
+                            @endphp
+                            <div class="bg-white rounded-xl border border-slate-200/80 overflow-hidden clean-card flex flex-col">
+                                <div class="aspect-square bg-slate-100 overflow-hidden">
+                                    @if($img)
+                                        <img src="{{ $img }}" alt="{{ $prod->name }}" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center text-slate-400 text-xs">
+                                            Tanpa Foto
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="p-4 flex flex-col flex-grow">
+                                    <h3 class="font-bold text-xs sm:text-sm text-slate-900 mb-1 line-clamp-2">
+                                        {{ $prod->name }}
+                                    </h3>
+                                    @if($prod->price)
+                                        <p class="text-xs sm:text-sm font-semibold text-emerald-700 mb-3">
+                                            Rp {{ number_format($prod->price, 0, ',', '.') }}
+                                        </p>
+                                    @endif
+                                    <a href="{{ route('products.detail', $prod->slug) }}" class="mt-auto block text-center py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
+                                        Lihat Detail
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+            {{-- -----------------------------------------------
+                 SYSTEM: EDUKASI LINGKUNGAN HIGHLIGHT
+            ----------------------------------------------- --}}
+            @elseif($section->type == 'system_edukasi')
+                @if(isset($featured_educations) && $featured_educations->count() > 0)
+                <div>
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $section->title ?: 'Edukasi Lingkungan' }}</h2>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Artikel dan informasi seputar pemilahan sampah & kelestarian.</p>
+                        </div>
+                        <a href="{{ route('educations') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
+                            Semua Edukasi →
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        @foreach($featured_educations as $edu)
+                            <div class="bg-white rounded-xl border border-slate-200/80 p-5 clean-card flex flex-col">
+                                <h3 class="font-bold text-slate-900 text-base mb-2 line-clamp-2">
+                                    {{ $edu->title }}
+                                </h3>
+                                <p class="text-xs sm:text-sm text-slate-500 mb-4 line-clamp-3 leading-relaxed flex-grow">
+                                    {{ Str::limit(strip_tags($edu->content ?? ''), 100) }}
+                                </p>
+                                <a href="{{ route('educations.detail', $edu->slug) }}" class="inline-flex items-center text-xs font-semibold text-emerald-700 hover:underline mt-auto">
+                                    Baca Artikel →
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+            {{-- -----------------------------------------------
+                 SYSTEM: BERITA TERBARU HIGHLIGHT
+            ----------------------------------------------- --}}
+            @elseif($section->type == 'system_berita')
+                <div>
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $section->title ?: 'Berita Terbaru' }}</h2>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Publikasi dan warta kegiatan Bank Sampah Sejahtera Gemilang RW.006 Pakulonan Barat.</p>
+                        </div>
+                        <a href="{{ route('news') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
+                            Arsip Berita →
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @forelse($latest_news as $item)
+                            <div class="bg-white rounded-xl border border-slate-200/80 overflow-hidden clean-card flex flex-col">
+                                @if($item->thumbnail)
+                                    <div class="h-44 overflow-hidden bg-slate-100">
+                                        <img src="{{ asset('storage/' . $item->thumbnail) }}" alt="{{ $item->title }}" class="w-full h-full object-cover">
+                                    </div>
+                                @endif
+                                <div class="p-5 flex flex-col flex-grow">
+                                    <p class="text-[11px] text-slate-400 mb-2 font-medium">
+                                        {{ $item->published_at ? $item->published_at->format('d M Y') : 'Hari ini' }}
+                                    </p>
+                                    <h3 class="font-bold text-slate-900 text-base mb-2 line-clamp-2">
+                                        {{ $item->title }}
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-slate-500 mb-4 line-clamp-3 leading-relaxed flex-grow">
+                                        {!! Str::limit(strip_tags($item->content), 105) !!}
+                                    </p>
+                                    <a href="{{ route('news.detail', $item->slug) }}" class="inline-flex items-center text-xs font-semibold text-emerald-700 hover:underline mt-auto">
+                                        Baca Selengkapnya →
+                                    </a>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-span-full py-10 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                                <p class="text-slate-400 text-xs sm:text-sm">Belum ada berita yang dipublikasikan.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+            {{-- -----------------------------------------------
+                 CUSTOM: GAMBAR
+            ----------------------------------------------- --}}
+            @elseif($section->type == 'image')
                 <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden p-4 sm:p-6">
                     @if($section->title)
                         <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-4">{{ $section->title }}</h2>
@@ -185,7 +344,9 @@
                     @endif
                 </div>
 
-            {{-- KOMPONEN: TEKS --}}
+            {{-- -----------------------------------------------
+                 CUSTOM: TEKS
+            ----------------------------------------------- --}}
             @elseif($section->type == 'text')
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-10 max-w-4xl mx-auto">
                     @if($section->title)
@@ -196,7 +357,9 @@
                     </div>
                 </div>
 
-            {{-- KOMPONEN: GAMBAR + TEKS --}}
+            {{-- -----------------------------------------------
+                 CUSTOM: GAMBAR + TEKS
+            ----------------------------------------------- --}}
             @elseif($section->type == 'image_text')
                 <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden p-4 sm:p-6">
                     <div class="flex flex-col {{ $section->image_position == 'right' ? 'md:flex-row-reverse' : 'md:flex-row' }} items-center gap-6 sm:gap-8">
@@ -225,7 +388,9 @@
                     </div>
                 </div>
 
-            {{-- KOMPONEN: VIDEO --}}
+            {{-- -----------------------------------------------
+                 CUSTOM: VIDEO
+            ----------------------------------------------- --}}
             @elseif($section->type == 'video')
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 max-w-4xl mx-auto">
                     @if($section->title)
@@ -251,12 +416,14 @@
                     @endif
                 </div>
 
-            {{-- KOMPONEN: BANNER PENGUMUMAN / INFORMASI --}}
+            {{-- -----------------------------------------------
+                 CUSTOM: BANNER PENGUMUMAN / CALLOUT
+            ----------------------------------------------- --}}
             @elseif($section->type == 'callout')
                 <div class="bg-emerald-50/90 rounded-2xl border border-emerald-200/80 p-6 sm:p-8 max-w-4xl mx-auto shadow-sm">
                     @if($section->title)
                         <h2 class="text-lg sm:text-xl font-bold text-emerald-950 mb-3 flex items-center gap-2">
-                            <span>📢</span> {{ $section->title }}
+                            <span>📌</span> {{ $section->title }}
                         </h2>
                     @endif
                     <div class="prose prose-sm sm:prose-base prose-emerald max-w-none text-emerald-900 leading-relaxed mb-4">
@@ -271,7 +438,9 @@
                     @endif
                 </div>
 
-            {{-- KOMPONEN: TANYA JAWAB (FAQ) --}}
+            {{-- -----------------------------------------------
+                 CUSTOM: TANYA JAWAB / FAQ
+            ----------------------------------------------- --}}
             @elseif($section->type == 'faq')
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 max-w-4xl mx-auto">
                     @if($section->title)
@@ -286,179 +455,7 @@
             @endif
 
         @endforeach
-    </div>
     @endif
-
-
-    {{-- -----------------------------------------------
-         2. PROGRAM KERJA (WORK PROGRAMS HIGHLIGHT)
-    ----------------------------------------------- --}}
-    @if(isset($featured_programs) && $featured_programs->count() > 0)
-    <div>
-        <div class="flex justify-between items-end mb-6">
-            <div>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Program Kerja</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1">program-program dan kegiatan RW.006 Pakulonan Barat.</p>
-            </div>
-            <a href="{{ route('work_programs') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
-                Lihat Semua →
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach($featured_programs as $prog)
-                <div class="bg-white rounded-xl border border-slate-200/80 overflow-hidden clean-card flex flex-col">
-                    @if($prog->thumbnail)
-                        <div class="h-44 overflow-hidden bg-slate-100">
-                            <img src="{{ asset('storage/' . $prog->thumbnail) }}" alt="{{ $prog->title }}" class="w-full h-full object-cover">
-                        </div>
-                    @endif
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-slate-900 text-base mb-2 line-clamp-2">
-                            {{ $prog->title }}
-                        </h3>
-                        <p class="text-xs sm:text-sm text-slate-500 mb-4 line-clamp-3 leading-relaxed flex-grow">
-                            {{ Str::limit(strip_tags($prog->description), 110) }}
-                        </p>
-                        <a href="{{ route('work_programs.detail', $prog->id) }}" class="inline-flex items-center text-xs font-semibold text-emerald-700 hover:underline mt-auto">
-                            Baca Rincian Program →
-                        </a>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-
-    {{-- -----------------------------------------------
-         3. PRODUK DAUR ULANG (PRODUCTS HIGHLIGHT)
-    ----------------------------------------------- --}}
-    @if(isset($featured_products) && $featured_products->count() > 0)
-    <div>
-        <div class="flex justify-between items-end mb-6">
-            <div>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Produk Daur Ulang</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1">Karya dan produk hasil olahan sampah organik/anorganik.</p>
-            </div>
-            <a href="{{ route('products') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
-                Katalog Lengkap →
-            </a>
-        </div>
-
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            @foreach($featured_products as $prod)
-                @php
-                    $img = $prod->images->first() ? asset('storage/' . $prod->images->first()->image_path) : null;
-                @endphp
-                <div class="bg-white rounded-xl border border-slate-200/80 overflow-hidden clean-card flex flex-col">
-                    <div class="aspect-square bg-slate-100 overflow-hidden">
-                        @if($img)
-                            <img src="{{ $img }}" alt="{{ $prod->name }}" class="w-full h-full object-cover">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center text-slate-400 text-xs">
-                                Tanpa Foto
-                            </div>
-                        @endif
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow">
-                        <h3 class="font-bold text-xs sm:text-sm text-slate-900 mb-1 line-clamp-2">
-                            {{ $prod->name }}
-                        </h3>
-                        @if($prod->price)
-                            <p class="text-xs sm:text-sm font-semibold text-emerald-700 mb-3">
-                                Rp {{ number_format($prod->price, 0, ',', '.') }}
-                            </p>
-                        @endif
-                        <a href="{{ route('products.detail', $prod->slug) }}" class="mt-auto block text-center py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
-                            Lihat Detail
-                        </a>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-
-    {{-- -----------------------------------------------
-         4. EDUKASI LINGKUNGAN (EDUCATIONS HIGHLIGHT)
-    ----------------------------------------------- --}}
-    @if(isset($featured_educations) && $featured_educations->count() > 0)
-    <div>
-        <div class="flex justify-between items-end mb-6">
-            <div>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Edukasi Lingkungan</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1">Artikel dan informasi seputar pemilahan sampah & kelestarian.</p>
-            </div>
-            <a href="{{ route('educations') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
-                Semua Edukasi →
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach($featured_educations as $edu)
-                <div class="bg-white rounded-xl border border-slate-200/80 p-5 clean-card flex flex-col">
-                    <h3 class="font-bold text-slate-900 text-base mb-2 line-clamp-2">
-                        {{ $edu->title }}
-                    </h3>
-                    <p class="text-xs sm:text-sm text-slate-500 mb-4 line-clamp-3 leading-relaxed flex-grow">
-                        {{ Str::limit(strip_tags($edu->content ?? ''), 100) }}
-                    </p>
-                    <a href="{{ route('educations.detail', $edu->slug) }}" class="inline-flex items-center text-xs font-semibold text-emerald-700 hover:underline mt-auto">
-                        Baca Artikel →
-                    </a>
-                </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-
-    {{-- -----------------------------------------------
-         5. BERITA TERBARU (NEWS HIGHLIGHT)
-    ----------------------------------------------- --}}
-    <div>
-        <div class="flex justify-between items-end mb-6">
-            <div>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Berita Terbaru</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1">Publikasi dan warta kegiatan Bank Sampah Sejahtera Gemilang RW.006 Pakulonan Barat.</p>
-            </div>
-            <a href="{{ route('news') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
-                Arsip Berita →
-            </a>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @forelse($latest_news as $item)
-                <div class="bg-white rounded-xl border border-slate-200/80 overflow-hidden clean-card flex flex-col">
-                    @if($item->thumbnail)
-                        <div class="h-44 overflow-hidden bg-slate-100">
-                            <img src="{{ asset('storage/' . $item->thumbnail) }}" alt="{{ $item->title }}" class="w-full h-full object-cover">
-                        </div>
-                    @endif
-                    <div class="p-5 flex flex-col flex-grow">
-                        <p class="text-[11px] text-slate-400 mb-2 font-medium">
-                            {{ $item->published_at ? $item->published_at->format('d M Y') : 'Hari ini' }}
-                        </p>
-                        <h3 class="font-bold text-slate-900 text-base mb-2 line-clamp-2">
-                            {{ $item->title }}
-                        </h3>
-                        <p class="text-xs sm:text-sm text-slate-500 mb-4 line-clamp-3 leading-relaxed flex-grow">
-                            {!! Str::limit(strip_tags($item->content), 105) !!}
-                        </p>
-                        <a href="{{ route('news.detail', $item->slug) }}" class="inline-flex items-center text-xs font-semibold text-emerald-700 hover:underline mt-auto">
-                            Baca Selengkapnya →
-                        </a>
-                    </div>
-                </div>
-            @empty
-                <div class="col-span-full py-10 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                    <p class="text-slate-400 text-xs sm:text-sm">Belum ada berita yang dipublikasikan.</p>
-                </div>
-            @endforelse
-        </div>
-    </div>
 
 </div>
 

@@ -3,120 +3,168 @@
 @section('page_title', 'Pengaturan Beranda (Page Builder)')
 
 @section('content')
-<div class="mb-10">
-    <div class="flex justify-between items-center mb-4">
+
+<!-- Toast Notification Container -->
+<div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+<!-- HERO BANNER SLIDER MANAGEMENT -->
+<div class="mb-10 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+    <div class="flex flex-wrap justify-between items-center mb-4 gap-3">
         <div>
-            <h2 class="text-xl font-bold text-gray-800">Banner Hero Utama</h2>
-            <p class="text-gray-600 text-sm mt-1">Tambahkan beberapa gambar untuk membuat slider otomatis di bagian teratas halaman utama.</p>
+            <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                <span>🖼️</span> Slider Banner Hero (Header Beranda)
+            </h2>
+            <p class="text-gray-600 text-sm mt-1">Upload dan susun gambar yang tampil di slider bagian teratas halaman utama.</p>
         </div>
-        <!-- Tombol upload via form di bawah -->
     </div>
 
     <!-- Form Upload Hero -->
-    <div class="bg-white p-4 rounded-lg shadow-sm border mb-4">
-        <form action="{{ route('admin.home-sections.hero.store') }}" method="POST" enctype="multipart/form-data" class="flex items-center space-x-4">
-            @csrf
-            <input type="file" name="images[]" multiple accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100" required>
-            <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded font-bold hover:bg-red-700 transition flex-shrink-0">
-                Upload Gambar
-            </button>
-        </form>
-    </div>
+    <form action="{{ route('admin.home-sections.hero.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-wrap sm:flex-nowrap items-center gap-4 mb-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
+        @csrf
+        <input type="file" name="images[]" multiple accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100" required>
+        <button type="submit" class="px-5 py-2.5 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition shadow-sm flex-shrink-0 text-sm">
+            + Upload Gambar Hero
+        </button>
+    </form>
 
     <!-- Daftar Hero -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="sortable-hero">
         @forelse($heroes as $hero)
-            <div data-id="{{ $hero->id }}" class="relative group rounded-lg overflow-hidden border shadow-sm cursor-move">
-                <img src="{{ asset('storage/' . $hero->image) }}" class="w-full h-32 object-cover">
-                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                    <form action="{{ route('admin.home-sections.hero.destroy', $hero->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus gambar ini?');">
+            <div data-id="{{ $hero->id }}" class="relative group rounded-xl overflow-hidden border shadow-sm cursor-move bg-slate-900">
+                <img src="{{ asset('storage/' . $hero->image) }}" class="w-full h-36 object-contain">
+                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center space-x-2">
+                    <form action="{{ route('admin.home-sections.hero.destroy', $hero->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus gambar hero ini?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700">
+                        <button type="submit" class="p-2.5 bg-red-600 text-white rounded-full hover:bg-red-700 transition shadow" title="Hapus Gambar">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </form>
                 </div>
+                <div class="absolute top-2 left-2 bg-black/70 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow backdrop-blur-sm">
+                    Tarik untuk geser
+                </div>
             </div>
         @empty
-            <div class="col-span-4 p-8 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300 text-gray-500">
-                Belum ada gambar Banner Hero.
+            <div class="col-span-4 p-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-300 text-gray-500 text-sm">
+                Belum ada gambar Slider Hero. Upload beberapa gambar di atas.
             </div>
         @endforelse
     </div>
 </div>
 
-<hr class="mb-10 border-gray-300">
+<hr class="mb-10 border-gray-200">
 
-<div class="flex justify-between items-center mb-6">
+<!-- DRAG AND SWAP ALL HOME COMPONENTS -->
+<div class="mb-6 flex flex-wrap justify-between items-center gap-4">
     <div>
-        <h2 class="text-xl font-bold text-gray-800">Daftar Komponen Lainnya</h2>
-        <p class="text-gray-600 text-sm mt-1">Komponen yang akan tampil di bawah Hero Banner.</p>
+        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <span>🧩</span> Susunan Komponen Beranda (Drag & Swap)
+        </h2>
+        <p class="text-gray-600 text-sm mt-1">
+            Gunakan ikon <strong class="text-red-600">⋮⋮ (Drag & Swap)</strong> atau tombol panah <strong class="text-red-600">▲ ▼</strong> untuk mengubah urutan tampilan komponen pada halaman utama secara bebas.
+        </p>
     </div>
-    <a href="{{ route('admin.home-sections.create') }}" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
-        + Tambah Komponen
+    <a href="{{ route('admin.home-sections.create') }}" class="px-5 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition shadow-sm text-sm">
+        + Tambah Komponen Baru
     </a>
 </div>
 
-<div class="bg-white border rounded-lg overflow-hidden shadow-sm">
-    <table class="w-full text-left border-collapse">
-        <thead>
-            <tr class="bg-gray-50 border-b">
-                <th class="py-3 px-4 w-12"></th> <!-- Untuk handle drag -->
-                <th class="py-3 px-4 font-semibold text-sm text-gray-700">Tipe</th>
-                <th class="py-3 px-4 font-semibold text-sm text-gray-700">Pratinjau / Judul</th>
-                <th class="py-3 px-4 font-semibold text-sm text-gray-700">Status</th>
-                <th class="py-3 px-4 font-semibold text-sm text-gray-700 w-32">Aksi</th>
-            </tr>
-        </thead>
-        <tbody id="sortable-list">
-            @forelse($sections as $item)
-                <tr data-id="{{ $item->id }}" class="border-b hover:bg-gray-50 transition cursor-move">
-                    <td class="py-3 px-4 text-gray-400">
-                        <!-- Drag handle icon -->
-                        <svg class="w-5 h-5 cursor-grab" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path></svg>
-                    </td>
-                    <td class="py-3 px-4">
-                        <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs font-bold uppercase tracking-wider">
-                            {{ str_replace('_', ' ', $item->type) }}
-                        </span>
-                    </td>
-                    <td class="py-3 px-4">
-                        @if($item->title)
-                            <div class="font-semibold text-gray-800">{{ $item->title }}</div>
-                        @endif
-                        @if($item->type == 'text' && !$item->title)
-                            <div class="text-sm text-gray-500 italic">Teks Paragraf...</div>
-                        @endif
-                        @if($item->image)
-                            <img src="{{ asset('storage/' . $item->image) }}" class="h-10 object-cover mt-1 rounded border" alt="preview">
-                        @endif
-                    </td>
-                    <td class="py-3 px-4">
-                        @if($item->is_active)
-                            <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Aktif</span>
-                        @else
-                            <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-semibold">Nonaktif</span>
-                        @endif
-                    </td>
-                    <td class="py-3 px-4 flex items-center space-x-3">
-                        <a href="{{ route('admin.home-sections.edit', $item->id) }}" class="text-red-600 hover:text-red-800 transition">Edit</a>
-                        <form action="{{ route('admin.home-sections.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus komponen ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-800 transition">Hapus</button>
-                        </form>
-                    </td>
+<div class="bg-white border rounded-xl overflow-hidden shadow-sm mb-12">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 border-b border-gray-200">
+                    <th class="py-3.5 px-4 w-20 text-center font-semibold text-xs text-gray-600 uppercase tracking-wider">Urutan</th>
+                    <th class="py-3.5 px-4 font-semibold text-xs text-gray-600 uppercase tracking-wider">Tipe Komponen</th>
+                    <th class="py-3.5 px-4 font-semibold text-xs text-gray-600 uppercase tracking-wider">Judul / Detail Ringkas</th>
+                    <th class="py-3.5 px-4 font-semibold text-xs text-gray-600 uppercase tracking-wider text-center">Status Tampil</th>
+                    <th class="py-3.5 px-4 font-semibold text-xs text-gray-600 uppercase tracking-wider text-right w-44">Aksi</th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="5" class="py-8 text-center text-gray-500">
-                        Belum ada komponen yang ditambahkan. Halaman utama mungkin terlihat kosong.
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="sortable-list" class="divide-y divide-gray-100">
+                @forelse($sections as $item)
+                    <tr data-id="{{ $item->id }}" class="hover:bg-slate-50/80 transition cursor-move group">
+                        <!-- Drag Handle & Swap Buttons -->
+                        <td class="py-3.5 px-4 text-center">
+                            <div class="flex items-center justify-center space-x-1">
+                                <span class="drag-handle p-1.5 rounded hover:bg-gray-200 text-gray-400 group-hover:text-red-600 cursor-grab select-none font-bold text-lg" title="Tarik & Lepas untuk mengubah urutan">
+                                    ⋮⋮
+                                </span>
+                                <div class="flex flex-col space-y-0.5">
+                                    <button type="button" class="btn-swap-up p-0.5 text-gray-400 hover:text-red-600 rounded hover:bg-gray-100 text-xs font-bold leading-none" title="Naikkan urutan">▲</button>
+                                    <button type="button" class="btn-swap-down p-0.5 text-gray-400 hover:text-red-600 rounded hover:bg-gray-100 text-xs font-bold leading-none" title="Turunkan urutan">▼</button>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Tipe Badge -->
+                        <td class="py-3.5 px-4 whitespace-nowrap">
+                            @if(str_starts_with($item->type, 'system_') || $item->type === 'hero')
+                                <span class="px-2.5 py-1 bg-amber-100 text-amber-800 border border-amber-200 rounded-md text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1">
+                                    <span>⚙️</span> {{ str_replace(['system_', '_'], ['', ' '], $item->type) }}
+                                </span>
+                            @else
+                                <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-md text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1">
+                                    <span>✨</span> {{ str_replace('_', ' ', $item->type) }}
+                                </span>
+                            @endif
+                        </td>
+
+                        <!-- Judul / Preview -->
+                        <td class="py-3.5 px-4">
+                            <div class="font-semibold text-gray-900 text-sm">
+                                {{ $item->title ?? 'Tanpa Judul' }}
+                            </div>
+                            @if($item->content)
+                                <div class="text-xs text-gray-500 line-clamp-1 mt-0.5">
+                                    {{ strip_tags($item->content) }}
+                                </div>
+                            @endif
+                            @if($item->image)
+                                <img src="{{ asset('storage/' . $item->image) }}" class="h-10 object-cover mt-1.5 rounded border border-gray-200 shadow-sm" alt="preview">
+                            @endif
+                        </td>
+
+                        <!-- Status Active Toggle Switch -->
+                        <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                            <button type="button" onclick="toggleSectionStatus({{ $item->id }}, this)"
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border transition shadow-sm {{ $item->is_active ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100' : 'bg-gray-100 text-gray-600 border-gray-300 hover:bg-gray-200' }}">
+                                <span class="w-2 h-2 rounded-full mr-1.5 {{ $item->is_active ? 'bg-emerald-500' : 'bg-gray-400' }}"></span>
+                                <span class="status-label">{{ $item->is_active ? 'Aktif' : 'Nonaktif' }}</span>
+                            </button>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                            <div class="flex items-center justify-end space-x-2">
+                                @if(!str_starts_with($item->type, 'system_') && $item->type !== 'hero')
+                                    <a href="{{ route('admin.home-sections.edit', $item->id) }}" class="inline-flex items-center text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1.5 rounded transition shadow-sm">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('admin.home-sections.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus komponen ini?');" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="inline-flex items-center text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 px-2.5 py-1.5 rounded transition shadow-sm">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="text-xs text-gray-400 italic">Bawaan Sistem</span>
+                                @endif
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-gray-500 text-sm">
+                            Belum ada komponen yang tersedia.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 @endsection
 
@@ -124,51 +172,127 @@
 <!-- SortableJS -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var el = document.getElementById('sortable-list');
-        if (el) {
-            var sortable = Sortable.create(el, {
-                animation: 150,
-                ghostClass: 'bg-red-50',
-                onEnd: function (evt) {
-                    var items = [];
-                    el.querySelectorAll('tr').forEach(function(row, index) {
-                        items.push({
-                            id: row.getAttribute('data-id'),
-                            order: index + 1
-                        });
-                    });
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `pointer-events-auto flex items-center px-4 py-3 rounded-lg shadow-lg text-sm font-medium text-white transition-all transform duration-300 translate-y-2 opacity-0 ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'}`;
+        toast.innerHTML = `<span>${type === 'success' ? '✓' : '✕'}</span><span class="ml-2">${message}</span>`;
+        container.appendChild(toast);
 
-                    // Kirim ke server
-                    fetch('{{ route("admin.home-sections.reorder") }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ orders: items })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if(data.success) {
-                            // Optional: Tampilkan toast / notif kecil
-                            console.log('Urutan berhasil diperbarui.');
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                        alert('Gagal memperbarui urutan.');
-                    });
+        setTimeout(() => {
+            toast.classList.remove('translate-y-2', 'opacity-0');
+        }, 10);
+
+        setTimeout(() => {
+            toast.classList.add('opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    function saveNewOrder() {
+        const el = document.getElementById('sortable-list');
+        const items = [];
+        el.querySelectorAll('tr[data-id]').forEach(function(row, index) {
+            items.push({
+                id: row.getAttribute('data-id'),
+                order: index + 1
+            });
+        });
+
+        fetch('{{ route("admin.home-sections.reorder") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ orders: items })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                showToast('Urutan komponen berhasil diperbarui!');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            showToast('Gagal memperbarui urutan komponen.', 'error');
+        });
+    }
+
+    function toggleSectionStatus(id, btn) {
+        fetch(`{{ url('admin/home-sections') }}/${id}/toggle-status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if(data.success) {
+                const label = btn.querySelector('.status-label');
+                const dot = btn.querySelector('span');
+
+                if(data.is_active) {
+                    btn.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border transition shadow-sm bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100";
+                    dot.className = "w-2 h-2 rounded-full mr-1.5 bg-emerald-500";
+                    label.innerText = 'Aktif';
+                } else {
+                    btn.className = "inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border transition shadow-sm bg-gray-100 text-gray-600 border-gray-300 hover:bg-gray-200";
+                    dot.className = "w-2 h-2 rounded-full mr-1.5 bg-gray-400";
+                    label.innerText = 'Nonaktif';
+                }
+                showToast(data.message);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showToast('Gagal mengubah status komponen.', 'error');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const el = document.getElementById('sortable-list');
+        if (el) {
+            Sortable.create(el, {
+                animation: 150,
+                handle: '.drag-handle',
+                ghostClass: 'bg-red-50',
+                onEnd: function () {
+                    saveNewOrder();
+                }
+            });
+
+            // Click up/down arrow buttons to swap rows
+            el.addEventListener('click', function(e) {
+                const upBtn = e.target.closest('.btn-swap-up');
+                const downBtn = e.target.closest('.btn-swap-down');
+                
+                if (upBtn) {
+                    const row = upBtn.closest('tr');
+                    const prev = row.previousElementSibling;
+                    if (prev && prev.matches('tr[data-id]')) {
+                        row.parentNode.insertBefore(row, prev);
+                        saveNewOrder();
+                    }
+                } else if (downBtn) {
+                    const row = downBtn.closest('tr');
+                    const next = row.nextElementSibling;
+                    if (next && next.matches('tr[data-id]')) {
+                        row.parentNode.insertBefore(next, row);
+                        saveNewOrder();
+                    }
                 }
             });
         }
-        var elHero = document.getElementById('sortable-hero');
+
+        const elHero = document.getElementById('sortable-hero');
         if (elHero) {
-            var sortableHero = Sortable.create(elHero, {
+            Sortable.create(elHero, {
                 animation: 150,
                 ghostClass: 'bg-red-50',
-                onEnd: function (evt) {
-                    var items = [];
+                onEnd: function () {
+                    const items = [];
                     elHero.querySelectorAll('div[data-id]').forEach(function(row, index) {
                         items.push({
                             id: row.getAttribute('data-id'),
@@ -187,12 +311,12 @@
                     .then(response => response.json())
                     .then(data => {
                         if(data.success) {
-                            console.log('Urutan hero berhasil diperbarui.');
+                            showToast('Urutan slider hero berhasil diperbarui!');
                         }
                     })
                     .catch((error) => {
                         console.error('Error:', error);
-                        alert('Gagal memperbarui urutan hero.');
+                        showToast('Gagal memperbarui urutan hero.', 'error');
                     });
                 }
             });

@@ -10,10 +10,33 @@ use Illuminate\Support\Facades\Storage;
 
 class HomeSectionController extends Controller
 {
+    private function ensureDefaultSectionsExist()
+    {
+        $defaults = [
+            ['type' => 'hero', 'title' => 'Banner Hero Utama (Slider)'],
+            ['type' => 'system_program_kerja', 'title' => 'Program Kerja (Highlight)'],
+            ['type' => 'system_produk', 'title' => 'Produk Daur Ulang (Highlight)'],
+            ['type' => 'system_edukasi', 'title' => 'Edukasi Lingkungan (Highlight)'],
+            ['type' => 'system_berita', 'title' => 'Berita Terbaru (Highlight)'],
+        ];
+
+        foreach ($defaults as $def) {
+            if (!HomeSection::where('type', $def['type'])->exists()) {
+                HomeSection::create([
+                    'type' => $def['type'],
+                    'title' => $def['title'],
+                    'order' => (HomeSection::max('order') ?? 0) + 1,
+                    'is_active' => true,
+                ]);
+            }
+        }
+    }
+
     public function index()
     {
+        $this->ensureDefaultSectionsExist();
         $heroes = HeroBanner::orderBy('order')->get();
-        $sections = HomeSection::where('type', '!=', 'hero')->orderBy('order')->get();
+        $sections = HomeSection::orderBy('order', 'asc')->get();
         return view('admin.home-sections.index', compact('sections', 'heroes'));
     }
 
@@ -37,7 +60,7 @@ class HomeSectionController extends Controller
         ]);
 
         $validated['is_active'] = $request->has('is_active');
-        $validated['order'] = HomeSection::max('order') + 1;
+        $validated['order'] = (HomeSection::max('order') ?? 0) + 1;
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('home_sections', 'public');
@@ -55,8 +78,9 @@ class HomeSectionController extends Controller
 
     public function update(Request $request, HomeSection $homeSection)
     {
+        $allowedTypes = 'image,text,image_text,video,callout,faq,hero,system_program_kerja,system_produk,system_edukasi,system_berita';
         $validated = $request->validate([
-            'type' => 'required|in:image,text,image_text,video,callout,faq',
+            'type' => 'required|in:' . $allowedTypes,
             'title' => 'nullable|string|max:255',
             'content' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -83,6 +107,11 @@ class HomeSectionController extends Controller
 
     public function destroy(HomeSection $homeSection)
     {
+        // Don't allow deletion of system sections to prevent breaking essential page highlights
+        if (str_starts_with($homeSection->type, 'system_') || $homeSection->type === 'hero') {
+            return back()->with('error', 'Komponen bawaan sistem tidak dapat dihapus. Anda dapat menonaktifkannya jika tidak ingin ditampilkan.');
+        }
+
         if ($homeSection->image) {
             Storage::disk('public')->delete($homeSection->image);
         }
@@ -103,6 +132,19 @@ class HomeSectionController extends Controller
         }
 
         return response()->json(['success' => true]);
+    }
+
+    public function toggleStatus(HomeSection $homeSection)
+    {
+        $homeSection->update([
+            'is_active' => !$homeSection->is_active
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $homeSection->is_active,
+            'message' => 'Status komponen berhasil diperbarui.'
+        ]);
     }
 
     public function storeHero(Request $request)
