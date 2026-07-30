@@ -18,11 +18,36 @@ class FrontEndController extends Controller
         // Data berita (sesuai urutan drag & drop admin)
         $latest_news = News::where('status', 'published')->orderBy('order', 'asc')->latest('published_at')->take(3)->get();
         
+        // Data Program Kerja Unggulan
+        $featured_programs = WorkProgram::orderBy('order', 'asc')->take(3)->get();
+
+        // Data Produk Daur Ulang Unggulan
+        $featured_products = Product::active()->with('images')->orderBy('order', 'asc')->latest()->take(4)->get();
+
+        // Data Edukasi Unggulan
+        $featured_educations = Education::where('is_published', true)->orderBy('order', 'asc')->latest()->take(3)->get();
+
+        // Statistik Ringkasan Dampak
+        $stats = [
+            'programs' => WorkProgram::count(),
+            'products' => Product::active()->count(),
+            'educations' => Education::where('is_published', true)->count(),
+            'members' => Member::count(),
+        ];
+
         // Data dinamis Page Builder
         $hero_slides = \App\Models\HeroBanner::orderBy('order')->get();
         $sections = \App\Models\HomeSection::where('type', '!=', 'hero')->where('is_active', true)->orderBy('order')->get();
 
-        return view('frontend.home', compact('latest_news', 'hero_slides', 'sections'));
+        return view('frontend.home', compact(
+            'latest_news', 
+            'featured_programs', 
+            'featured_products', 
+            'featured_educations', 
+            'stats', 
+            'hero_slides', 
+            'sections'
+        ));
     }
 
     public function members()

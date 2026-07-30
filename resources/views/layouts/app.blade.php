@@ -203,7 +203,8 @@
                         </div>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed max-w-sm">
-                        Website Resmi dan dikelola RW. 006 Kelurahan Pakulonan Barat, Kecamatan Tangerang, Kota Tangerang, Provinsi Banten.
+                        Website Resmi dan dikelola RW. 006 Kelurahan Pakulonan Barat, Kecamatan Tangerang, Kota
+                        Tangerang, Provinsi Banten.
                     </p>
                 </div>
 
@@ -246,8 +247,8 @@
                             RW. 006, Sejahtera Gemilang, Pakulonan Barat, Tangerang Utara, Banten
                         </li>
                         <li>
-                            WA: <a href="https://wa.me/628123456789" target="_blank"
-                                class="hover:text-red-500 transition-colors">+6281-2345-6789</a>
+                            WA: <a href="https://wa.me/6282114425126" target="_blank"
+                                class="hover:text-red-500 transition-colors">+6282-1144-25126</a>
                         </li>
                         <li>
                             Email: <a href="mailto:fathanfarizi@fathan.lt"
@@ -257,7 +258,8 @@
 
                     <!-- Media Sosial Icons -->
                     <div class="flex space-x-4 pt-2">
-                        <a href="https://www.instagram.com/rw.06_pakbar?igsh=YnVlbTZ0NXQzZ2Jy" class="text-slate-400 hover:text-red-500 transition-colors">
+                        <a href="https://www.instagram.com/rw.06_pakbar?igsh=YnVlbTZ0NXQzZ2Jy"
+                            class="text-slate-400 hover:text-red-500 transition-colors">
                             <span class="sr-only">Instagram</span>
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path fill-rule="evenodd"
@@ -273,9 +275,10 @@
             <!-- Bottom Copyright & Admin Login -->
             <div
                 class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 space-y-2 sm:space-y-0">
-                <p>&copy; {{ date('Y') }} Bank Sampah Sejahtera Gemilang RW. 006 Pakulonan Barat. Hak Cipta Dilindungi.</p>
+                <p>&copy; {{ date('Y') }} Bank Sampah Sejahtera Gemilang RW. 006 Pakulonan Barat. Hak Cipta Dilindungi.
+                </p>
                 <div class="flex space-x-4">
-                    
+
                     <a href="{{ route('login') }}" class="hover:text-red-500 transition-colors">Admin Login</a>
                 </div>
             </div>
