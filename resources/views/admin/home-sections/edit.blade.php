@@ -16,11 +16,21 @@
 
     <div class="bg-white p-6 border rounded-lg shadow-sm">
         
+        @if(str_starts_with($homeSection->type, 'system_') || $homeSection->type === 'hero')
+            <div class="p-4 mb-6 bg-amber-50 border-l-4 border-amber-500 rounded text-amber-900 text-sm">
+                <p class="font-bold flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Komponen Bawaan Sistem
+                </p>
+                <p class="mt-1">Anda dapat menyesuaikan Judul Utama, Subjudul/Deskripsi Singkat, dan status aktifnya di sini.</p>
+            </div>
+        @endif
+
         <!-- Tipe Komponen -->
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">Tipe Komponen <span class="text-red-500">*</span></label>
             <select name="type" id="type_selector" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border bg-gray-100" required>
-                <option value="{{ $homeSection->type }}">{{ strtoupper(str_replace('_', ' ', $homeSection->type)) }}</option>
+                <option value="{{ $homeSection->type }}">{{ strtoupper(str_replace(['system_', '_'], ['', ' '], $homeSection->type)) }}</option>
             </select>
             <p class="text-xs text-gray-500 mt-1">Tipe komponen tidak dapat diubah setelah dibuat. Buat komponen baru jika ingin tipe berbeda.</p>
         </div>
@@ -31,7 +41,7 @@
         <div class="space-y-6">
             
             <!-- Judul -->
-            <div class="field-group" data-show-for="text,image_text,video,callout,faq">
+            <div class="field-group" data-show-for="text,image_text,video,callout,faq,hero,system_program_kerja,system_produk,system_edukasi,system_berita">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Judul Komponen (Opsional)</label>
                 <input type="text" name="title" value="{{ old('title', $homeSection->title) }}" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">
                 @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -67,9 +77,11 @@
                 @error('video_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 
-            <!-- Konten (Teks) -->
-            <div class="field-group" data-show-for="text,image_text,callout,faq">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Konten / Isi Teks</label>
+            <!-- Konten (Teks / Subjudul) -->
+            <div class="field-group" data-show-for="text,image_text,callout,faq,system_program_kerja,system_produk,system_edukasi,system_berita">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ str_starts_with($homeSection->type, 'system_') ? 'Subjudul / Deskripsi Singkat Section' : 'Konten / Isi Teks' }}
+                </label>
                 <textarea name="content" id="content_editor" rows="5" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 p-2 border">{{ old('content', $homeSection->content) }}</textarea>
                 @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>

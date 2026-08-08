@@ -167,7 +167,7 @@
                     <div class="flex justify-between items-end mb-6">
                         <div>
                             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $section->title ?: 'Program Kerja' }}</h2>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-1">program-program dan kegiatan RW.006 Pakulonan Barat.</p>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">{{ $section->content ? strip_tags($section->content) : 'program-program dan kegiatan RW.006 Pakulonan Barat.' }}</p>
                         </div>
                         <a href="{{ route('work_programs') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
                             Lihat Semua →
@@ -208,7 +208,7 @@
                     <div class="flex justify-between items-end mb-6">
                         <div>
                             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $section->title ?: 'Produk Daur Ulang' }}</h2>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Karya dan produk hasil olahan sampah organik/anorganik.</p>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">{{ $section->content ? strip_tags($section->content) : 'Karya dan produk hasil olahan sampah organik/anorganik.' }}</p>
                         </div>
                         <a href="{{ route('products') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
                             Katalog Lengkap →
@@ -258,7 +258,7 @@
                     <div class="flex justify-between items-end mb-6">
                         <div>
                             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $section->title ?: 'Edukasi Lingkungan' }}</h2>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Artikel dan informasi seputar pemilahan sampah & kelestarian.</p>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">{{ $section->content ? strip_tags($section->content) : 'Artikel dan informasi seputar pemilahan sampah & kelestarian.' }}</p>
                         </div>
                         <a href="{{ route('educations') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
                             Semua Edukasi →
@@ -291,7 +291,7 @@
                     <div class="flex justify-between items-end mb-6">
                         <div>
                             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $section->title ?: 'Berita Terbaru' }}</h2>
-                            <p class="text-xs sm:text-sm text-slate-500 mt-1">Publikasi dan warta kegiatan Bank Sampah Sejahtera Gemilang RW.006 Pakulonan Barat.</p>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">{{ $section->content ? strip_tags($section->content) : 'Publikasi dan warta kegiatan Bank Sampah Sejahtera Gemilang RW.006 Pakulonan Barat.' }}</p>
                         </div>
                         <a href="{{ route('news') }}" class="text-xs sm:text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition">
                             Arsip Berita →
