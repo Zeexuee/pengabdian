@@ -57,9 +57,13 @@ Route::prefix('admin')->middleware(['auth', 'is_admin'])->name('admin.')->group(
     // Dashboard
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
-    // Pengaturan Profil
+    // Pengaturan Profil & Pengaturan User
     Route::get('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
+
+    // Pengaturan Admin / Kelola User
+    Route::put('users/{user}/password', [\App\Http\Controllers\Admin\UserController::class, 'updatePassword'])->name('users.update-password');
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
 
     // CRUD Divisions & Members
     Route::post('divisions/reorder', [\App\Http\Controllers\Admin\DivisionController::class, 'reorder'])->name('divisions.reorder');
