@@ -93,18 +93,24 @@
                         Kami</a>
                 </div>
 
-                <!-- Tombol Menu Hamburger (Mobile) - kanan -->
-                <div class="flex items-center md:hidden ml-auto">
-                    <button type="button" onclick="toggleMobileMenu()"
-                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
-                        aria-expanded="false">
-                        <span class="sr-only">Buka menu utama</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+                <!-- Logo Disain & Logo Mercu (Kanan Navbar) -->
+                <div class="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                    <img src="{{ asset('images/logo_disain.png') }}" alt="Logo Disain" class="h-8 md:h-10 w-auto object-contain">
+                    <img src="{{ asset('images/logo-mercu.png') }}" alt="Logo Mercu Buana" class="h-8 md:h-10 w-auto object-contain">
+
+                    <!-- Tombol Menu Hamburger (Mobile) -->
+                    <div class="flex items-center md:hidden ml-1">
+                        <button type="button" onclick="toggleMobileMenu()"
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
+                            aria-expanded="false">
+                            <span class="sr-only">Buka menu utama</span>
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

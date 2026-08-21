@@ -153,7 +153,7 @@
                             Bank Sampah Sejahtera Gemilang
                         </h1>
                         <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-                            Informasi kegiatan, program kerja, edukasi lingkungan, dan produk daur ulang Bank Sampah Sejahtera Gemilang RW. 006 Kelurahan Pakulonan Barat.
+                            Informasi kegiatan, program kerja, edukasi lingkungan, dan produk daur ulang Bank Sampah Sejahtera Gemilang RW. 006 Kelurahan Pakulonan Barat Kabupaten Tangerang, Provinsi Banten.
                         </p>
                     </div>
                 @endif
